@@ -240,7 +240,10 @@ app.get('/api/cars', (req, res) => {
   const term = String(q).trim().toLowerCase();
   if (term) {
     cars = cars.filter(
-      (c) => c.name.toLowerCase().includes(term) || c.categories.some((cat) => cat.toLowerCase().includes(term))
+      (c) =>
+        c.name.toLowerCase().includes(term) ||
+        c.spawnCode.toLowerCase().includes(term) ||
+        c.categories.some((cat) => cat.toLowerCase().includes(term))
     );
   }
   if (category) {
