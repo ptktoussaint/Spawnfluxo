@@ -75,9 +75,36 @@ function normalizeCategoriesInput(categories) {
   return [...new Set(categories.map((c) => String(c).trim()).filter(Boolean))];
 }
 
-async function readCars() {
-  const snapshot = await carsCollection.get();
-  return snapshot.docs.map((doc) => normalizeCarDoc(doc.id, doc.data()));
+// ----- Cache em memória -----
+// O Firestore gratuito cobra por leitura, e cada visitante pesquisando no
+// catálogo faria uma leitura por veículo retornado. Para não depender do
+// número de acessos, os dados ficam em memória e o Firestore só é lido uma
+// vez (na inicialização do servidor) e escrito a cada alteração do admin —
+// nunca lido de novo a cada requisição pública.
+let carsCache = [];
+let categoriesCache = [];
+
+function sortCategoryNames(names) {
+  return [...new Set(names)].sort((a, b) => a.localeCompare(b, 'pt-BR'));
+}
+
+function addCategoriesToCache(names) {
+  categoriesCache = sortCategoryNames([...categoriesCache, ...names]);
+}
+
+async function loadCacheFromFirestore() {
+  const [carsSnap, catSnap] = await Promise.all([carsCollection.get(), categoriesCollection.get()]);
+  carsCache = carsSnap.docs.map((doc) => normalizeCarDoc(doc.id, doc.data()));
+  categoriesCache = sortCategoryNames(catSnap.docs.map((d) => d.data().name).filter(Boolean));
+  console.log(`Cache carregado do Firestore: ${carsCache.length} veículos, ${categoriesCache.length} categorias.`);
+}
+
+function readCars() {
+  return carsCache;
+}
+
+function readCategoryNames() {
+  return categoriesCache;
 }
 
 async function registerCategories(names) {
@@ -87,17 +114,7 @@ async function registerCategories(names) {
     return categoriesCollection.doc(slug).set({ name, updatedAt: new Date().toISOString() }, { merge: true });
   });
   await Promise.all(writes);
-}
-
-// Lê só a coleção "categories" (poucos documentos), sem reler todos os
-// carros: toda categoria usada por algum carro já foi registrada ali por
-// registerCategories() (seja no seed inicial ou em cada criação/edição),
-// então não precisamos pagar o custo de reler a coleção "cars" inteira
-// só para montar essa lista — economiza cota de leitura do Firestore.
-async function readCategoryNames() {
-  const catSnap = await categoriesCollection.get();
-  const names = catSnap.docs.map((d) => d.data().name).filter(Boolean);
-  return [...new Set(names)].sort((a, b) => a.localeCompare(b, 'pt-BR'));
+  addCategoriesToCache(names);
 }
 
 async function seedIfEmpty() {
@@ -218,7 +235,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/api/cars', async (req, res, next) => {
   try {
     const { q = '', category = '' } = req.query;
-    let cars = await readCars();
+    let cars = readCars();
     const term = String(q).trim().toLowerCase();
     if (term) {
       cars = cars.filter(
@@ -235,12 +252,8 @@ app.get('/api/cars', async (req, res, next) => {
   }
 });
 
-app.get('/api/categories', async (req, res, next) => {
-  try {
-    res.json(await readCategoryNames());
-  } catch (err) {
-    next(err);
-  }
+app.get('/api/categories', (req, res) => {
+  res.json(readCategoryNames());
 });
 
 // Criação explícita de categoria, mesmo sem nenhum carro usando-a ainda.
@@ -252,6 +265,7 @@ app.post('/api/categories', requireAuth, async (req, res, next) => {
     const slug = slugify(trimmed);
     if (!slug) return res.status(400).json({ error: 'Nome de categoria inválido' });
     await categoriesCollection.doc(slug).set({ name: trimmed, updatedAt: new Date().toISOString() }, { merge: true });
+    addCategoriesToCache([trimmed]);
     res.status(201).json({ name: trimmed });
   } catch (err) {
     next(err);
@@ -298,6 +312,7 @@ app.post('/api/cars', requireAuth, async (req, res, next) => {
     };
     await carsCollection.doc(id).set(data);
     await registerCategories(cleanCategories);
+    carsCache = [...carsCache, { id, ...data }];
     res.status(201).json({ id, ...data });
   } catch (err) {
     next(err);
@@ -306,9 +321,8 @@ app.post('/api/cars', requireAuth, async (req, res, next) => {
 
 app.put('/api/cars/:id', requireAuth, async (req, res, next) => {
   try {
-    const ref = carsCollection.doc(req.params.id);
-    const snap = await ref.get();
-    if (!snap.exists) return res.status(404).json({ error: 'Carro não encontrado' });
+    const current = carsCache.find((c) => c.id === req.params.id);
+    if (!current) return res.status(404).json({ error: 'Carro não encontrado' });
 
     const { name, spawnCode, categories, photoUrl } = req.body || {};
     if (photoUrl && !isValidPhotoUrl(String(photoUrl).trim())) {
@@ -322,7 +336,6 @@ app.put('/api/cars/:id', requireAuth, async (req, res, next) => {
       }
     }
 
-    const current = normalizeCarDoc(req.params.id, snap.data());
     const updated = { ...current };
     delete updated.id;
     if (name !== undefined) updated.name = String(name).trim();
@@ -335,8 +348,9 @@ app.put('/api/cars/:id', requireAuth, async (req, res, next) => {
     }
 
     updated.updatedAt = new Date().toISOString();
-    await ref.set(updated);
+    await carsCollection.doc(req.params.id).set(updated);
     if (cleanCategories) await registerCategories(cleanCategories);
+    carsCache = carsCache.map((c) => (c.id === req.params.id ? { id: req.params.id, ...updated } : c));
     res.json({ id: req.params.id, ...updated });
   } catch (err) {
     next(err);
@@ -345,10 +359,10 @@ app.put('/api/cars/:id', requireAuth, async (req, res, next) => {
 
 app.delete('/api/cars/:id', requireAuth, async (req, res, next) => {
   try {
-    const ref = carsCollection.doc(req.params.id);
-    const snap = await ref.get();
-    if (!snap.exists) return res.status(404).json({ error: 'Carro não encontrado' });
-    await ref.delete();
+    const exists = carsCache.some((c) => c.id === req.params.id);
+    if (!exists) return res.status(404).json({ error: 'Carro não encontrado' });
+    await carsCollection.doc(req.params.id).delete();
+    carsCache = carsCache.filter((c) => c.id !== req.params.id);
     res.json({ ok: true });
   } catch (err) {
     next(err);
@@ -363,6 +377,7 @@ app.use((err, req, res, next) => {
 
 async function main() {
   await seedIfEmpty();
+  await loadCacheFromFirestore();
   app.listen(PORT, () => {
     console.log(`Spawnfluxo rodando em http://localhost:${PORT}`);
   });
