@@ -22,8 +22,12 @@ Acesse `http://localhost:3000` (catálogo público) e `http://localhost:3000/adm
 
 ## Estrutura dos dados
 
-Os veículos ficam em `data/cars.json` (formato simples, sem banco de dados externo).
-As fotos enviadas pelo formulário ficam em `public/uploads/`.
+Os veículos ficam em `<DATA_DIR>/cars.json` (formato simples, sem banco de dados externo).
+As fotos enviadas pelo formulário ficam em `<DATA_DIR>/uploads/`. Em desenvolvimento local,
+`DATA_DIR` é a pasta `data/` do projeto; em produção, aponte para um disco persistente
+(veja a seção **Deploy no Render** abaixo). `data/seed-cars.json` é a lista inicial de
+veículos — na primeira execução, se `cars.json` ainda não existir, ele é criado a partir
+dessa semente.
 
 Foram importados **207 veículos** a partir das listas que você enviou, organizados em 8
 categorias: `PLANOS VIP'S`, `VEÍCULOS VIP'S`, `MOTOS VIP'S`, `VEÍCULOS ESPECIAIS`,
@@ -61,15 +65,50 @@ fielmente na importação):
 
 ## Variáveis de ambiente
 
-| Variável         | Padrão      | Descrição                                   |
-|------------------|-------------|----------------------------------------------|
-| `PORT`           | `3000`      | Porta do servidor                             |
-| `ADMIN_PASSWORD` | `admin123`  | Senha do painel admin — **troque em produção** |
-| `TRUST_PROXY`    | (vazio)     | `true` se estiver atrás de proxy/load balancer |
+| Variável         | Padrão               | Descrição                                              |
+|------------------|----------------------|---------------------------------------------------------|
+| `PORT`           | `3000`               | Porta do servidor                                        |
+| `ADMIN_PASSWORD` | `admin123`           | Senha do painel admin — **troque em produção**            |
+| `DATA_DIR`       | pasta `data/` do projeto | Onde ficam `cars.json` e `uploads/`. Em produção, aponte para um disco persistente |
+| `TRUST_PROXY`    | (vazio)              | `true` se estiver atrás de proxy/load balancer            |
 
-## Deploy
+## Deploy no Render (deixar o site público)
 
-Como os dados ficam em `data/cars.json` e as fotos em `public/uploads/`, escolha um
-provedor com **disco persistente** (ex.: uma VM, Railway/Render com volume persistente).
-Em plataformas totalmente efêmeras (sem disco persistente), os dados cadastrados podem
-ser perdidos a cada novo deploy.
+O app precisa de **disco persistente** (os dados e fotos não podem viver só na pasta do
+código, que é recriada a cada deploy). O plano gratuito de Web Service do Render **não**
+suporta disco persistente — é necessário um plano pago que suporte disco (na época em que
+este guia foi escrito, o plano "Starter" custava algo em torno de US$7/mês + uma taxa
+pequena por GB de disco, algo como US$0,25/GB/mês — **confira o valor atual em
+render.com/pricing antes de assinar**, pois preços mudam).
+
+O repositório já inclui um `render.yaml` pronto (Blueprint), então o deploy é quase
+automático:
+
+1. Crie uma conta em [render.com](https://render.com) (dá para entrar com sua conta do
+   GitHub).
+2. No painel do Render, clique em **New +** → **Blueprint**.
+3. Conecte sua conta do GitHub e selecione o repositório `ptktoussaint/Spawnfluxo`.
+4. Escolha o branch `claude/game-car-spawn-manager-kjb84n` (ou o branch para onde você
+   mesclar essas mudanças, ex. `main`).
+5. O Render vai ler o `render.yaml` automaticamente e mostrar o serviço `spawnfluxo` com
+   um disco de 1GB já configurado. Confirme.
+6. Antes de criar, o Render vai pedir o valor da variável `ADMIN_PASSWORD` (ela não tem
+   valor padrão de propósito) — digite uma senha forte ali.
+7. Clique em **Apply**/**Create**. O primeiro deploy demora alguns minutos.
+8. Quando terminar, o Render te dá uma URL pública tipo
+   `https://spawnfluxo.onrender.com` — é esse o link que você compartilha com as outras
+   pessoas.
+9. Acesse `https://spawnfluxo.onrender.com/admin.html` e faça login com a senha que você
+   definiu no passo 6.
+
+Depois disso, qualquer novo `git push` no branch conectado atualiza o site automaticamente
+(o disco persistente mantém os veículos e fotos cadastrados entre os deploys).
+
+### Alternativa: configurar manualmente (sem usar o Blueprint)
+
+Se preferir não usar o `render.yaml`, dá para criar o Web Service manualmente no Render:
+- **Build Command**: `npm install`
+- **Start Command**: `npm start`
+- Adicione um **Disk**: mount path `/var/data`, tamanho 1GB
+- Variáveis de ambiente: `ADMIN_PASSWORD` (sua senha), `DATA_DIR=/var/data`,
+  `TRUST_PROXY=true`
