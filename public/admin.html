@@ -44,15 +44,14 @@
             <input type="text" id="category" list="category-list" required>
             <datalist id="category-list"></datalist>
           </label>
-          <label>Foto — URL da imagem
+          <label>Foto — URL da imagem (https://)
             <input type="url" id="photoUrl" placeholder="https://...">
           </label>
-          <label>Ou enviar um arquivo de imagem
-            <input type="file" id="photoFile" accept="image/png,image/jpeg,image/webp,image/gif">
-          </label>
           <img id="photo-preview" hidden>
-          <p style="color:var(--text-dim); font-size:0.8rem; margin:0;">
-            A foto é opcional: você pode salvar só nome/código/categoria agora e adicionar ou trocar a foto depois, editando este carro.
+          <p class="hint">
+            A foto é opcional: você pode salvar só nome/código/categoria agora e adicionar ou
+            trocar a foto depois, editando este carro. Hospede a imagem em algum lugar (imgur,
+            Discord, Google Drive com link público, etc.) e cole o link aqui.
           </p>
           <div class="form-actions">
             <button type="submit">Salvar</button>

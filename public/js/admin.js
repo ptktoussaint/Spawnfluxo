@@ -15,7 +15,6 @@ const nameInput = document.getElementById('name');
 const spawnCodeInput = document.getElementById('spawnCode');
 const categoryInput = document.getElementById('category');
 const photoUrlInput = document.getElementById('photoUrl');
-const photoFileInput = document.getElementById('photoFile');
 const photoPreview = document.getElementById('photo-preview');
 const categoryList = document.getElementById('category-list');
 const carTbody = document.getElementById('car-tbody');
@@ -129,19 +128,7 @@ carForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   formError.hidden = true;
   try {
-    let photoUrl = photoUrlInput.value.trim();
-
-    if (photoFileInput.files[0]) {
-      const fd = new FormData();
-      fd.append('photo', photoFileInput.files[0]);
-      const uploadRes = await authFetch('/api/upload', { method: 'POST', body: fd });
-      if (!uploadRes.ok) {
-        const err = await uploadRes.json().catch(() => ({}));
-        throw new Error(err.error || 'Falha no upload da foto');
-      }
-      const uploadData = await uploadRes.json();
-      photoUrl = uploadData.url;
-    }
+    const photoUrl = photoUrlInput.value.trim();
 
     const payload = {
       name: nameInput.value.trim(),

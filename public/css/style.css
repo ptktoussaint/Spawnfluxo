@@ -165,6 +165,7 @@ button.danger { background: var(--danger); color: #1a0505; }
 button.danger:hover { background: var(--danger-hover); }
 
 .error { color: var(--danger-hover); font-size: 0.9rem; }
+.hint { color: var(--text-dim); font-size: 0.8rem; margin: 0; }
 
 .admin-toolbar {
   display: flex;

@@ -2,17 +2,17 @@ services:
   - type: web
     name: spawnfluxo
     runtime: node
-    plan: starter
+    plan: free
     buildCommand: npm install
     startCommand: npm start
     envVars:
       - key: ADMIN_PASSWORD
         sync: false
-      - key: DATA_DIR
-        value: /var/data
+      - key: FIREBASE_PROJECT_ID
+        sync: false
+      - key: FIREBASE_CLIENT_EMAIL
+        sync: false
+      - key: FIREBASE_PRIVATE_KEY
+        sync: false
       - key: TRUST_PROXY
         value: "true"
-    disk:
-      name: spawnfluxo-data
-      mountPath: /var/data
-      sizeGB: 1

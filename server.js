@@ -1,23 +1,18 @@
+require('dotenv').config({ quiet: true });
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
-const multer = require('multer');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const { initializeApp, cert } = require('firebase-admin/app');
+const { getFirestore } = require('firebase-admin/firestore');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123';
 const TOKEN_TTL_MS = 12 * 60 * 60 * 1000; // 12h de sessão
-
-// DATA_DIR aponta para um disco persistente em produção (ex.: Render Disk),
-// já que os dados e as fotos enviadas não podem viver dentro da pasta do
-// código-fonte, que é recriada do zero a cada deploy.
-const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, 'data');
-const DATA_FILE = path.join(DATA_DIR, 'cars.json');
 const SEED_FILE = path.join(__dirname, 'data', 'seed-cars.json');
-const UPLOADS_DIR = path.join(DATA_DIR, 'uploads');
 
 if (ADMIN_PASSWORD === 'admin123' || ADMIN_PASSWORD.length < 8) {
   console.warn(
@@ -26,11 +21,61 @@ if (ADMIN_PASSWORD === 'admin123' || ADMIN_PASSWORD.length < 8) {
   );
 }
 
-if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
-if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
-if (!fs.existsSync(DATA_FILE)) {
-  // Primeira execução: popula com os veículos já cadastrados (data/seed-cars.json).
-  fs.writeFileSync(DATA_FILE, fs.existsSync(SEED_FILE) ? fs.readFileSync(SEED_FILE) : '[]');
+// ----- Firebase (Firestore) -----
+// Os dados dos veículos ficam no Firestore em vez de disco local, porque a
+// hospedagem gratuita (Render free tier) não oferece disco persistente.
+const FIREBASE_PROJECT_ID = process.env.FIREBASE_PROJECT_ID;
+const FIREBASE_CLIENT_EMAIL = process.env.FIREBASE_CLIENT_EMAIL;
+const FIREBASE_PRIVATE_KEY = (process.env.FIREBASE_PRIVATE_KEY || '').replace(/\\n/g, '\n');
+
+if (!FIREBASE_PROJECT_ID || !FIREBASE_CLIENT_EMAIL || !FIREBASE_PRIVATE_KEY) {
+  console.error(
+    'Faltam variáveis de ambiente do Firebase (FIREBASE_PROJECT_ID, FIREBASE_CLIENT_EMAIL, ' +
+    'FIREBASE_PRIVATE_KEY). Veja o README para instruções de configuração.'
+  );
+  process.exit(1);
+}
+
+const firebaseApp = initializeApp({
+  credential: cert({
+    projectId: FIREBASE_PROJECT_ID,
+    clientEmail: FIREBASE_CLIENT_EMAIL,
+    privateKey: FIREBASE_PRIVATE_KEY,
+  }),
+});
+
+const db = getFirestore(firebaseApp);
+const carsCollection = db.collection('cars');
+
+async function readCars() {
+  const snapshot = await carsCollection.get();
+  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+}
+
+async function seedIfEmpty() {
+  const existing = await carsCollection.limit(1).get();
+  if (!existing.empty) return;
+  if (!fs.existsSync(SEED_FILE)) return;
+
+  const seedCars = JSON.parse(fs.readFileSync(SEED_FILE, 'utf-8'));
+  const commits = [];
+  let batch = db.batch();
+  let opCount = 0;
+
+  for (const car of seedCars) {
+    const { id, ...data } = car;
+    batch.set(carsCollection.doc(id), data);
+    opCount += 1;
+    if (opCount === 450) { // limite de 500 operações por batch no Firestore
+      commits.push(batch.commit());
+      batch = db.batch();
+      opCount = 0;
+    }
+  }
+  if (opCount > 0) commits.push(batch.commit());
+
+  await Promise.all(commits);
+  console.log(`Firestore semeado com ${seedCars.length} veículos a partir de data/seed-cars.json.`);
 }
 
 // Tokens de sessao do admin ficam apenas em memoria (nunca tocam disco) e
@@ -71,17 +116,9 @@ function safeCompare(a, b) {
   return crypto.timingSafeEqual(bufA, bufB);
 }
 
-function readCars() {
-  return JSON.parse(fs.readFileSync(DATA_FILE, 'utf-8'));
-}
-
-function writeCars(cars) {
-  fs.writeFileSync(DATA_FILE, JSON.stringify(cars, null, 2));
-}
-
 function isValidPhotoUrl(url) {
   if (!url) return true; // foto é opcional
-  return /^https:\/\/[^\s]+$/i.test(url) || /^\/uploads\/[A-Za-z0-9._-]+$/.test(url);
+  return /^https:\/\/[^\s]+$/i.test(url);
 }
 
 function requireAuth(req, res, next) {
@@ -101,9 +138,9 @@ app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      imgSrc: ["'self'", 'https:', 'data:'],
+      imgSrc: ["'self'", 'https:'],
       scriptSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'"],
+      styleSrc: ["'self'"],
     },
   },
 }));
@@ -126,47 +163,37 @@ const apiLimiter = rateLimit({
 app.use('/api', apiLimiter);
 app.use(express.json({ limit: '200kb' }));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/uploads', express.static(UPLOADS_DIR));
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, UPLOADS_DIR),
-  filename: (req, file, cb) => {
-    const ext = path.extname(file.originalname).toLowerCase();
-    cb(null, crypto.randomUUID() + ext);
-  },
-});
-
-const upload = multer({
-  storage,
-  limits: { fileSize: 5 * 1024 * 1024 },
-  fileFilter: (req, file, cb) => {
-    if (/^image\/(png|jpe?g|webp|gif)$/.test(file.mimetype)) cb(null, true);
-    else cb(new Error('Formato de imagem inválido'));
-  },
-});
 
 // ----- Endpoints públicos (somente leitura) -----
 
-app.get('/api/cars', (req, res) => {
-  const { q = '', category = '' } = req.query;
-  let cars = readCars();
-  const term = String(q).trim().toLowerCase();
-  if (term) {
-    cars = cars.filter(
-      (c) => c.name.toLowerCase().includes(term) || c.category.toLowerCase().includes(term)
-    );
+app.get('/api/cars', async (req, res, next) => {
+  try {
+    const { q = '', category = '' } = req.query;
+    let cars = await readCars();
+    const term = String(q).trim().toLowerCase();
+    if (term) {
+      cars = cars.filter(
+        (c) => c.name.toLowerCase().includes(term) || c.category.toLowerCase().includes(term)
+      );
+    }
+    if (category) {
+      cars = cars.filter((c) => c.category === category);
+    }
+    cars.sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'));
+    res.json(cars);
+  } catch (err) {
+    next(err);
   }
-  if (category) {
-    cars = cars.filter((c) => c.category === category);
-  }
-  cars.sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'));
-  res.json(cars);
 });
 
-app.get('/api/categories', (req, res) => {
-  const cars = readCars();
-  const set = new Set(cars.map((c) => c.category).filter(Boolean));
-  res.json([...set].sort((a, b) => a.localeCompare(b, 'pt-BR')));
+app.get('/api/categories', async (req, res, next) => {
+  try {
+    const cars = await readCars();
+    const set = new Set(cars.map((c) => c.category).filter(Boolean));
+    res.json([...set].sort((a, b) => a.localeCompare(b, 'pt-BR')));
+  } catch (err) {
+    next(err);
+  }
 });
 
 // ----- Autenticação do admin -----
@@ -187,74 +214,87 @@ app.post('/api/logout', requireAuth, (req, res) => {
 
 // ----- Endpoints administrativos (protegidos) -----
 
-app.post('/api/cars', requireAuth, (req, res) => {
-  const { name, spawnCode, category, photoUrl } = req.body || {};
-  if (!name || !spawnCode || !category) {
-    return res.status(400).json({ error: 'Nome, código e categoria são obrigatórios' });
+app.post('/api/cars', requireAuth, async (req, res, next) => {
+  try {
+    const { name, spawnCode, category, photoUrl } = req.body || {};
+    if (!name || !spawnCode || !category) {
+      return res.status(400).json({ error: 'Nome, código e categoria são obrigatórios' });
+    }
+    if (photoUrl && !isValidPhotoUrl(photoUrl)) {
+      return res.status(400).json({ error: 'URL de foto inválida. Use um link https://.' });
+    }
+    const now = new Date().toISOString();
+    const id = crypto.randomUUID();
+    const data = {
+      name: String(name).trim(),
+      spawnCode: String(spawnCode).trim(),
+      category: String(category).trim(),
+      photoUrl: photoUrl ? String(photoUrl).trim() : '',
+      createdAt: now,
+      updatedAt: now,
+    };
+    await carsCollection.doc(id).set(data);
+    res.status(201).json({ id, ...data });
+  } catch (err) {
+    next(err);
   }
-  if (photoUrl && !isValidPhotoUrl(photoUrl)) {
-    return res.status(400).json({ error: 'URL de foto inválida. Use https:// ou uma foto enviada pelo formulário.' });
-  }
-  const cars = readCars();
-  const now = new Date().toISOString();
-  const car = {
-    id: crypto.randomUUID(),
-    name: String(name).trim(),
-    spawnCode: String(spawnCode).trim(),
-    category: String(category).trim(),
-    photoUrl: photoUrl ? String(photoUrl).trim() : '',
-    createdAt: now,
-    updatedAt: now,
-  };
-  cars.push(car);
-  writeCars(cars);
-  res.status(201).json(car);
 });
 
-app.put('/api/cars/:id', requireAuth, (req, res) => {
-  const cars = readCars();
-  const idx = cars.findIndex((c) => c.id === req.params.id);
-  if (idx === -1) return res.status(404).json({ error: 'Carro não encontrado' });
+app.put('/api/cars/:id', requireAuth, async (req, res, next) => {
+  try {
+    const ref = carsCollection.doc(req.params.id);
+    const snap = await ref.get();
+    if (!snap.exists) return res.status(404).json({ error: 'Carro não encontrado' });
 
-  const { name, spawnCode, category, photoUrl } = req.body || {};
-  if (photoUrl && !isValidPhotoUrl(String(photoUrl).trim())) {
-    return res.status(400).json({ error: 'URL de foto inválida. Use https:// ou uma foto enviada pelo formulário.' });
+    const { name, spawnCode, category, photoUrl } = req.body || {};
+    if (photoUrl && !isValidPhotoUrl(String(photoUrl).trim())) {
+      return res.status(400).json({ error: 'URL de foto inválida. Use um link https://.' });
+    }
+
+    const updated = { ...snap.data() };
+    if (name !== undefined) updated.name = String(name).trim();
+    if (spawnCode !== undefined) updated.spawnCode = String(spawnCode).trim();
+    if (category !== undefined) updated.category = String(category).trim();
+    if (photoUrl !== undefined) updated.photoUrl = String(photoUrl).trim();
+
+    if (!updated.name || !updated.spawnCode || !updated.category) {
+      return res.status(400).json({ error: 'Nome, código e categoria são obrigatórios' });
+    }
+
+    updated.updatedAt = new Date().toISOString();
+    await ref.set(updated);
+    res.json({ id: req.params.id, ...updated });
+  } catch (err) {
+    next(err);
   }
-  const car = cars[idx];
-  if (name !== undefined) car.name = String(name).trim();
-  if (spawnCode !== undefined) car.spawnCode = String(spawnCode).trim();
-  if (category !== undefined) car.category = String(category).trim();
-  if (photoUrl !== undefined) car.photoUrl = String(photoUrl).trim();
+});
 
-  if (!car.name || !car.spawnCode || !car.category) {
-    return res.status(400).json({ error: 'Nome, código e categoria são obrigatórios' });
+app.delete('/api/cars/:id', requireAuth, async (req, res, next) => {
+  try {
+    const ref = carsCollection.doc(req.params.id);
+    const snap = await ref.get();
+    if (!snap.exists) return res.status(404).json({ error: 'Carro não encontrado' });
+    await ref.delete();
+    res.json({ ok: true });
+  } catch (err) {
+    next(err);
   }
-
-  car.updatedAt = new Date().toISOString();
-  cars[idx] = car;
-  writeCars(cars);
-  res.json(car);
 });
 
-app.delete('/api/cars/:id', requireAuth, (req, res) => {
-  const cars = readCars();
-  const exists = cars.some((c) => c.id === req.params.id);
-  if (!exists) return res.status(404).json({ error: 'Carro não encontrado' });
-  writeCars(cars.filter((c) => c.id !== req.params.id));
-  res.json({ ok: true });
-});
-
-app.post('/api/upload', requireAuth, upload.single('photo'), (req, res) => {
-  if (!req.file) return res.status(400).json({ error: 'Nenhum arquivo enviado' });
-  res.json({ url: '/uploads/' + req.file.filename });
-});
-
-// Tratamento de erros do multer (ex: arquivo grande demais, formato invalido)
+// Handler de erro genérico (rotas assíncronas usam next(err) para cair aqui).
 app.use((err, req, res, next) => {
-  if (err) return res.status(400).json({ error: err.message || 'Erro no upload' });
-  next();
+  console.error(err);
+  res.status(500).json({ error: 'Erro interno do servidor' });
 });
 
-app.listen(PORT, () => {
-  console.log(`Spawnfluxo rodando em http://localhost:${PORT}`);
+async function main() {
+  await seedIfEmpty();
+  app.listen(PORT, () => {
+    console.log(`Spawnfluxo rodando em http://localhost:${PORT}`);
+  });
+}
+
+main().catch((err) => {
+  console.error('Falha ao iniciar o servidor:', err);
+  process.exit(1);
 });
