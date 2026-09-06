@@ -9,6 +9,9 @@ const adminQInput = document.getElementById('admin-q');
 const adminCategorySelect = document.getElementById('admin-category');
 const adminCountEl = document.getElementById('admin-count');
 const carTbody = document.getElementById('car-tbody');
+const globalNewCategoryInput = document.getElementById('global-new-category');
+const globalAddCategoryBtn = document.getElementById('global-add-category-btn');
+const toolbarError = document.getElementById('toolbar-error');
 
 let token = sessionStorage.getItem('spawnfluxo_token') || '';
 let cars = [];
@@ -44,9 +47,15 @@ async function showAdmin() {
   // ainda em andamento re-renderizaria a tabela por cima de uma edição
   // recém-aberta, apagando o que já tivesse sido digitado.
   newCarBtn.disabled = true;
-  await loadCategories();
-  await loadCars();
-  newCarBtn.disabled = false;
+  try {
+    await loadCategories();
+    await loadCars();
+  } catch (err) {
+    toolbarError.textContent = err.message;
+    toolbarError.hidden = false;
+  } finally {
+    newCarBtn.disabled = false;
+  }
 }
 
 function logout() {
@@ -94,15 +103,25 @@ newCarBtn.addEventListener('click', () => {
   renderTable();
 });
 
+function loadCarsSafely() {
+  loadCars().catch((err) => {
+    toolbarError.textContent = err.message;
+    toolbarError.hidden = false;
+  });
+}
+
 adminQInput.addEventListener('input', () => {
   clearTimeout(debounceTimer);
-  debounceTimer = setTimeout(loadCars, 250);
+  debounceTimer = setTimeout(loadCarsSafely, 250);
 });
-adminCategorySelect.addEventListener('change', loadCars);
+adminCategorySelect.addEventListener('change', loadCarsSafely);
 
 async function loadCategories() {
   const res = await fetch('/api/categories');
-  allCategories = await res.json();
+  if (!res.ok) throw new Error('Não foi possível carregar as categorias.');
+  const data = await res.json();
+  if (!Array.isArray(data)) throw new Error('Resposta inválida ao carregar categorias.');
+  allCategories = data;
   const current = adminCategorySelect.value;
   adminCategorySelect.innerHTML =
     '<option value="">Todas as categorias</option>' +
@@ -110,12 +129,47 @@ async function loadCategories() {
   if (allCategories.includes(current)) adminCategorySelect.value = current;
 }
 
+// Atualiza só o checklist de categorias da linha em edição (se houver),
+// sem re-renderizar a tabela toda (o que apagaria o resto do formulário).
+function refreshOpenChecklist() {
+  const checklistEl = carTbody.querySelector('.editing-row .categories-checklist');
+  if (!checklistEl) return;
+  const checkedNow = Array.from(checklistEl.querySelectorAll('input:checked')).map((cb) => cb.value);
+  checklistEl.innerHTML = checklistItemsHtml(allCategories, checkedNow);
+}
+
+globalAddCategoryBtn.addEventListener('click', async () => {
+  const name = globalNewCategoryInput.value.trim();
+  if (!name) return;
+  toolbarError.hidden = true;
+  try {
+    const res = await authFetch('/api/categories', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name }),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || 'Erro ao criar categoria');
+    }
+    await loadCategories();
+    refreshOpenChecklist();
+    globalNewCategoryInput.value = '';
+  } catch (err) {
+    toolbarError.textContent = err.message;
+    toolbarError.hidden = false;
+  }
+});
+
 async function loadCars() {
   const params = new URLSearchParams();
   if (adminQInput.value.trim()) params.set('q', adminQInput.value.trim());
   if (adminCategorySelect.value) params.set('category', adminCategorySelect.value);
   const res = await fetch('/api/cars?' + params.toString());
-  cars = await res.json();
+  if (!res.ok) throw new Error('Não foi possível carregar os carros.');
+  const data = await res.json();
+  if (!Array.isArray(data)) throw new Error('Resposta inválida ao carregar os carros.');
+  cars = data;
   renderTable();
 }
 
@@ -154,12 +208,8 @@ function editRowHtml(car) {
             </label>
           </div>
           <div class="categories-field">
-            <span class="field-label">Categorias (marque uma ou mais)</span>
+            <span class="field-label">Categorias (marque uma ou mais — para criar uma nova, use "+ Nova categoria" no topo da página)</span>
             <div class="categories-checklist">${checklistItemsHtml(allCategories, c.categories)}</div>
-            <div class="add-category-row">
-              <input type="text" class="new-category-input" placeholder="Nova categoria...">
-              <button type="button" class="add-category-btn secondary">+ Adicionar categoria</button>
-            </div>
           </div>
           <img class="inline-preview" ${c.photoUrl ? `src="${escapeAttr(c.photoUrl)}"` : 'hidden'}>
           <div class="inline-actions">
@@ -215,10 +265,15 @@ function attachRowHandlers() {
     btn.addEventListener('click', async () => {
       const car = cars.find((c) => c.id === btn.dataset.id);
       if (!confirm(`Excluir "${car.name}"?`)) return;
-      const res = await authFetch('/api/cars/' + btn.dataset.id, { method: 'DELETE' });
-      if (res.ok) {
-        await loadCars();
-        await loadCategories();
+      try {
+        const res = await authFetch('/api/cars/' + btn.dataset.id, { method: 'DELETE' });
+        if (res.ok) {
+          await loadCars();
+          await loadCategories();
+        }
+      } catch (err) {
+        toolbarError.textContent = err.message;
+        toolbarError.hidden = false;
       }
     });
   });
@@ -243,35 +298,7 @@ function attachRowHandlers() {
     });
 
     const checklistEl = row.querySelector('.categories-checklist');
-    const newCatInput = row.querySelector('.new-category-input');
-    const addCatBtn = row.querySelector('.add-category-btn');
     const errorEl = row.querySelector('.inline-error');
-
-    addCatBtn.addEventListener('click', async () => {
-      const name = newCatInput.value.trim();
-      if (!name) return;
-      errorEl.hidden = true;
-      try {
-        const res = await authFetch('/api/categories', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name }),
-        });
-        if (!res.ok) {
-          const err = await res.json().catch(() => ({}));
-          throw new Error(err.error || 'Erro ao criar categoria');
-        }
-        const data = await res.json();
-        await loadCategories();
-        const checkedNow = Array.from(checklistEl.querySelectorAll('input:checked')).map((cb) => cb.value);
-        if (!checkedNow.includes(data.name)) checkedNow.push(data.name);
-        checklistEl.innerHTML = checklistItemsHtml(allCategories, checkedNow);
-        newCatInput.value = '';
-      } catch (err) {
-        errorEl.textContent = err.message;
-        errorEl.hidden = false;
-      }
-    });
 
     const saveBtn = row.querySelector('.save-inline-btn');
     saveBtn.addEventListener('click', async () => {

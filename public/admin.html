@@ -26,9 +26,16 @@
 
     <section id="admin-section" hidden>
       <div class="admin-toolbar">
-        <button id="new-car-btn">+ Novo carro</button>
+        <div class="toolbar-left">
+          <button id="new-car-btn">+ Novo carro</button>
+          <div class="add-category-row">
+            <input type="text" id="global-new-category" placeholder="Nova categoria...">
+            <button type="button" id="global-add-category-btn" class="secondary">+ Nova categoria</button>
+          </div>
+        </div>
         <button id="logout-btn" class="secondary">Sair</button>
       </div>
+      <p id="toolbar-error" class="error" hidden></p>
 
       <div class="search-bar">
         <input id="admin-q" type="text" placeholder="Buscar por nome ou categoria...">

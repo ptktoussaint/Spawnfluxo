@@ -78,6 +78,18 @@ fielmente na importação):
 5. **Guarde esse arquivo `.json` em local seguro e nunca o coloque no Git** — quem tiver
    essas credenciais tem acesso total de leitura/escrita ao banco.
 
+### Cota gratuita do Firestore
+
+O plano gratuito (Spark) do Firebase tem um limite diário de operações no Firestore —
+historicamente 50.000 leituras, 20.000 escritas e 20.000 exclusões por dia (a cota reseta
+à meia-noite, horário do Pacífico dos EUA). Cada visita ao catálogo público conta como uma
+leitura por veículo retornado (ex.: carregar a lista completa com 207 veículos = 207
+leituras). Em uso normal isso rende bastante, mas testar bastante (ou ter muitos acessos
+simultâneos) num mesmo dia pode esgotar a cota — nesse caso a página mostra uma mensagem de
+erro amigável em vez de travar, e volta a funcionar sozinha quando a cota resetar. Se isso
+acontecer com frequência, o Firebase tem um plano pago (Blaze) com cota bem maior e cobrança
+só pelo excedente.
+
 ## Segurança
 
 - O login do admin usa comparação de senha em tempo constante e limite de tentativas

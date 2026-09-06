@@ -89,12 +89,15 @@ async function registerCategories(names) {
   await Promise.all(writes);
 }
 
+// Lê só a coleção "categories" (poucos documentos), sem reler todos os
+// carros: toda categoria usada por algum carro já foi registrada ali por
+// registerCategories() (seja no seed inicial ou em cada criação/edição),
+// então não precisamos pagar o custo de reler a coleção "cars" inteira
+// só para montar essa lista — economiza cota de leitura do Firestore.
 async function readCategoryNames() {
-  const [catSnap, cars] = await Promise.all([categoriesCollection.get(), readCars()]);
-  const explicit = catSnap.docs.map((d) => d.data().name).filter(Boolean);
-  const used = cars.flatMap((c) => c.categories);
-  const set = new Set([...explicit, ...used]);
-  return [...set].sort((a, b) => a.localeCompare(b, 'pt-BR'));
+  const catSnap = await categoriesCollection.get();
+  const names = catSnap.docs.map((d) => d.data().name).filter(Boolean);
+  return [...new Set(names)].sort((a, b) => a.localeCompare(b, 'pt-BR'));
 }
 
 async function seedIfEmpty() {

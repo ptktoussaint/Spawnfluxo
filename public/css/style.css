@@ -198,10 +198,20 @@ button.danger:hover { background: var(--danger-hover); }
 .admin-toolbar {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 1.25rem;
+  align-items: center;
+  margin-bottom: 0.5rem;
   flex-wrap: wrap;
   gap: 0.75rem;
 }
+
+.toolbar-left {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+#toolbar-error { margin-bottom: 1.25rem; }
 
 table {
   width: 100%;
