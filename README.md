@@ -9,20 +9,22 @@ nome do veículo, código de spawn, uma ou mais categorias e foto (opcional).
   categoria, igual à página pública. Clicar em "Editar" transforma a própria linha da
   tabela num formulário editável (sem precisar rolar a página até o topo). Permite
   adicionar, editar e excluir veículos, marcar **múltiplas categorias** por veículo (via
-  checkboxes) e **criar categorias novas** direto no formulário, mesmo sem ainda ter um
+  checkboxes) e **criar categorias novas** direto na barra do topo, mesmo sem ainda ter um
   veículo para usá-la. A foto é opcional — dá para cadastrar só nome/código/categoria e
   adicionar (ou trocar) a foto depois, editando o registro. A foto é sempre um link
   `https://` (hospede a imagem em algum lugar como imgur, Discord ou Google Drive com link
   público, e cole o link no formulário) — não há upload de arquivo, para o site poder rodar
   100% de graça sem precisar de disco próprio.
 
-Os dados dos veículos ficam no **Firestore** (banco de dados gratuito do Firebase/Google),
-não em arquivo local — assim o site pode ser hospedado inteiramente na camada gratuita do
-Render (que não oferece disco persistente).
+Os dados ficam num banco **Postgres gratuito no Supabase**, não em arquivo local — assim o
+site pode ser hospedado inteiramente na camada gratuita do Render (que não oferece disco
+persistente). O servidor lê o banco só uma vez, ao iniciar, e mantém tudo em memória depois
+disso (veja **Como os dados persistem** abaixo) — assim o uso do site não depende de cota
+por leitura nem gera custo proporcional a acessos.
 
 ## Como rodar localmente
 
-1. Configure um projeto Firebase (veja a seção **Configurar o Firebase** abaixo) — é o
+1. Configure um projeto Supabase (veja a seção **Configurar o Supabase** abaixo) — é o
    mesmo projeto que você vai usar em produção, então esse passo só precisa ser feito uma vez.
 2. Instale as dependências e configure o `.env`:
 
@@ -31,9 +33,8 @@ Render (que não oferece disco persistente).
    cp .env.example .env
    ```
 
-   Edite o `.env` e preencha `ADMIN_PASSWORD` (uma senha forte) e as três variáveis
-   `FIREBASE_PROJECT_ID`, `FIREBASE_CLIENT_EMAIL`, `FIREBASE_PRIVATE_KEY` com os dados da
-   conta de serviço do seu projeto Firebase.
+   Edite o `.env` e preencha `ADMIN_PASSWORD` (uma senha forte) e `DATABASE_URL` com a
+   connection string do seu projeto Supabase.
 3. Rode:
 
    ```bash
@@ -42,11 +43,11 @@ Render (que não oferece disco persistente).
 
 Acesse `http://localhost:3000` (catálogo público) e `http://localhost:3000/admin.html` (admin).
 
-Na primeira execução, se a coleção `cars` do Firestore estiver vazia, o servidor a popula
-automaticamente com os **207 veículos** já cadastrados (a partir de `data/seed-cars.json`),
-organizados em 8 categorias: `PLANOS VIP'S`, `VEÍCULOS VIP'S`, `MOTOS VIP'S`,
-`VEÍCULOS ESPECIAIS`, `AERONAVES`, `CAMINHÕES`, `VEÍCULOS LUXO` e `RECOMPENSAS DO PASSE`.
-Nenhuma foto foi associada ainda — adicione pelo painel admin quando quiser.
+Na primeira execução, se a tabela `cars` estiver vazia, o servidor a popula automaticamente
+com os **207 veículos** já cadastrados (a partir de `data/seed-cars.json`), organizados em
+8 categorias: `PLANOS VIP'S`, `VEÍCULOS VIP'S`, `MOTOS VIP'S`, `VEÍCULOS ESPECIAIS`,
+`AERONAVES`, `CAMINHÕES`, `VEÍCULOS LUXO` e `RECOMPENSAS DO PASSE`. Nenhuma foto foi
+associada ainda — adicione pelo painel admin quando quiser.
 
 **Pontos para você revisar** (peculiaridades que já existiam nas listas originais, mantidas
 fielmente na importação):
@@ -61,34 +62,32 @@ fielmente na importação):
   `PRIMOGENITO` dessa segunda linha está correto, pois já existe outra linha `PRIMOGENITO`
   com código `primogenito`.
 
-## Configurar o Firebase (banco de dados gratuito)
+## Configurar o Supabase (banco de dados gratuito)
 
-1. Acesse [console.firebase.google.com](https://console.firebase.google.com) e crie um
-   projeto novo (pode ser gratuito, plano "Spark").
-2. No menu lateral, vá em **Build → Firestore Database** → **Create database** → escolha
-   modo de produção (production mode) e a região mais próxima de você → **Enable**.
-3. Vá em **Configurações do projeto** (ícone de engrenagem) → aba **Service accounts** →
-   **Generate new private key**. Isso baixa um arquivo `.json`.
-4. Abra esse arquivo `.json` baixado. Dele você precisa de três valores para o `.env` (ou
-   para as variáveis de ambiente do Render):
-   - `project_id` → `FIREBASE_PROJECT_ID`
-   - `client_email` → `FIREBASE_CLIENT_EMAIL`
-   - `private_key` → `FIREBASE_PRIVATE_KEY` (copie o valor inteiro, incluindo
-     `-----BEGIN PRIVATE KEY-----` e `-----END PRIVATE KEY-----`)
-5. **Guarde esse arquivo `.json` em local seguro e nunca o coloque no Git** — quem tiver
-   essas credenciais tem acesso total de leitura/escrita ao banco.
+1. Acesse [supabase.com](https://supabase.com) e crie uma conta gratuita (não pede cartão
+   de crédito).
+2. **New project** → escolha um nome e uma **senha do banco** (guarde essa senha, você vai
+   precisar dela na connection string) → escolha a região mais próxima de você → **Create
+   new project**. Leva um ou dois minutos para provisionar.
+3. No menu lateral, vá em **SQL Editor** → **New query**, cole o conteúdo do arquivo
+   [`db/schema.sql`](db/schema.sql) deste repositório e clique em **Run**. Isso cria as
+   tabelas `cars` e `categories`.
+4. Vá em **Project Settings** (ícone de engrenagem) → **Database** → **Connection string**
+   → aba **URI**. Copie essa string — ela é parecida com:
+   `postgresql://postgres.xxxxx:[YOUR-PASSWORD]@aws-0-xxxxx.pooler.supabase.com:6543/postgres`
+5. Substitua `[YOUR-PASSWORD]` pela senha do banco que você definiu no passo 2, e use essa
+   string completa como `DATABASE_URL` no `.env` (local) ou nas variáveis de ambiente do
+   Render (produção).
 
-### Cota gratuita do Firestore
+### Como os dados persistem
 
-O plano gratuito (Spark) do Firebase tem um limite diário de operações no Firestore —
-historicamente 50.000 leituras, 20.000 escritas e 20.000 exclusões por dia (a cota reseta
-à meia-noite, horário do Pacífico dos EUA). Cada visita ao catálogo público conta como uma
-leitura por veículo retornado (ex.: carregar a lista completa com 207 veículos = 207
-leituras). Em uso normal isso rende bastante, mas testar bastante (ou ter muitos acessos
-simultâneos) num mesmo dia pode esgotar a cota — nesse caso a página mostra uma mensagem de
-erro amigável em vez de travar, e volta a funcionar sozinha quando a cota resetar. Se isso
-acontecer com frequência, o Firebase tem um plano pago (Blaze) com cota bem maior e cobrança
-só pelo excedente.
+O servidor lê as tabelas `cars` e `categories` do Supabase **uma única vez, quando inicia**,
+e guarda tudo em memória a partir daí. Toda busca, filtro e listagem no site (público ou
+admin) vem dessa memória — não gera nenhuma consulta ao banco. O banco só é tocado de novo
+quando: (a) o servidor reinicia (o que acontece de vez em quando no plano grátis do Render,
+não a cada visita), recarregando o cache do zero, ou (b) você cria/edita/exclui algo pelo
+painel admin, que grava no banco **e** atualiza o cache na hora. Isso significa que o uso
+do site não gera custo proporcional a quantas pessoas acessam.
 
 ## Segurança
 
@@ -99,8 +98,8 @@ só pelo excedente.
 - URLs de foto só são aceitas se forem `https://` (não dá para injetar `javascript:` ou
   caminhos locais).
 - Cabeçalhos de segurança (CSP, X-Frame-Options, etc.) via `helmet`.
-- As credenciais do Firebase ficam só no servidor (variáveis de ambiente) — nunca são
-  expostas ao navegador do visitante.
+- A connection string do banco fica só no servidor (variável de ambiente) — nunca é
+  exposta ao navegador do visitante.
 - **Antes de publicar na internet**: defina uma senha forte em `ADMIN_PASSWORD` (nunca
   use a senha padrão) e sirva o site atrás de HTTPS (o Render já fornece isso
   automaticamente).
@@ -109,30 +108,27 @@ só pelo excedente.
 
 ## Variáveis de ambiente
 
-| Variável                | Padrão      | Descrição                                              |
-|--------------------------|-------------|---------------------------------------------------------|
-| `PORT`                   | `3000`      | Porta do servidor                                        |
-| `ADMIN_PASSWORD`         | `admin123`  | Senha do painel admin — **troque em produção**            |
-| `FIREBASE_PROJECT_ID`    | —           | Do arquivo de credenciais do Firebase (`project_id`)      |
-| `FIREBASE_CLIENT_EMAIL`  | —           | Do arquivo de credenciais do Firebase (`client_email`)    |
-| `FIREBASE_PRIVATE_KEY`   | —           | Do arquivo de credenciais do Firebase (`private_key`)      |
-| `TRUST_PROXY`            | (vazio)     | `true` se estiver atrás de proxy/load balancer (ex. Render) |
+| Variável         | Padrão      | Descrição                                                    |
+|-------------------|-------------|----------------------------------------------------------------|
+| `PORT`            | `3000`      | Porta do servidor                                               |
+| `ADMIN_PASSWORD`  | `admin123`  | Senha do painel admin — **troque em produção**                   |
+| `DATABASE_URL`    | —           | Connection string do Postgres/Supabase (Project Settings > Database > Connection string > URI) |
+| `TRUST_PROXY`     | (vazio)     | `true` se estiver atrás de proxy/load balancer (ex. Render)      |
 
 ## Deploy no Render (deixar o site público, de graça)
 
-Como os dados agora ficam no Firestore, o app **não precisa de disco persistente** — dá
+Como os dados agora ficam no Supabase, o app **não precisa de disco persistente** — dá
 para usar o plano gratuito de Web Service do Render.
 
 ⚠️ O plano gratuito do Render "dorme" o serviço depois de um tempo sem acesso, e demora
 uns 30-50 segundos para "acordar" no próximo acesso — mas isso não afeta os dados (eles
-ficam no Firestore, não no Render), só a velocidade da primeira visita depois de um tempo
+ficam no Supabase, não no Render), só a velocidade da primeira visita depois de um tempo
 parado.
 
 O repositório já inclui um `render.yaml` pronto (Blueprint), então o deploy é quase
 automático:
 
-1. Configure o Firebase primeiro (seção acima) e tenha em mãos `FIREBASE_PROJECT_ID`,
-   `FIREBASE_CLIENT_EMAIL` e `FIREBASE_PRIVATE_KEY`.
+1. Configure o Supabase primeiro (seção acima) e tenha em mãos o `DATABASE_URL`.
 2. Crie uma conta em [render.com](https://render.com) (dá para entrar com sua conta do
    GitHub).
 3. No painel do Render, clique em **New +** → **Blueprint**.
@@ -141,11 +137,8 @@ automático:
    mesclar essas mudanças, ex. `main`).
 6. O Render vai ler o `render.yaml` automaticamente e mostrar o serviço `spawnfluxo` no
    plano gratuito. Confirme.
-7. Antes de criar, o Render vai pedir o valor de `ADMIN_PASSWORD`,
-   `FIREBASE_PROJECT_ID`, `FIREBASE_CLIENT_EMAIL` e `FIREBASE_PRIVATE_KEY` (não têm
-   valor padrão de propósito) — cole os valores correspondentes. Para
-   `FIREBASE_PRIVATE_KEY`, cole o valor inteiro do jeito que está no `.json` (com as
-   quebras de linha como `\n`).
+7. Antes de criar, o Render vai pedir o valor de `ADMIN_PASSWORD` e `DATABASE_URL` (não
+   têm valor padrão de propósito) — cole os valores correspondentes.
 8. Clique em **Apply**/**Create**. O primeiro deploy demora alguns minutos.
 9. Quando terminar, o Render te dá uma URL pública tipo
    `https://spawnfluxo.onrender.com` — é esse o link que você compartilha com as outras
@@ -161,5 +154,4 @@ Se preferir não usar o `render.yaml`, dá para criar o Web Service manualmente 
 - **Build Command**: `npm install`
 - **Start Command**: `npm start`
 - **Plan**: Free
-- Variáveis de ambiente: `ADMIN_PASSWORD`, `FIREBASE_PROJECT_ID`, `FIREBASE_CLIENT_EMAIL`,
-  `FIREBASE_PRIVATE_KEY`, `TRUST_PROXY=true`
+- Variáveis de ambiente: `ADMIN_PASSWORD`, `DATABASE_URL`, `TRUST_PROXY=true`

@@ -5,8 +5,7 @@ const fs = require('fs');
 const crypto = require('crypto');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
-const { initializeApp, cert } = require('firebase-admin/app');
-const { getFirestore } = require('firebase-admin/firestore');
+const { Pool } = require('pg');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -21,32 +20,23 @@ if (ADMIN_PASSWORD === 'admin123' || ADMIN_PASSWORD.length < 8) {
   );
 }
 
-// ----- Firebase (Firestore) -----
-// Os dados dos veículos ficam no Firestore em vez de disco local, porque a
-// hospedagem gratuita (Render free tier) não oferece disco persistente.
-const FIREBASE_PROJECT_ID = process.env.FIREBASE_PROJECT_ID;
-const FIREBASE_CLIENT_EMAIL = process.env.FIREBASE_CLIENT_EMAIL;
-const FIREBASE_PRIVATE_KEY = (process.env.FIREBASE_PRIVATE_KEY || '').replace(/\\n/g, '\n');
+// ----- Banco de dados (Postgres via Supabase) -----
+const DATABASE_URL = process.env.DATABASE_URL;
 
-if (!FIREBASE_PROJECT_ID || !FIREBASE_CLIENT_EMAIL || !FIREBASE_PRIVATE_KEY) {
+if (!DATABASE_URL) {
   console.error(
-    'Faltam variáveis de ambiente do Firebase (FIREBASE_PROJECT_ID, FIREBASE_CLIENT_EMAIL, ' +
-    'FIREBASE_PRIVATE_KEY). Veja o README para instruções de configuração.'
+    'Falta a variável de ambiente DATABASE_URL (connection string do Postgres/Supabase). ' +
+    'Veja o README para instruções de configuração.'
   );
   process.exit(1);
 }
 
-const firebaseApp = initializeApp({
-  credential: cert({
-    projectId: FIREBASE_PROJECT_ID,
-    clientEmail: FIREBASE_CLIENT_EMAIL,
-    privateKey: FIREBASE_PRIVATE_KEY,
-  }),
+const pool = new Pool({
+  connectionString: DATABASE_URL,
+  // Supabase exige TLS; rejectUnauthorized:false evita falha de verificação
+  // de cadeia de certificado comum em hosts gerenciados como este.
+  ssl: { rejectUnauthorized: false },
 });
-
-const db = getFirestore(firebaseApp);
-const carsCollection = db.collection('cars');
-const categoriesCollection = db.collection('categories');
 
 function slugify(name) {
   return String(name)
@@ -58,16 +48,16 @@ function slugify(name) {
     .replace(/(^-+|-+$)/g, '');
 }
 
-// Aceita tanto o formato antigo (category: string) quanto o novo
-// (categories: string[]), para não quebrar documentos já existentes no Firestore.
-function normalizeCarDoc(id, data) {
-  const { category, categories, ...rest } = data;
-  const list = Array.isArray(categories)
-    ? categories.filter(Boolean)
-    : category
-      ? [category]
-      : [];
-  return { id, ...rest, categories: list };
+function rowToCar(row) {
+  return {
+    id: row.id,
+    name: row.name,
+    spawnCode: row.spawn_code,
+    categories: row.categories || [],
+    photoUrl: row.photo_url || '',
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+  };
 }
 
 function normalizeCategoriesInput(categories) {
@@ -76,11 +66,10 @@ function normalizeCategoriesInput(categories) {
 }
 
 // ----- Cache em memória -----
-// O Firestore gratuito cobra por leitura, e cada visitante pesquisando no
-// catálogo faria uma leitura por veículo retornado. Para não depender do
-// número de acessos, os dados ficam em memória e o Firestore só é lido uma
-// vez (na inicialização do servidor) e escrito a cada alteração do admin —
-// nunca lido de novo a cada requisição pública.
+// Bancos gerenciados costumam cobrar ou limitar por operação/tráfego. Para
+// não depender do número de acessos ao site, os dados ficam em memória e o
+// banco só é lido uma vez (na inicialização do servidor) e escrito a cada
+// alteração do admin — nunca lido de novo a cada requisição pública.
 let carsCache = [];
 let categoriesCache = [];
 
@@ -92,11 +81,14 @@ function addCategoriesToCache(names) {
   categoriesCache = sortCategoryNames([...categoriesCache, ...names]);
 }
 
-async function loadCacheFromFirestore() {
-  const [carsSnap, catSnap] = await Promise.all([carsCollection.get(), categoriesCollection.get()]);
-  carsCache = carsSnap.docs.map((doc) => normalizeCarDoc(doc.id, doc.data()));
-  categoriesCache = sortCategoryNames(catSnap.docs.map((d) => d.data().name).filter(Boolean));
-  console.log(`Cache carregado do Firestore: ${carsCache.length} veículos, ${categoriesCache.length} categorias.`);
+async function loadCacheFromDb() {
+  const [carsResult, catResult] = await Promise.all([
+    pool.query('SELECT * FROM cars'),
+    pool.query('SELECT * FROM categories'),
+  ]);
+  carsCache = carsResult.rows.map(rowToCar);
+  categoriesCache = sortCategoryNames(catResult.rows.map((r) => r.name).filter(Boolean));
+  console.log(`Cache carregado do banco: ${carsCache.length} veículos, ${categoriesCache.length} categorias.`);
 }
 
 function readCars() {
@@ -108,40 +100,50 @@ function readCategoryNames() {
 }
 
 async function registerCategories(names) {
-  const writes = names.map((name) => {
+  for (const name of names) {
     const slug = slugify(name);
-    if (!slug) return Promise.resolve();
-    return categoriesCollection.doc(slug).set({ name, updatedAt: new Date().toISOString() }, { merge: true });
-  });
-  await Promise.all(writes);
+    if (!slug) continue;
+    await pool.query(
+      `INSERT INTO categories (slug, name, updated_at) VALUES ($1, $2, now())
+       ON CONFLICT (slug) DO UPDATE SET name = EXCLUDED.name, updated_at = now()`,
+      [slug, name]
+    );
+  }
   addCategoriesToCache(names);
 }
 
 async function seedIfEmpty() {
-  const existing = await carsCollection.limit(1).get();
-  if (!existing.empty) return;
+  const { rows } = await pool.query('SELECT 1 FROM cars LIMIT 1');
+  if (rows.length > 0) return;
   if (!fs.existsSync(SEED_FILE)) return;
 
   const seedCars = JSON.parse(fs.readFileSync(SEED_FILE, 'utf-8'));
-  const commits = [];
-  let batch = db.batch();
-  let opCount = 0;
+  if (seedCars.length === 0) return;
 
-  for (const car of seedCars) {
-    const { id, category, ...data } = car;
-    batch.set(carsCollection.doc(id), { ...data, categories: category ? [category] : [] });
-    opCount += 1;
-    if (opCount === 450) { // limite de 500 operações por batch no Firestore
-      commits.push(batch.commit());
-      batch = db.batch();
-      opCount = 0;
-    }
-  }
-  if (opCount > 0) commits.push(batch.commit());
+  const values = [];
+  const placeholders = seedCars.map((car, i) => {
+    const base = i * 7;
+    values.push(
+      car.id,
+      car.name,
+      car.spawnCode,
+      car.category ? [car.category] : [],
+      car.photoUrl || '',
+      car.createdAt,
+      car.updatedAt
+    );
+    return `($${base + 1}, $${base + 2}, $${base + 3}, $${base + 4}, $${base + 5}, $${base + 6}, $${base + 7})`;
+  });
 
-  await Promise.all(commits);
+  await pool.query(
+    `INSERT INTO cars (id, name, spawn_code, categories, photo_url, created_at, updated_at)
+     VALUES ${placeholders.join(', ')}
+     ON CONFLICT (id) DO NOTHING`,
+    values
+  );
+
   await registerCategories([...new Set(seedCars.map((c) => c.category).filter(Boolean))]);
-  console.log(`Firestore semeado com ${seedCars.length} veículos a partir de data/seed-cars.json.`);
+  console.log(`Banco semeado com ${seedCars.length} veículos a partir de data/seed-cars.json.`);
 }
 
 // Tokens de sessao do admin ficam apenas em memoria (nunca tocam disco) e
@@ -232,24 +234,20 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // ----- Endpoints públicos (somente leitura) -----
 
-app.get('/api/cars', async (req, res, next) => {
-  try {
-    const { q = '', category = '' } = req.query;
-    let cars = readCars();
-    const term = String(q).trim().toLowerCase();
-    if (term) {
-      cars = cars.filter(
-        (c) => c.name.toLowerCase().includes(term) || c.categories.some((cat) => cat.toLowerCase().includes(term))
-      );
-    }
-    if (category) {
-      cars = cars.filter((c) => c.categories.includes(category));
-    }
-    cars.sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'));
-    res.json(cars);
-  } catch (err) {
-    next(err);
+app.get('/api/cars', (req, res) => {
+  const { q = '', category = '' } = req.query;
+  let cars = readCars();
+  const term = String(q).trim().toLowerCase();
+  if (term) {
+    cars = cars.filter(
+      (c) => c.name.toLowerCase().includes(term) || c.categories.some((cat) => cat.toLowerCase().includes(term))
+    );
   }
+  if (category) {
+    cars = cars.filter((c) => c.categories.includes(category));
+  }
+  cars = [...cars].sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'));
+  res.json(cars);
 });
 
 app.get('/api/categories', (req, res) => {
@@ -264,7 +262,11 @@ app.post('/api/categories', requireAuth, async (req, res, next) => {
     if (!trimmed) return res.status(400).json({ error: 'Nome da categoria é obrigatório' });
     const slug = slugify(trimmed);
     if (!slug) return res.status(400).json({ error: 'Nome de categoria inválido' });
-    await categoriesCollection.doc(slug).set({ name: trimmed, updatedAt: new Date().toISOString() }, { merge: true });
+    await pool.query(
+      `INSERT INTO categories (slug, name, updated_at) VALUES ($1, $2, now())
+       ON CONFLICT (slug) DO UPDATE SET name = EXCLUDED.name, updated_at = now()`,
+      [slug, trimmed]
+    );
     addCategoriesToCache([trimmed]);
     res.status(201).json({ name: trimmed });
   } catch (err) {
@@ -302,7 +304,8 @@ app.post('/api/cars', requireAuth, async (req, res, next) => {
     }
     const now = new Date().toISOString();
     const id = crypto.randomUUID();
-    const data = {
+    const car = {
+      id,
       name: String(name).trim(),
       spawnCode: String(spawnCode).trim(),
       categories: cleanCategories,
@@ -310,10 +313,14 @@ app.post('/api/cars', requireAuth, async (req, res, next) => {
       createdAt: now,
       updatedAt: now,
     };
-    await carsCollection.doc(id).set(data);
+    await pool.query(
+      `INSERT INTO cars (id, name, spawn_code, categories, photo_url, created_at, updated_at)
+       VALUES ($1, $2, $3, $4, $5, $6, $6)`,
+      [car.id, car.name, car.spawnCode, car.categories, car.photoUrl, now]
+    );
     await registerCategories(cleanCategories);
-    carsCache = [...carsCache, { id, ...data }];
-    res.status(201).json({ id, ...data });
+    carsCache = [...carsCache, car];
+    res.status(201).json(car);
   } catch (err) {
     next(err);
   }
@@ -337,7 +344,6 @@ app.put('/api/cars/:id', requireAuth, async (req, res, next) => {
     }
 
     const updated = { ...current };
-    delete updated.id;
     if (name !== undefined) updated.name = String(name).trim();
     if (spawnCode !== undefined) updated.spawnCode = String(spawnCode).trim();
     if (cleanCategories !== undefined) updated.categories = cleanCategories;
@@ -348,10 +354,14 @@ app.put('/api/cars/:id', requireAuth, async (req, res, next) => {
     }
 
     updated.updatedAt = new Date().toISOString();
-    await carsCollection.doc(req.params.id).set(updated);
+    await pool.query(
+      `UPDATE cars SET name = $1, spawn_code = $2, categories = $3, photo_url = $4, updated_at = $5
+       WHERE id = $6`,
+      [updated.name, updated.spawnCode, updated.categories, updated.photoUrl, updated.updatedAt, req.params.id]
+    );
     if (cleanCategories) await registerCategories(cleanCategories);
-    carsCache = carsCache.map((c) => (c.id === req.params.id ? { id: req.params.id, ...updated } : c));
-    res.json({ id: req.params.id, ...updated });
+    carsCache = carsCache.map((c) => (c.id === req.params.id ? updated : c));
+    res.json(updated);
   } catch (err) {
     next(err);
   }
@@ -361,7 +371,7 @@ app.delete('/api/cars/:id', requireAuth, async (req, res, next) => {
   try {
     const exists = carsCache.some((c) => c.id === req.params.id);
     if (!exists) return res.status(404).json({ error: 'Carro não encontrado' });
-    await carsCollection.doc(req.params.id).delete();
+    await pool.query('DELETE FROM cars WHERE id = $1', [req.params.id]);
     carsCache = carsCache.filter((c) => c.id !== req.params.id);
     res.json({ ok: true });
   } catch (err) {
@@ -377,7 +387,7 @@ app.use((err, req, res, next) => {
 
 async function main() {
   await seedIfEmpty();
-  await loadCacheFromFirestore();
+  await loadCacheFromDb();
   app.listen(PORT, () => {
     console.log(`Spawnfluxo rodando em http://localhost:${PORT}`);
   });
