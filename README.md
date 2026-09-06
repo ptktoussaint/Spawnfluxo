@@ -1,13 +1,17 @@
 # Spawnfluxo — Catálogo de Spawn de Veículos
 
 Aplicação web para gerenciar o catálogo de códigos de spawn de veículos do servidor:
-nome do veículo, código de spawn, categoria e foto (opcional).
+nome do veículo, código de spawn, uma ou mais categorias e foto (opcional).
 
 - **Página pública** (`/` ou `/index.html`): qualquer pessoa pode buscar por nome ou
-  categoria e ver nome + código + categoria + foto. Não é possível editar nada por aqui.
-- **Painel administrativo** (`/admin.html`): protegido por senha. Permite adicionar,
-  editar e excluir veículos. A foto é opcional — dá para cadastrar só nome/código/categoria
-  e adicionar (ou trocar) a foto depois, editando o registro. A foto é sempre um link
+  categoria e ver nome + código + categorias + foto. Não é possível editar nada por aqui.
+- **Painel administrativo** (`/admin.html`): protegido por senha. Tem busca e filtro por
+  categoria, igual à página pública. Clicar em "Editar" transforma a própria linha da
+  tabela num formulário editável (sem precisar rolar a página até o topo). Permite
+  adicionar, editar e excluir veículos, marcar **múltiplas categorias** por veículo (via
+  checkboxes) e **criar categorias novas** direto no formulário, mesmo sem ainda ter um
+  veículo para usá-la. A foto é opcional — dá para cadastrar só nome/código/categoria e
+  adicionar (ou trocar) a foto depois, editando o registro. A foto é sempre um link
   `https://` (hospede a imagem em algum lugar como imgur, Discord ou Google Drive com link
   público, e cole o link no formulário) — não há upload de arquivo, para o site poder rodar
   100% de graça sem precisar de disco próprio.

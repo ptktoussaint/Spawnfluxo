@@ -45,7 +45,9 @@ function renderCars(cars) {
       }
       <div class="car-info">
         <h3>${escapeHtml(car.name)}</h3>
-        <p class="car-category">${escapeHtml(car.category)}</p>
+        <div class="car-categories">
+          ${car.categories.map((cat) => `<span class="car-category">${escapeHtml(cat)}</span>`).join('')}
+        </div>
         <p class="car-code">Código: <code>${escapeHtml(car.spawnCode)}</code></p>
       </div>
     </div>

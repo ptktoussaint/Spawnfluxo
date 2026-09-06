@@ -46,10 +46,55 @@ const firebaseApp = initializeApp({
 
 const db = getFirestore(firebaseApp);
 const carsCollection = db.collection('cars');
+const categoriesCollection = db.collection('categories');
+
+function slugify(name) {
+  return String(name)
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '') // remove acentos
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-+|-+$)/g, '');
+}
+
+// Aceita tanto o formato antigo (category: string) quanto o novo
+// (categories: string[]), para não quebrar documentos já existentes no Firestore.
+function normalizeCarDoc(id, data) {
+  const { category, categories, ...rest } = data;
+  const list = Array.isArray(categories)
+    ? categories.filter(Boolean)
+    : category
+      ? [category]
+      : [];
+  return { id, ...rest, categories: list };
+}
+
+function normalizeCategoriesInput(categories) {
+  if (!Array.isArray(categories)) return null;
+  return [...new Set(categories.map((c) => String(c).trim()).filter(Boolean))];
+}
 
 async function readCars() {
   const snapshot = await carsCollection.get();
-  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  return snapshot.docs.map((doc) => normalizeCarDoc(doc.id, doc.data()));
+}
+
+async function registerCategories(names) {
+  const writes = names.map((name) => {
+    const slug = slugify(name);
+    if (!slug) return Promise.resolve();
+    return categoriesCollection.doc(slug).set({ name, updatedAt: new Date().toISOString() }, { merge: true });
+  });
+  await Promise.all(writes);
+}
+
+async function readCategoryNames() {
+  const [catSnap, cars] = await Promise.all([categoriesCollection.get(), readCars()]);
+  const explicit = catSnap.docs.map((d) => d.data().name).filter(Boolean);
+  const used = cars.flatMap((c) => c.categories);
+  const set = new Set([...explicit, ...used]);
+  return [...set].sort((a, b) => a.localeCompare(b, 'pt-BR'));
 }
 
 async function seedIfEmpty() {
@@ -63,8 +108,8 @@ async function seedIfEmpty() {
   let opCount = 0;
 
   for (const car of seedCars) {
-    const { id, ...data } = car;
-    batch.set(carsCollection.doc(id), data);
+    const { id, category, ...data } = car;
+    batch.set(carsCollection.doc(id), { ...data, categories: category ? [category] : [] });
     opCount += 1;
     if (opCount === 450) { // limite de 500 operações por batch no Firestore
       commits.push(batch.commit());
@@ -75,6 +120,7 @@ async function seedIfEmpty() {
   if (opCount > 0) commits.push(batch.commit());
 
   await Promise.all(commits);
+  await registerCategories([...new Set(seedCars.map((c) => c.category).filter(Boolean))]);
   console.log(`Firestore semeado com ${seedCars.length} veículos a partir de data/seed-cars.json.`);
 }
 
@@ -173,11 +219,11 @@ app.get('/api/cars', async (req, res, next) => {
     const term = String(q).trim().toLowerCase();
     if (term) {
       cars = cars.filter(
-        (c) => c.name.toLowerCase().includes(term) || c.category.toLowerCase().includes(term)
+        (c) => c.name.toLowerCase().includes(term) || c.categories.some((cat) => cat.toLowerCase().includes(term))
       );
     }
     if (category) {
-      cars = cars.filter((c) => c.category === category);
+      cars = cars.filter((c) => c.categories.includes(category));
     }
     cars.sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'));
     res.json(cars);
@@ -188,9 +234,22 @@ app.get('/api/cars', async (req, res, next) => {
 
 app.get('/api/categories', async (req, res, next) => {
   try {
-    const cars = await readCars();
-    const set = new Set(cars.map((c) => c.category).filter(Boolean));
-    res.json([...set].sort((a, b) => a.localeCompare(b, 'pt-BR')));
+    res.json(await readCategoryNames());
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Criação explícita de categoria, mesmo sem nenhum carro usando-a ainda.
+app.post('/api/categories', requireAuth, async (req, res, next) => {
+  try {
+    const { name } = req.body || {};
+    const trimmed = typeof name === 'string' ? name.trim() : '';
+    if (!trimmed) return res.status(400).json({ error: 'Nome da categoria é obrigatório' });
+    const slug = slugify(trimmed);
+    if (!slug) return res.status(400).json({ error: 'Nome de categoria inválido' });
+    await categoriesCollection.doc(slug).set({ name: trimmed, updatedAt: new Date().toISOString() }, { merge: true });
+    res.status(201).json({ name: trimmed });
   } catch (err) {
     next(err);
   }
@@ -216,9 +275,10 @@ app.post('/api/logout', requireAuth, (req, res) => {
 
 app.post('/api/cars', requireAuth, async (req, res, next) => {
   try {
-    const { name, spawnCode, category, photoUrl } = req.body || {};
-    if (!name || !spawnCode || !category) {
-      return res.status(400).json({ error: 'Nome, código e categoria são obrigatórios' });
+    const { name, spawnCode, categories, photoUrl } = req.body || {};
+    const cleanCategories = normalizeCategoriesInput(categories);
+    if (!name || !spawnCode || !cleanCategories || cleanCategories.length === 0) {
+      return res.status(400).json({ error: 'Nome, código e ao menos uma categoria são obrigatórios' });
     }
     if (photoUrl && !isValidPhotoUrl(photoUrl)) {
       return res.status(400).json({ error: 'URL de foto inválida. Use um link https://.' });
@@ -228,12 +288,13 @@ app.post('/api/cars', requireAuth, async (req, res, next) => {
     const data = {
       name: String(name).trim(),
       spawnCode: String(spawnCode).trim(),
-      category: String(category).trim(),
+      categories: cleanCategories,
       photoUrl: photoUrl ? String(photoUrl).trim() : '',
       createdAt: now,
       updatedAt: now,
     };
     await carsCollection.doc(id).set(data);
+    await registerCategories(cleanCategories);
     res.status(201).json({ id, ...data });
   } catch (err) {
     next(err);
@@ -246,23 +307,33 @@ app.put('/api/cars/:id', requireAuth, async (req, res, next) => {
     const snap = await ref.get();
     if (!snap.exists) return res.status(404).json({ error: 'Carro não encontrado' });
 
-    const { name, spawnCode, category, photoUrl } = req.body || {};
+    const { name, spawnCode, categories, photoUrl } = req.body || {};
     if (photoUrl && !isValidPhotoUrl(String(photoUrl).trim())) {
       return res.status(400).json({ error: 'URL de foto inválida. Use um link https://.' });
     }
+    let cleanCategories;
+    if (categories !== undefined) {
+      cleanCategories = normalizeCategoriesInput(categories);
+      if (!cleanCategories) {
+        return res.status(400).json({ error: 'Categorias inválidas' });
+      }
+    }
 
-    const updated = { ...snap.data() };
+    const current = normalizeCarDoc(req.params.id, snap.data());
+    const updated = { ...current };
+    delete updated.id;
     if (name !== undefined) updated.name = String(name).trim();
     if (spawnCode !== undefined) updated.spawnCode = String(spawnCode).trim();
-    if (category !== undefined) updated.category = String(category).trim();
+    if (cleanCategories !== undefined) updated.categories = cleanCategories;
     if (photoUrl !== undefined) updated.photoUrl = String(photoUrl).trim();
 
-    if (!updated.name || !updated.spawnCode || !updated.category) {
-      return res.status(400).json({ error: 'Nome, código e categoria são obrigatórios' });
+    if (!updated.name || !updated.spawnCode || updated.categories.length === 0) {
+      return res.status(400).json({ error: 'Nome, código e ao menos uma categoria são obrigatórios' });
     }
 
     updated.updatedAt = new Date().toISOString();
     await ref.set(updated);
+    if (cleanCategories) await registerCategories(cleanCategories);
     res.json({ id: req.params.id, ...updated });
   } catch (err) {
     next(err);

@@ -8,11 +8,11 @@ const newCarBtn = document.getElementById('new-car-btn');
 const adminQInput = document.getElementById('admin-q');
 const adminCategorySelect = document.getElementById('admin-category');
 const adminCountEl = document.getElementById('admin-count');
-const categoryList = document.getElementById('category-list');
 const carTbody = document.getElementById('car-tbody');
 
 let token = sessionStorage.getItem('spawnfluxo_token') || '';
 let cars = [];
+let allCategories = [];
 let editingId = null; // null = ninguém sendo editado; 'new' = criando; ou o id do carro em edição
 let debounceTimer;
 
@@ -36,11 +36,17 @@ async function authFetch(url, options = {}) {
   return res;
 }
 
-function showAdmin() {
+async function showAdmin() {
   loginSection.hidden = true;
   adminSection.hidden = false;
-  loadCategories();
-  loadCars();
+  // "+ Novo carro" fica desabilitado até o carregamento inicial terminar:
+  // o checklist de categorias depende de allCategories, e um loadCars()
+  // ainda em andamento re-renderizaria a tabela por cima de uma edição
+  // recém-aberta, apagando o que já tivesse sido digitado.
+  newCarBtn.disabled = true;
+  await loadCategories();
+  await loadCars();
+  newCarBtn.disabled = false;
 }
 
 function logout() {
@@ -96,13 +102,12 @@ adminCategorySelect.addEventListener('change', loadCars);
 
 async function loadCategories() {
   const res = await fetch('/api/categories');
-  const categories = await res.json();
+  allCategories = await res.json();
   const current = adminCategorySelect.value;
   adminCategorySelect.innerHTML =
     '<option value="">Todas as categorias</option>' +
-    categories.map((c) => `<option value="${escapeAttr(c)}">${escapeHtml(c)}</option>`).join('');
-  if (categories.includes(current)) adminCategorySelect.value = current;
-  categoryList.innerHTML = categories.map((c) => `<option value="${escapeAttr(c)}">`).join('');
+    allCategories.map((c) => `<option value="${escapeAttr(c)}">${escapeHtml(c)}</option>`).join('');
+  if (allCategories.includes(current)) adminCategorySelect.value = current;
 }
 
 async function loadCars() {
@@ -115,7 +120,20 @@ async function loadCars() {
 }
 
 function emptyCar() {
-  return { id: '', name: '', spawnCode: '', category: '', photoUrl: '' };
+  return { id: '', name: '', spawnCode: '', categories: [], photoUrl: '' };
+}
+
+function checklistItemsHtml(categories, checked) {
+  return categories
+    .map(
+      (cat) => `
+    <label class="chk">
+      <input type="checkbox" value="${escapeAttr(cat)}" ${checked.includes(cat) ? 'checked' : ''}>
+      <span>${escapeHtml(cat)}</span>
+    </label>
+  `
+    )
+    .join('');
 }
 
 function editRowHtml(car) {
@@ -131,12 +149,17 @@ function editRowHtml(car) {
             <label>Código de spawn
               <input type="text" class="f-spawnCode" value="${escapeAttr(c.spawnCode)}">
             </label>
-            <label>Categoria
-              <input type="text" class="f-category" list="category-list" value="${escapeAttr(c.category)}">
-            </label>
             <label>Foto — URL (https://)
               <input type="url" class="f-photoUrl" value="${escapeAttr(c.photoUrl)}" placeholder="https://...">
             </label>
+          </div>
+          <div class="categories-field">
+            <span class="field-label">Categorias (marque uma ou mais)</span>
+            <div class="categories-checklist">${checklistItemsHtml(allCategories, c.categories)}</div>
+            <div class="add-category-row">
+              <input type="text" class="new-category-input" placeholder="Nova categoria...">
+              <button type="button" class="add-category-btn secondary">+ Adicionar categoria</button>
+            </div>
           </div>
           <img class="inline-preview" ${c.photoUrl ? `src="${escapeAttr(c.photoUrl)}"` : 'hidden'}>
           <div class="inline-actions">
@@ -151,12 +174,15 @@ function editRowHtml(car) {
 }
 
 function viewRowHtml(car) {
+  const categoriesHtml = car.categories.length
+    ? `<div class="car-categories">${car.categories.map((cat) => `<span class="car-category">${escapeHtml(cat)}</span>`).join('')}</div>`
+    : '—';
   return `
     <tr data-id="${car.id}">
       <td data-label="Foto">${car.photoUrl ? `<img src="${escapeHtml(car.photoUrl)}" class="thumb">` : '—'}</td>
       <td data-label="Nome">${escapeHtml(car.name)}</td>
       <td data-label="Código"><code>${escapeHtml(car.spawnCode)}</code></td>
-      <td data-label="Categoria">${escapeHtml(car.category)}</td>
+      <td data-label="Categoria">${categoriesHtml}</td>
       <td data-label="Ações">
         <button data-id="${car.id}" class="edit-btn secondary">Editar</button>
         <button data-id="${car.id}" class="delete-btn danger">Excluir</button>
@@ -216,15 +242,46 @@ function attachRowHandlers() {
       }
     });
 
-    const saveBtn = row.querySelector('.save-inline-btn');
-    saveBtn.addEventListener('click', async () => {
-      const errorEl = row.querySelector('.inline-error');
+    const checklistEl = row.querySelector('.categories-checklist');
+    const newCatInput = row.querySelector('.new-category-input');
+    const addCatBtn = row.querySelector('.add-category-btn');
+    const errorEl = row.querySelector('.inline-error');
+
+    addCatBtn.addEventListener('click', async () => {
+      const name = newCatInput.value.trim();
+      if (!name) return;
       errorEl.hidden = true;
       try {
+        const res = await authFetch('/api/categories', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name }),
+        });
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.error || 'Erro ao criar categoria');
+        }
+        const data = await res.json();
+        await loadCategories();
+        const checkedNow = Array.from(checklistEl.querySelectorAll('input:checked')).map((cb) => cb.value);
+        if (!checkedNow.includes(data.name)) checkedNow.push(data.name);
+        checklistEl.innerHTML = checklistItemsHtml(allCategories, checkedNow);
+        newCatInput.value = '';
+      } catch (err) {
+        errorEl.textContent = err.message;
+        errorEl.hidden = false;
+      }
+    });
+
+    const saveBtn = row.querySelector('.save-inline-btn');
+    saveBtn.addEventListener('click', async () => {
+      errorEl.hidden = true;
+      try {
+        const categories = Array.from(checklistEl.querySelectorAll('input:checked')).map((cb) => cb.value);
         const payload = {
           name: row.querySelector('.f-name').value.trim(),
           spawnCode: row.querySelector('.f-spawnCode').value.trim(),
-          category: row.querySelector('.f-category').value.trim(),
+          categories,
           photoUrl: row.querySelector('.f-photoUrl').value.trim(),
         };
 
