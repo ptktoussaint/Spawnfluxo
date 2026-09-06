@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Spawnfluxo — Admin</title>
+  <title>SPAWNS FLUXO "BY PTK" — Admin</title>
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
   <header class="topbar">
-    <h1>🚗 Spawnfluxo — Admin</h1>
+    <h1 class="brand-title">SPAWNS FLUXO <span class="credit">"BY PTK"</span> — Admin</h1>
     <a href="/index.html" class="back-link">← Voltar ao catálogo</a>
   </header>
 
@@ -30,36 +30,15 @@
         <button id="logout-btn" class="secondary">Sair</button>
       </div>
 
-      <div id="car-form-wrap" hidden>
-        <form id="car-form" class="card form">
-          <h2 id="form-title">Novo carro</h2>
-          <input type="hidden" id="car-id">
-          <label>Nome do carro
-            <input type="text" id="name" required>
-          </label>
-          <label>Código de spawn
-            <input type="text" id="spawnCode" required>
-          </label>
-          <label>Categoria
-            <input type="text" id="category" list="category-list" required>
-            <datalist id="category-list"></datalist>
-          </label>
-          <label>Foto — URL da imagem (https://)
-            <input type="url" id="photoUrl" placeholder="https://...">
-          </label>
-          <img id="photo-preview" hidden>
-          <p class="hint">
-            A foto é opcional: você pode salvar só nome/código/categoria agora e adicionar ou
-            trocar a foto depois, editando este carro. Hospede a imagem em algum lugar (imgur,
-            Discord, Google Drive com link público, etc.) e cole o link aqui.
-          </p>
-          <div class="form-actions">
-            <button type="submit">Salvar</button>
-            <button type="button" id="cancel-form-btn" class="secondary">Cancelar</button>
-          </div>
-          <p id="form-error" class="error" hidden></p>
-        </form>
+      <div class="search-bar">
+        <input id="admin-q" type="text" placeholder="Buscar por nome ou categoria...">
+        <select id="admin-category">
+          <option value="">Todas as categorias</option>
+        </select>
       </div>
+      <datalist id="category-list"></datalist>
+
+      <div id="admin-count" class="count"></div>
 
       <table id="car-table">
         <thead>
