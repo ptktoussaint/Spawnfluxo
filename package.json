@@ -1,0 +1,17 @@
+{
+  "name": "spawnfluxo",
+  "version": "1.0.0",
+  "description": "Catalogo online de codigos de spawn de veiculos, com painel administrativo e visualizacao publica.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "license": "UNLICENSED",
+  "dependencies": {
+    "express": "^4.19.2",
+    "express-rate-limit": "^8.7.0",
+    "helmet": "^8.3.0",
+    "multer": "^2.0.0"
+  }
+}

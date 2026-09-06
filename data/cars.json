@@ -1,0 +1,1865 @@
+[
+  {
+    "id": "d8c32b5e-6629-4175-b9b5-6f5f360a5ed3",
+    "name": "SUBMARINO ( VIP FÉRIAS )",
+    "spawnCode": "avisa",
+    "category": "PLANOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "32b6d6f3-666c-4040-baaf-ff2c5be602ee",
+    "name": "SAKURA ( VIP FÉRIAS )",
+    "spawnCode": "r1sakura",
+    "category": "PLANOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "0359b5f0-6c54-4bbf-92ce-1552f7fa11c5",
+    "name": "Q8 ( VIP FÉRIAS )",
+    "spawnCode": "rsq8m",
+    "category": "PLANOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "3ebbd3ac-477c-4da7-984b-4f04a793bcb1",
+    "name": "BRAVADO ( VIP BLACK )",
+    "spawnCode": "bravadoexclusive",
+    "category": "PLANOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "393a99f6-40e1-4232-aeb3-3e857f7ed3de",
+    "name": "HELI EXCLUSIVO ( VIP FARMADOR )",
+    "spawnCode": "fxbird",
+    "category": "PLANOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "6215a47a-4353-4a6c-8411-2e0aff347d47",
+    "name": "PORSCHE GT3 ( VIP FARMADOR )",
+    "spawnCode": "pfistergtd",
+    "category": "PLANOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "3439b258-1d7d-48a9-bea9-fb429fe50fd7",
+    "name": "PANAMERA ( VIP SUPREMO )",
+    "spawnCode": "pfistermansur",
+    "category": "PLANOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "bf2e9193-2a7f-49eb-8b10-1dc9b2fb53ba",
+    "name": "FURIA WB ( PACK LORE FRIENDLY )",
+    "spawnCode": "furiawb2",
+    "category": "PLANOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "46d68bcc-ac12-4c0c-833c-05dbe3afec3b",
+    "name": "SF VENOM ( PACK LORE FRIENDLY )",
+    "spawnCode": "gp1wb",
+    "category": "PLANOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "00eb0b06-fcf0-4454-8e8c-e8cf2aeee5bf",
+    "name": "VIP AGROBOY",
+    "spawnCode": "gcram1500",
+    "category": "PLANOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "b71dc33b-14b3-4218-bc36-26768452424a",
+    "name": "TRATOR ( VIP RESIDENCIAL )",
+    "spawnCode": "rmodtracktor",
+    "category": "PLANOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "57ffc98d-f4e5-4822-b18e-6c547d347a1d",
+    "name": "VIP PASCOA",
+    "spawnCode": "gxm5",
+    "category": "PLANOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "1e7f4acc-59a4-45da-a622-d299ffd6a1f4",
+    "name": "VIP PASCOA",
+    "spawnCode": "peptos_xsci1",
+    "category": "PLANOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "c41c0c76-df03-4300-bf0e-cc13227ab05b",
+    "name": "VIP NAMORADO",
+    "spawnCode": "hfd",
+    "category": "PLANOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "58aeae4f-28d8-4247-876b-40834931efaa",
+    "name": "VIP NAMORADO",
+    "spawnCode": "pfistermansur",
+    "category": "PLANOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "7643d64e-6dfa-40b2-8894-7bcde93d1ffe",
+    "name": "VIP EMPRESARIO ( Canis Comandant )",
+    "spawnCode": "22jeeplar",
+    "category": "PLANOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "b56fc01c-3fab-4470-a27d-3b4144ac3414",
+    "name": "VIP EMPRESARIO ( Caminhão )",
+    "spawnCode": "benson2",
+    "category": "PLANOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "7c24fc03-6035-4ba0-b350-6c32b5ea21f5",
+    "name": "VIP EMPRESARIO ( quadriciclo )",
+    "spawnCode": "sportsmanmud",
+    "category": "PLANOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "7d60ee13-dfa9-4214-951f-d292908ba958",
+    "name": "VIP SAMU",
+    "spawnCode": "850blueman",
+    "category": "PLANOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "ef06a3c1-25db-4da2-bd6f-553294a8d731",
+    "name": "VIP SAMU",
+    "spawnCode": "fxvipmed",
+    "category": "PLANOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "8dd9790f-d643-4e7b-9241-39b05da11487",
+    "name": "VIP BOMBEIRO",
+    "spawnCode": "850fedman",
+    "category": "PLANOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "8605fd15-e6ba-4e44-8d64-58787967d2ed",
+    "name": "VIP POLICIA",
+    "spawnCode": "polvipm3",
+    "category": "PLANOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "377e9cad-71bc-4acb-bca2-4a3145849dba",
+    "name": "VIP POLICIA",
+    "spawnCode": "fxvippol",
+    "category": "PLANOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "37dbc6b4-5e38-4fee-8957-a01341d8ff72",
+    "name": "VIP HALLOWEEN ( McLaren )",
+    "spawnCode": "765lt",
+    "category": "PLANOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "6b4d242f-4367-45c1-b9d0-a677e07889bf",
+    "name": "VIP HALLOWEEN ( Vassoura Hallowen )",
+    "spawnCode": "wrharrypotterv",
+    "category": "PLANOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "57c04a82-11c4-4093-b74b-b516326560ac",
+    "name": "VIP CARNAVAL",
+    "spawnCode": "gexige",
+    "category": "PLANOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "63d840f3-c402-4f11-b976-be99ebc8c8b6",
+    "name": "VIP ASTRO ( Gallivanter Exige )",
+    "spawnCode": "gexige",
+    "category": "PLANOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "1751e32f-8a07-4492-b448-d2fc494aa044",
+    "name": "VIP ASTRO ( Vassoura Voadora )",
+    "spawnCode": "wrharrypotterv",
+    "category": "PLANOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "8588ce2e-fab4-48f3-899e-22cd7fb74f2c",
+    "name": "VIP COPA ( Helicoptero top )",
+    "spawnCode": "helitop",
+    "category": "PLANOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "27f0396d-af09-46e1-a5ec-6cd51aa04239",
+    "name": "VIP COPA ( Pnmr )",
+    "spawnCode": "pfistermansur",
+    "category": "PLANOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "349483a1-a89e-47ff-b058-5378fc67eca8",
+    "name": "VIP COPA ( Brasilia )",
+    "spawnCode": "fxbrasa",
+    "category": "PLANOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "1be2f0d2-c47c-4f57-91da-6933772bb096",
+    "name": "RX7 ( PACK VELOZES & FURIOSOS )",
+    "spawnCode": "2f2frx7",
+    "category": "PLANOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "abe1de95-649a-436f-82cf-65ddbd274bd1",
+    "name": "S2000 ( PACK VELOZES & FURIOSOS )",
+    "spawnCode": "2f2fs2000",
+    "category": "PLANOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "c24a3531-fb9a-4426-94dc-e8618c12cb35",
+    "name": "CG 160 ( PACK MOTOS BR )",
+    "spawnCode": "cg160",
+    "category": "PLANOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "ffc995a2-08de-4f51-b1fd-bddb22134fc9",
+    "name": "MT 09 ( PACK MOTOS BR )",
+    "spawnCode": "mt09",
+    "category": "PLANOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "55f5b005-3a97-4584-b5bb-88edeabb6aec",
+    "name": "XRE 2022 ( PACK MOTOS BR )",
+    "spawnCode": "xre2020",
+    "category": "PLANOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "5a2a9959-54a6-4abb-b161-2a9b0a74a641",
+    "name": "Pfister 718 D",
+    "spawnCode": "718b",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "c5403c29-1786-4ac9-a71f-0f74d8550efb",
+    "name": "Grotti Turismo ( LaFerrari )",
+    "spawnCode": "apertadrcustom",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "4f8b0b0b-e6ee-410b-aa35-340fbfbf9ee7",
+    "name": "Pegassi AH-KSV",
+    "spawnCode": "ahksv",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "d7bfc83b-cf4b-4c1e-8ca0-201d85b39b56",
+    "name": "Tailgater S",
+    "spawnCode": "ars3spxxbk",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "94bd50c6-10da-4e4a-979c-1453ec5b2cd3",
+    "name": "Ubermacht Zen-M",
+    "spawnCode": "bmwm1wb",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "2b6e598d-0537-4b9b-aaeb-c87adb274719",
+    "name": "Ubermacht S4 N40i",
+    "spawnCode": "bmwz4",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "c87f9b17-7fa7-4dc1-a5a8-3549ae8cb559",
+    "name": "Invetero D7",
+    "spawnCode": "c7",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "b2ba1d28-7af3-4c25-a28b-77d072905d09",
+    "name": "Civic",
+    "spawnCode": "cvr",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "c2540984-e472-43f5-8403-0520404dbb56",
+    "name": "Benefactor C-S V8",
+    "spawnCode": "dres63amg",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "39a89e4b-21b4-4540-b7ad-b195553d55fa",
+    "name": "Maibatsu Revolution",
+    "spawnCode": "evo10",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "c36159a4-f65c-4c99-9914-737487d99c16",
+    "name": "Stud GS",
+    "spawnCode": "fordmustang",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "794e49cd-487b-481e-ace5-dd8968ba5f98",
+    "name": "Declasse",
+    "spawnCode": "fxsantana",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "db10d354-2afa-490f-be9b-5f39b0df032b",
+    "name": "Benefactor XLS",
+    "spawnCode": "gle53",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "b5d25b0c-4fc5-4f02-8690-82e009b622aa",
+    "name": "Progen Fury",
+    "spawnCode": "imola",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "2654c7f5-e1bf-4bad-bddb-c5cd3c48de5f",
+    "name": "GS-R M35",
+    "spawnCode": "nissangtr",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "3fd68407-3bfc-4656-8d03-855bf6d869d2",
+    "name": "Formula 1",
+    "spawnCode": "openwheel2",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "8cbb0561-b025-4f4e-bfb6-ec4f13ed13d3",
+    "name": "Zion",
+    "spawnCode": "passat",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "2ebf4fc6-f908-4302-9fdb-d6d8b25a2c70",
+    "name": "Paredão do Paulo",
+    "spawnCode": "paredao",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "a87521a5-20b3-49ae-8acb-5c0961908eb2",
+    "name": "Pegassi Ignus",
+    "spawnCode": "rmodsianr",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "d9242a9a-40a9-40c7-9052-bc25cab214de",
+    "name": "Superia",
+    "spawnCode": "toyotasupra",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "5b60329e-3d65-4bda-9f2e-fe4a5a643f47",
+    "name": "Baller Super",
+    "spawnCode": "velar",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "64d19209-6e2e-4dd6-90c6-73bd6982c5bf",
+    "name": "BENEFACTOR AGW A45",
+    "spawnCode": "wrlwcla45",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "082d5611-d250-42b9-a5d7-d9c3effa80d0",
+    "name": "Bravado 2024",
+    "spawnCode": "24camzl1x",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "acbed0d4-fa7a-45d9-b7d5-094dda31a1f9",
+    "name": "Bombarok Rebaixada",
+    "spawnCode": "amarokreb",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "b382567f-64ab-4a6b-afc4-cade46cd09ca",
+    "name": "Celta",
+    "spawnCode": "celtach",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "8f9d70b9-457f-45f1-9edd-3d912afd1964",
+    "name": "Obey RST",
+    "spawnCode": "audirs7",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "60636f11-a19c-444a-b794-0cfb2acd762e",
+    "name": "Elegance 2024",
+    "spawnCode": "azera2024m4",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "fad741c1-28a2-4588-b9a7-bd991ddd495c",
+    "name": "X-SUV",
+    "spawnCode": "bmwg05",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "4d9bbe43-f35f-472f-a6b8-4c09ee596ce9",
+    "name": "Benefactor C-Series AM",
+    "spawnCode": "c63",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "c06e2333-4dc4-4055-9e88-171a66b4e709",
+    "name": "Maibatsu Do Brian",
+    "spawnCode": "eclipse",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "609be9bf-baed-4cf9-a1fb-240bfc66bb62",
+    "name": "Albany Luxor ( ESCALADE )",
+    "spawnCode": "esc21",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "2154c4e0-91a1-4cd3-9578-37b59c0bdc79",
+    "name": "Sprint RW",
+    "spawnCode": "fbgolfr18",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "5032ba55-265e-4e21-a936-5c911fbce2cf",
+    "name": "Focus",
+    "spawnCode": "focuscustom",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "dcfb6126-59f8-4827-812e-a6359598edd9",
+    "name": "Progen GranTourer",
+    "spawnCode": "foxgt2",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "9738f137-5944-47a4-8e47-d4babc101e77",
+    "name": "Progen S7",
+    "spawnCode": "foxsenna",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "9ae88965-185a-4f47-8657-78950777546e",
+    "name": "Weevil PXX",
+    "spawnCode": "fusca2",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "6cb5ce0d-fd43-4472-b9f1-ae84fd657640",
+    "name": "psfister ( porshe )",
+    "spawnCode": "fxastron",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "ba04e8fa-45a3-4ddf-91b4-0c537afc4e1e",
+    "name": "Benefactor G-Xtreme",
+    "spawnCode": "rmodg65",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "caf00a34-1a12-43b8-a5d0-0a591eda1b27",
+    "name": "BF Sadler",
+    "spawnCode": "saveirosom",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "c6340ef8-7007-4d79-a322-6d088387f90a",
+    "name": "BF Carrier",
+    "spawnCode": "saveiro",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "758378af-5d82-43b1-a533-54b79a9bca09",
+    "name": "ubermacht Sport",
+    "spawnCode": "22m5sal",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "1bf5a8f5-bb85-4a20-9430-0ba940b6cf72",
+    "name": "Sultan RallySport R",
+    "spawnCode": "evo9_2022",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "a1172dd0-fc6e-43f8-8a6a-9f900c1590a3",
+    "name": "Grotti Turismo XR",
+    "spawnCode": "f458",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "f86aae7d-c77b-4d02-9cfa-363b82650808",
+    "name": "Giulia",
+    "spawnCode": "giulia_2021",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "653aaa81-7e18-4348-a38c-6401299c11fb",
+    "name": "BF Surfer",
+    "spawnCode": "jas_rrsurfert",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "9140fd1b-3a29-4862-8e6c-56931f9f9234",
+    "name": "Dinka RetroSport",
+    "spawnCode": "keveg6",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "9860cea5-5102-4834-8ebd-1999e7a309e4",
+    "name": "Ubermacht 235X Sport",
+    "spawnCode": "m235ixd",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "4ef32ee2-2f2b-4202-b194-92b72f29ef98",
+    "name": "Dominator GTX",
+    "spawnCode": "mustanggtd",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "c2c2276b-6d8f-4368-928a-22a540ff6c10",
+    "name": "SKYLINER",
+    "spawnCode": "nissanskyliner34",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "b3877143-fb7f-4bd6-813e-a91e961c6061",
+    "name": "Annis Elegy ZR",
+    "spawnCode": "nznismo24",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "4df9096c-ede5-46e7-9157-cb91cae593bd",
+    "name": "Comet S2 Cabrio",
+    "spawnCode": "playaangiec8",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "7628b05a-2eba-4dce-a84c-bab89f4f5ced",
+    "name": "Bravado T-Rex",
+    "spawnCode": "playabootyrx",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "7cfe51e2-235f-480e-bb03-0588cc06a2db",
+    "name": "BF Compact",
+    "spawnCode": "quadrado",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "5aa76577-41f3-4f23-9791-f1d8fdcd9691",
+    "name": "Elegy R",
+    "spawnCode": "r35",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "0bcc2f5e-ae4d-4204-b4ae-71c7cdfb1478",
+    "name": "CAMARO",
+    "spawnCode": "rmodcamaro",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "8fa71a24-d98c-4f02-9bad-f7b46b720572",
+    "name": "Bravado Thunder LX",
+    "spawnCode": "rmodcharger69",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "21a4be29-14e8-4d89-b360-5be349da99f0",
+    "name": "s10 rebaixada",
+    "spawnCode": "s10ori",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "480204e3-8a63-49de-952b-158e6c56d7ec",
+    "name": "Karin Land",
+    "spawnCode": "sjland",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "77d2f6a1-1eda-450a-a18f-16cce5e941fa",
+    "name": "Pegassi Vortex Tec",
+    "spawnCode": "tecnica",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "23b34469-143d-465f-8a9e-645be6aca568",
+    "name": "COMET ELECTRIC",
+    "spawnCode": "taycan",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "370cbdbf-69de-4110-92c3-30ac84b46e04",
+    "name": "Kart",
+    "spawnCode": "veto2",
+    "category": "VEÍCULOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "c6836a01-60c7-4634-989f-b2ce37e0a8d4",
+    "name": "Nagasaki Hyper10",
+    "spawnCode": "10r24nbrt",
+    "category": "MOTOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "658219d7-58e4-4ea0-ac7e-06c1292a7482",
+    "name": "Dinka Sindicado",
+    "spawnCode": "africa",
+    "category": "MOTOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "95abc846-c67f-49c2-abad-42358cae67c6",
+    "name": "MOTORIZADA DO DOG",
+    "spawnCode": "bike",
+    "category": "MOTOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "55573adb-8807-4615-a917-36cfcf1cbe69",
+    "name": "Road CD750",
+    "spawnCode": "cbhornet750",
+    "category": "MOTOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "b16faa9e-dc43-4c14-bf7b-778bda9750e4",
+    "name": "TurboStrike",
+    "spawnCode": "cbr1000rrr",
+    "category": "MOTOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "f0cd8c49-7cc6-465b-970b-77084108a433",
+    "name": "Akuma",
+    "spawnCode": "f4rr",
+    "category": "MOTOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "4f5d5f6e-f69c-45a6-a2b9-e570cef9be80",
+    "name": "Shitzu Velocity",
+    "spawnCode": "falcon",
+    "category": "MOTOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "2880ebb8-cf30-4e3c-b2f4-d346fbf1d02d",
+    "name": "Bati Striker 310",
+    "spawnCode": "gs310r",
+    "category": "MOTOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "c311e788-ee75-4031-af0b-06fe1965532a",
+    "name": "Wasp",
+    "spawnCode": "hornet",
+    "category": "MOTOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "b2879412-3e43-4b89-998d-7d150bf93114",
+    "name": "PCX",
+    "spawnCode": "PCX",
+    "category": "MOTOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "d98718ed-9859-4fd6-b701-af93633ea18e",
+    "name": "Nagasaki Shinobi",
+    "spawnCode": "peptos_h2",
+    "category": "MOTOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "bff84f67-446f-4cdb-a675-e4841931c42b",
+    "name": "Adventurer Cross",
+    "spawnCode": "r1200gs",
+    "category": "MOTOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "abc509d8-f11b-4381-be97-511641c1927f",
+    "name": "Phantom RR",
+    "spawnCode": "s1000docandidato",
+    "category": "MOTOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "f34857a6-22f0-4799-b277-8889f98dbb98",
+    "name": "Nomad 300",
+    "spawnCode": "sahara300",
+    "category": "MOTOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "402a130b-e22b-428b-baf7-581c3fb242b9",
+    "name": "Sanchez Super",
+    "spawnCode": "tenere1200",
+    "category": "MOTOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "091f3686-d1d9-436f-a46f-87883721aee7",
+    "name": "Transalpo",
+    "spawnCode": "transalp",
+    "category": "MOTOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "8a7a983f-eba9-4c40-a38a-54107c90c4b4",
+    "name": "Sanchez",
+    "spawnCode": "xt660vip",
+    "category": "MOTOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "af6ff996-e110-4e35-92e0-0b7fd3c87d0d",
+    "name": "Nemesis",
+    "spawnCode": "z1000",
+    "category": "MOTOS VIP'S",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "f7e1d0ee-6dca-4279-b632-2a25919b7e76",
+    "name": "Carro do passe",
+    "spawnCode": "chyperg07",
+    "category": "RECOMPENSAS DO PASSE",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "3906ffef-94b8-4741-825e-a8f05dfa4b89",
+    "name": "Blindado 16 tiros",
+    "spawnCode": "fxmustsuv",
+    "category": "RECOMPENSAS DO PASSE",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "89ea12c2-5afd-494f-a816-b9f4669a5871",
+    "name": "Limosine",
+    "spawnCode": "fxlimo",
+    "category": "RECOMPENSAS DO PASSE",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "66d9dc71-7dc1-4026-87de-552dfd446c2e",
+    "name": "Sentinnel XS pontos",
+    "spawnCode": "passat",
+    "category": "RECOMPENSAS DO PASSE",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "a83fbd19-ab38-493d-a06d-99135473cda2",
+    "name": "36 SL",
+    "spawnCode": "sl63",
+    "category": "RECOMPENSAS DO PASSE",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "22932398-8daa-49d3-9207-8b3ae365ebaa",
+    "name": "Carro Booster",
+    "spawnCode": "rmodsianr",
+    "category": "RECOMPENSAS DO PASSE",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "23c5a733-8d0d-44b2-a76d-8b247dbaa25f",
+    "name": "Carro inicial",
+    "spawnCode": "fxst",
+    "category": "RECOMPENSAS DO PASSE",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "650f33d2-67f6-4991-a40f-f6873e00114f",
+    "name": "MAMMOTH EV (BLINDADO)",
+    "spawnCode": "24humevof",
+    "category": "VEÍCULOS ESPECIAIS",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "f275b1af-424b-4957-a7a4-18e80481678b",
+    "name": "ARMATA XT ( BLINDADO )",
+    "spawnCode": "armatartx",
+    "category": "VEÍCULOS ESPECIAIS",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "1c6c7886-a54d-49da-b9b2-91f28552283f",
+    "name": "ARIEL ATOM",
+    "spawnCode": "atom",
+    "category": "VEÍCULOS ESPECIAIS",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "8bac0085-b074-4e2b-bd7e-6031ed176ead",
+    "name": "BENEFACTOR GRT LUZ",
+    "spawnCode": "amggtrlight",
+    "category": "VEÍCULOS ESPECIAIS",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "fb81e6fc-b8d7-483f-a189-9e13b671d6c0",
+    "name": "ROGER RAUVER SPORT MANSORY",
+    "spawnCode": "ballercustom",
+    "category": "VEÍCULOS ESPECIAIS",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "7760ba33-26dd-4d61-8c6f-72021750e2ed",
+    "name": "ENUS ROICE DAWN",
+    "spawnCode": "bbdawn",
+    "category": "VEÍCULOS ESPECIAIS",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "cb6e4594-ca23-443a-8e3b-6d5321e1f6ea",
+    "name": "XX MM (BLINDADO)",
+    "spawnCode": "chyperxx",
+    "category": "VEÍCULOS ESPECIAIS",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "75088c15-0363-48d1-9550-a8946c3f2e5f",
+    "name": "CARRO VOADOR DELUXO",
+    "spawnCode": "deluxo",
+    "category": "VEÍCULOS ESPECIAIS",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "0cf1d7f1-65ff-42f5-bd22-5b66585cec76",
+    "name": "DRONE DA NASA ( BLINDADO )",
+    "spawnCode": "drone",
+    "category": "VEÍCULOS ESPECIAIS",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "018c4d67-f717-4c0d-9125-fade78c171eb",
+    "name": "F250 DEBOXE",
+    "spawnCode": "f250deboxe",
+    "category": "VEÍCULOS ESPECIAIS",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "61f6a9ce-2f32-4541-bebf-7adaecee3da1",
+    "name": "BOLIDE",
+    "spawnCode": "formulax",
+    "category": "VEÍCULOS ESPECIAIS",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "9b432304-bc9b-4ed7-903c-44eb7208687f",
+    "name": "CYBERTRUNK TESLO (BLINDADO)",
+    "spawnCode": "foxct",
+    "category": "VEÍCULOS ESPECIAIS",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "70ea26ee-12b5-4a55-a0d2-437e01c1faf6",
+    "name": "SF90 XX LIMITED",
+    "spawnCode": "fsf90xx",
+    "category": "VEÍCULOS ESPECIAIS",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "d079256a-4e62-4012-9abc-13249a2d2716",
+    "name": "BRUISER ( BLINDADO )",
+    "spawnCode": "bruiserfx",
+    "category": "VEÍCULOS ESPECIAIS",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "905abba6-48a9-4189-b8c5-d38a017798d2",
+    "name": "VISAON GRAND TURES",
+    "spawnCode": "fvgt",
+    "category": "VEÍCULOS ESPECIAIS",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "e2cdc944-47c8-4c11-995a-7368a954bce8",
+    "name": "SILVERA 2024 ( 8 LUGARES )",
+    "spawnCode": "fxsilverado",
+    "category": "VEÍCULOS ESPECIAIS",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "d6626115-96c6-4b0d-9cf1-1d894bf2b5b7",
+    "name": "PUROSANGUE",
+    "spawnCode": "gcmferrariporusangue",
+    "category": "VEÍCULOS ESPECIAIS",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "3e8f836d-32c5-4ba7-8b12-317a3eb65492",
+    "name": "TOROS BULLETPROOF ( BLINDADO )",
+    "spawnCode": "gsttoros1",
+    "category": "VEÍCULOS ESPECIAIS",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "d5f48e2a-ba62-4519-9a3d-e5be19a10f7b",
+    "name": "JOOP GLADIATER 6X6 ( 8 LUGARES )",
+    "spawnCode": "jdap6x6g",
+    "category": "VEÍCULOS ESPECIAIS",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "d1d697e4-cebe-4216-be05-8bb6ff50e71d",
+    "name": "UBERMACHT MD7 MANSORIA",
+    "spawnCode": "m7mans",
+    "category": "VEÍCULOS ESPECIAIS",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "23c5310c-20fa-4861-838c-aec652aacf20",
+    "name": "PFISTER 911 GTSD3 RS LOLI",
+    "spawnCode": "peptos_911rs",
+    "category": "VEÍCULOS ESPECIAIS",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "89ca6559-a1a2-44b0-a6e2-565867bd1744",
+    "name": "PURO SANGUE",
+    "spawnCode": "PRIMOGENITO",
+    "category": "VEÍCULOS ESPECIAIS",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "55de910e-a457-4b29-9e52-a43d542b91a5",
+    "name": "WAGON BULLETPROOF ( BLINDADO )",
+    "spawnCode": "policypherwagon",
+    "category": "VEÍCULOS ESPECIAIS",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "56aef0c5-2789-407d-95f0-5e86ec7035cb",
+    "name": "PRIMOGENITO",
+    "spawnCode": "primogenito",
+    "category": "VEÍCULOS ESPECIAIS",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "deccbac8-243c-4944-bf1e-f8200d3465d7",
+    "name": "JETPACK VOADOR",
+    "spawnCode": "thruster",
+    "category": "VEÍCULOS ESPECIAIS",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "b8a0f9fc-3630-48b1-b172-0a32219ccfc5",
+    "name": "TRENO (NATAL)",
+    "spawnCode": "treno",
+    "category": "VEÍCULOS ESPECIAIS",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "9952444a-417c-420d-8da9-aac4618a6e83",
+    "name": "VISION",
+    "spawnCode": "visionlight",
+    "category": "VEÍCULOS ESPECIAIS",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "6fd445e9-0bd2-4e8e-8b38-da3f609daeca",
+    "name": "MANCERA MC20",
+    "spawnCode": "xmc20",
+    "category": "VEÍCULOS ESPECIAIS",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "c3e6745b-ce4e-4091-98a9-4ea17d526644",
+    "name": "BENEFACTOR MONSTRO ( 12 LUGARES )",
+    "spawnCode": "xxxxx",
+    "category": "VEÍCULOS ESPECIAIS",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "7d5bfbf5-a48b-44f7-8bbb-55836c855d66",
+    "name": "I8 ESPECIAL",
+    "spawnCode": "wri8e",
+    "category": "VEÍCULOS ESPECIAIS",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "1a4c2f95-789c-4bff-b422-378046fa574a",
+    "name": "RD1 GYTR",
+    "spawnCode": "20yzfr1",
+    "category": "VEÍCULOS ESPECIAIS",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "0401c4ac-4e31-4842-8190-b837b548dc67",
+    "name": "HENDA 750S",
+    "spawnCode": "hondanc750s",
+    "category": "VEÍCULOS ESPECIAIS",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "91e1fd06-992a-465a-bab0-02b5fa3587e9",
+    "name": "DUCATTI BRUTALE",
+    "spawnCode": "mvso",
+    "category": "VEÍCULOS ESPECIAIS",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "fe950310-ba9e-436d-9034-257280fbe0fc",
+    "name": "TIGRE 1200",
+    "spawnCode": "tiger1200",
+    "category": "VEÍCULOS ESPECIAIS",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "29412c8c-69b3-4c2a-9283-bc05b4e52499",
+    "name": "ONIBUS REC",
+    "spawnCode": "pbus",
+    "category": "VEÍCULOS ESPECIAIS",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "6e45be1d-d0db-4ec7-ae44-b4145c67d16f",
+    "name": "ONIBUS FESTEIRO",
+    "spawnCode": "pbus2",
+    "category": "VEÍCULOS ESPECIAIS",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "39cf0100-d6b7-4b74-8d23-8dccb17c935c",
+    "name": "LANCHA TECNOMAR 63",
+    "spawnCode": "tecnomar63",
+    "category": "VEÍCULOS ESPECIAIS",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "f6abe33e-0e38-4da9-a772-2b2bec546429",
+    "name": "ALPHAZ1",
+    "spawnCode": "alphaz1",
+    "category": "AERONAVES",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "e7b53a3a-16d3-4ac2-a64c-30c0c186e7d7",
+    "name": "HELI EXCLUSIVO (As350)",
+    "spawnCode": "bmas350",
+    "category": "AERONAVES",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "80e795e0-39e1-4f52-9bc7-f784700bf9e1",
+    "name": "BUZZARD 2",
+    "spawnCode": "buzzard2",
+    "category": "AERONAVES",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "ef946139-9744-45a9-8662-5521b421d75f",
+    "name": "CARGOBOB",
+    "spawnCode": "cargobob",
+    "category": "AERONAVES",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "162d9ebe-cf22-4a27-ad1c-f44ae0d5de54",
+    "name": "CONADA",
+    "spawnCode": "conada",
+    "category": "AERONAVES",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "74155c92-0e2e-42b5-926b-3be3e1a58eee",
+    "name": "DODO",
+    "spawnCode": "dodo",
+    "category": "AERONAVES",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "3b78d775-0b53-4006-b6ac-8d34bf5ebed5",
+    "name": "DRONE",
+    "spawnCode": "drone",
+    "category": "AERONAVES",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "9606befa-27b4-4ec3-ab2d-ec90a4f4cc29",
+    "name": "FROGGER",
+    "spawnCode": "frogger",
+    "category": "AERONAVES",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "b876c839-65e5-4a0a-a3a2-ae05c8a70edd",
+    "name": "AUGUSTA AW 109",
+    "spawnCode": "fxaw109",
+    "category": "AERONAVES",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "5d2fa983-6b7e-462f-acf1-a60e4f615576",
+    "name": "HAVOK",
+    "spawnCode": "havok",
+    "category": "AERONAVES",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "e6ca5738-9566-452b-8098-4e17c6baa6eb",
+    "name": "LUXOR",
+    "spawnCode": "luxor",
+    "category": "AERONAVES",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "54e780fd-3dd4-4a92-becb-cfeca4c1121a",
+    "name": "LUXOR2",
+    "spawnCode": "luxor2",
+    "category": "AERONAVES",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "ec4612db-3202-4624-bacf-9025624ebb93",
+    "name": "ASA DELTA MOTORIZADA",
+    "spawnCode": "microlight",
+    "category": "AERONAVES",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "33a5c689-910e-4ae1-a9c1-aa935d852acb",
+    "name": "NIMBUS",
+    "spawnCode": "nimbus",
+    "category": "AERONAVES",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "447d3159-ce00-4303-b7fc-25ba01655dbd",
+    "name": "SWIFT DELUXE",
+    "spawnCode": "swift2",
+    "category": "AERONAVES",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "f8a68f43-23d0-4c05-81be-e964cfad04d3",
+    "name": "VELUM2",
+    "spawnCode": "velum2",
+    "category": "AERONAVES",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "3caefbdd-3890-4f01-bae8-1b20b11fdc86",
+    "name": "VESTRA",
+    "spawnCode": "vestra",
+    "category": "AERONAVES",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "035bd9a0-d2d3-41b9-a279-eeb493d9497f",
+    "name": "BENSON (1.000KG)",
+    "spawnCode": "benson",
+    "category": "CAMINHÕES",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "1994a4ba-bfe7-4d14-aedf-70af7581cd7d",
+    "name": "BRICKADE BLINDADO (5.000KG)",
+    "spawnCode": "brickade",
+    "category": "CAMINHÕES",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "196772fb-3c4c-42f3-b09d-6172b4f69a5e",
+    "name": "MULE (500KG)",
+    "spawnCode": "mule",
+    "category": "CAMINHÕES",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "5ae0bed2-9bbf-4d05-a361-041f874782ca",
+    "name": "POUNDER (2.000KG)",
+    "spawnCode": "pounder",
+    "category": "CAMINHÕES",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "f9c9fa32-2674-4c7d-b9ea-f1bbffd89230",
+    "name": "RALLY TRUCK (10.000KG)",
+    "spawnCode": "rallytruck",
+    "category": "CAMINHÕES",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "77484aad-6a50-44ff-a57e-4d0b70505c0c",
+    "name": "RUMPO (1.000KG)",
+    "spawnCode": "rumpo3",
+    "category": "CAMINHÕES",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "6eb95a4e-02f6-409c-889d-ddff99c3ebe3",
+    "name": "TERBYTE (1.500KG)",
+    "spawnCode": "terbyte",
+    "category": "CAMINHÕES",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "61a01096-e241-4b0b-b472-2306615ca251",
+    "name": "RX7 ( VELOZES & FURIOSOS )",
+    "spawnCode": "2f2frx7",
+    "category": "VEÍCULOS LUXO",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "2c9303be-6885-421c-baaa-8aa196b51fd9",
+    "name": "S2000 ( VELOZES & FURIOSOS )",
+    "spawnCode": "2f2fs2000",
+    "category": "VEÍCULOS LUXO",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "b4581e11-2ba1-4211-a878-ec24da83ee83",
+    "name": "ITALI 296W",
+    "spawnCode": "296gts",
+    "category": "VEÍCULOS LUXO",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "00e30051-ba9b-4559-b88d-5529c2e29bfb",
+    "name": "BENEFACTOR ONEAGW",
+    "spawnCode": "amgone",
+    "category": "VEÍCULOS LUXO",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "17c2a2c9-e981-4bd4-9241-b822bd36f9ef",
+    "name": "TRUFFADE MAESTRAL W16",
+    "spawnCode": "bmistralw16",
+    "category": "VEÍCULOS LUXO",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "c72d038d-5e16-4b6b-9f5b-8e0df9d14aba",
+    "name": "BRAVADO REM 2500",
+    "spawnCode": "dodgeram2500",
+    "category": "VEÍCULOS LUXO",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "d8dbabcb-613d-4632-a516-04e10aced691",
+    "name": "KOENISEG GAMERO",
+    "spawnCode": "gemera",
+    "category": "VEÍCULOS LUXO",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "cf65d20d-e490-41a2-aead-26e8d65e141e",
+    "name": "AVENTEDOR SVJ",
+    "spawnCode": "gstsvjcade1",
+    "category": "VEÍCULOS LUXO",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "35f43162-8e3e-42c8-841d-aefa11e12d24",
+    "name": "PFISTER GW2 RS",
+    "spawnCode": "gt2rsmr",
+    "category": "VEÍCULOS LUXO",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "5f58bfd0-2295-49c8-b3ce-56daea9927d6",
+    "name": "APELLO EVO",
+    "spawnCode": "intemo",
+    "category": "VEÍCULOS LUXO",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "ce016d78-c374-4553-ba6c-a2a08c730ff4",
+    "name": "OBEY RD8 2024",
+    "spawnCode": "ikx3_r823",
+    "category": "VEÍCULOS LUXO",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "3146d064-30a2-4c3b-8411-30103db1301e",
+    "name": "ANNIS LWGDR",
+    "spawnCode": "lwgtr",
+    "category": "VEÍCULOS LUXO",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "0b0aac81-8f2a-411f-a7b0-55ca9687f69f",
+    "name": "UBERMACHT MD3F80",
+    "spawnCode": "m3f80",
+    "category": "VEÍCULOS LUXO",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "d6224566-14f7-4f71-b835-76bc34cb2b00",
+    "name": "BENEFACTOR AGW GT 63 2024",
+    "spawnCode": "nm_amg",
+    "category": "VEÍCULOS LUXO",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "3709afb7-967a-433b-986e-91878a5dd446",
+    "name": "ITALI PISTAO",
+    "spawnCode": "pistaspider19",
+    "category": "VEÍCULOS LUXO",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "9778a6ae-2131-42fb-9c6f-3660cc24e46a",
+    "name": "OBEY Q6",
+    "spawnCode": "q6audi23",
+    "category": "VEÍCULOS LUXO",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "3ecdbd98-e8dc-47f0-8977-039b87b3d7a4",
+    "name": "UBERMACHT XW6",
+    "spawnCode": "rmodx6",
+    "category": "VEÍCULOS LUXO",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "f30825a8-122c-4c3c-a833-c4cb6e9c6b8d",
+    "name": "SKYLEINE RD34",
+    "spawnCode": "rmodskyline34",
+    "category": "VEÍCULOS LUXO",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "8f80bf43-d4e8-441c-9505-14aa159e869e",
+    "name": "ASTONO MARTINS VULCAO",
+    "spawnCode": "Vulcan",
+    "category": "VEÍCULOS LUXO",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "39b0b12b-0a49-4807-9d23-bf1a956d0284",
+    "name": "ZENVA AURORE",
+    "spawnCode": "zenvo",
+    "category": "VEÍCULOS LUXO",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "2d8e0f80-46de-4f2f-ae8d-c2f2de1ad172",
+    "name": "RD1 GYTR",
+    "spawnCode": "20yzfr1",
+    "category": "VEÍCULOS LUXO",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "172733fc-15c7-4fd0-ad29-20d0dfe04f1a",
+    "name": "HENDA 750S",
+    "spawnCode": "hondanc750s",
+    "category": "VEÍCULOS LUXO",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "7499911d-43cc-4d28-846f-1d57245b01b0",
+    "name": "DUCATTI BRUTALE",
+    "spawnCode": "mvso",
+    "category": "VEÍCULOS LUXO",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  },
+  {
+    "id": "3b03773f-df4a-48dd-87d6-7797d71797bc",
+    "name": "TIGRE 1200",
+    "spawnCode": "tiger1200",
+    "category": "VEÍCULOS LUXO",
+    "photoUrl": "",
+    "createdAt": "2026-09-06T15:53:21.174Z",
+    "updatedAt": "2026-09-06T15:53:21.174Z"
+  }
+]

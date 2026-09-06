@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Spawnfluxo — Admin</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <h1>🚗 Spawnfluxo — Admin</h1>
+    <a href="/index.html" class="back-link">← Voltar ao catálogo</a>
+  </header>
+
+  <main>
+    <section id="login-section">
+      <form id="login-form" class="card form">
+        <h2>Login</h2>
+        <label>Senha
+          <input type="password" id="password" required autofocus>
+        </label>
+        <button type="submit">Entrar</button>
+        <p id="login-error" class="error" hidden></p>
+      </form>
+    </section>
+
+    <section id="admin-section" hidden>
+      <div class="admin-toolbar">
+        <button id="new-car-btn">+ Novo carro</button>
+        <button id="logout-btn" class="secondary">Sair</button>
+      </div>
+
+      <div id="car-form-wrap" hidden>
+        <form id="car-form" class="card form">
+          <h2 id="form-title">Novo carro</h2>
+          <input type="hidden" id="car-id">
+          <label>Nome do carro
+            <input type="text" id="name" required>
+          </label>
+          <label>Código de spawn
+            <input type="text" id="spawnCode" required>
+          </label>
+          <label>Categoria
+            <input type="text" id="category" list="category-list" required>
+            <datalist id="category-list"></datalist>
+          </label>
+          <label>Foto — URL da imagem
+            <input type="url" id="photoUrl" placeholder="https://...">
+          </label>
+          <label>Ou enviar um arquivo de imagem
+            <input type="file" id="photoFile" accept="image/png,image/jpeg,image/webp,image/gif">
+          </label>
+          <img id="photo-preview" hidden>
+          <p style="color:var(--text-dim); font-size:0.8rem; margin:0;">
+            A foto é opcional: você pode salvar só nome/código/categoria agora e adicionar ou trocar a foto depois, editando este carro.
+          </p>
+          <div class="form-actions">
+            <button type="submit">Salvar</button>
+            <button type="button" id="cancel-form-btn" class="secondary">Cancelar</button>
+          </div>
+          <p id="form-error" class="error" hidden></p>
+        </form>
+      </div>
+
+      <table id="car-table">
+        <thead>
+          <tr><th>Foto</th><th>Nome</th><th>Código</th><th>Categoria</th><th>Ações</th></tr>
+        </thead>
+        <tbody id="car-tbody"></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="/js/admin.js"></script>
+</body>
+</html>
