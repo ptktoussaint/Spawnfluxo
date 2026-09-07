@@ -233,11 +233,19 @@ app.use(helmet({
   },
 }));
 
+// Helmet não define mais um Permissions-Policy padrão; como o site não usa
+// nenhuma dessas APIs do navegador, desabilita todas explicitamente.
+app.use((req, res, next) => {
+  res.setHeader('Permissions-Policy', 'geolocation=(), camera=(), microphone=(), payment=(), usb=()');
+  next();
+});
+
 const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 10,
   standardHeaders: true,
   legacyHeaders: false,
+  skipSuccessfulRequests: true, // só conta tentativas com senha errada, não logins legítimos
   message: { error: 'Muitas tentativas de login. Tente novamente mais tarde.' },
 });
 
@@ -246,6 +254,17 @@ const apiLimiter = rateLimit({
   max: 600,
   standardHeaders: true,
   legacyHeaders: false,
+});
+
+// Limite adicional e mais rígido só para as rotas que escrevem no banco —
+// mesmo com um token válido, evita que ele seja usado para inundar o banco
+// de escritas (ex.: um token vazado/roubado).
+const writeLimiter = rateLimit({
+  windowMs: 5 * 60 * 1000,
+  max: 60,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Muitas alterações em pouco tempo. Tente novamente em alguns minutos.' },
 });
 
 app.use('/api', apiLimiter);
@@ -278,7 +297,7 @@ app.get('/api/categories', (req, res) => {
 });
 
 // Criação explícita de categoria, mesmo sem nenhum carro usando-a ainda.
-app.post('/api/categories', requireAuth, async (req, res, next) => {
+app.post('/api/categories', requireAuth, writeLimiter, async (req, res, next) => {
   try {
     const { name } = req.body || {};
     const trimmed = typeof name === 'string' ? name.trim() : '';
@@ -318,7 +337,7 @@ app.post('/api/logout', requireAuth, (req, res) => {
 
 // ----- Endpoints administrativos (protegidos) -----
 
-app.post('/api/cars', requireAuth, async (req, res, next) => {
+app.post('/api/cars', requireAuth, writeLimiter, async (req, res, next) => {
   try {
     const { name, spawnCode, categories, photoUrl } = req.body || {};
     const cleanCategories = normalizeCategoriesInput(categories);
@@ -355,7 +374,7 @@ app.post('/api/cars', requireAuth, async (req, res, next) => {
   }
 });
 
-app.put('/api/cars/:id', requireAuth, async (req, res, next) => {
+app.put('/api/cars/:id', requireAuth, writeLimiter, async (req, res, next) => {
   try {
     const current = carsCache.find((c) => c.id === req.params.id);
     if (!current) return res.status(404).json({ error: 'Carro não encontrado' });
@@ -399,7 +418,7 @@ app.put('/api/cars/:id', requireAuth, async (req, res, next) => {
   }
 });
 
-app.delete('/api/cars/:id', requireAuth, async (req, res, next) => {
+app.delete('/api/cars/:id', requireAuth, writeLimiter, async (req, res, next) => {
   try {
     const exists = carsCache.some((c) => c.id === req.params.id);
     if (!exists) return res.status(404).json({ error: 'Carro não encontrado' });

@@ -91,6 +91,9 @@ do site não gera custo proporcional a quantas pessoas acessam.
 
 ## Segurança
 
+Veja [`SECURITY.md`](SECURITY.md) para a arquitetura de segurança completa (o que o
+projeto usa do Supabase, RLS, autenticação, segredos, etc.). Resumo rápido abaixo:
+
 - **Login do admin**: comparação de senha em tempo constante (evita ataques de timing) e
   limite de 10 tentativas a cada 15 min por IP (dificulta força bruta).
 - **Sessões**: tokens aleatórios de 32 bytes (256 bits), guardados só em memória do
