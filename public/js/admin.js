@@ -19,14 +19,12 @@ let allCategories = [];
 let editingId = null; // null = ninguém sendo editado; 'new' = criando; ou o id do carro em edição
 let debounceTimer;
 
+// Segura tanto para texto quanto para dentro de atributos "...": também
+// escapa aspas, já que div.innerHTML por si só não as escapa.
 function escapeHtml(str) {
   const div = document.createElement('div');
   div.textContent = str ?? '';
-  return div.innerHTML;
-}
-
-function escapeAttr(str) {
-  return escapeHtml(str).replace(/"/g, '&quot;');
+  return div.innerHTML.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 
 async function authFetch(url, options = {}) {
@@ -125,7 +123,7 @@ async function loadCategories() {
   const current = adminCategorySelect.value;
   adminCategorySelect.innerHTML =
     '<option value="">Todas as categorias</option>' +
-    allCategories.map((c) => `<option value="${escapeAttr(c)}">${escapeHtml(c)}</option>`).join('');
+    allCategories.map((c) => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
   if (allCategories.includes(current)) adminCategorySelect.value = current;
 }
 
@@ -182,7 +180,7 @@ function checklistItemsHtml(categories, checked) {
     .map(
       (cat) => `
     <label class="chk">
-      <input type="checkbox" value="${escapeAttr(cat)}" ${checked.includes(cat) ? 'checked' : ''}>
+      <input type="checkbox" value="${escapeHtml(cat)}" ${checked.includes(cat) ? 'checked' : ''}>
       <span>${escapeHtml(cat)}</span>
     </label>
   `
@@ -198,20 +196,20 @@ function editRowHtml(car) {
         <div class="inline-form">
           <div class="inline-fields">
             <label>Nome do carro
-              <input type="text" class="f-name" value="${escapeAttr(c.name)}">
+              <input type="text" class="f-name" value="${escapeHtml(c.name)}" maxlength="200">
             </label>
             <label>Código de spawn
-              <input type="text" class="f-spawnCode" value="${escapeAttr(c.spawnCode)}">
+              <input type="text" class="f-spawnCode" value="${escapeHtml(c.spawnCode)}" maxlength="100">
             </label>
             <label>Foto — URL (https://)
-              <input type="url" class="f-photoUrl" value="${escapeAttr(c.photoUrl)}" placeholder="https://...">
+              <input type="url" class="f-photoUrl" value="${escapeHtml(c.photoUrl)}" placeholder="https://..." maxlength="2000">
             </label>
           </div>
           <div class="categories-field">
             <span class="field-label">Categorias (marque uma ou mais — para criar uma nova, use "+ Nova categoria" no topo da página)</span>
             <div class="categories-checklist">${checklistItemsHtml(allCategories, c.categories)}</div>
           </div>
-          <img class="inline-preview" ${c.photoUrl ? `src="${escapeAttr(c.photoUrl)}"` : 'hidden'}>
+          <img class="inline-preview" ${c.photoUrl ? `src="${escapeHtml(c.photoUrl)}"` : 'hidden'}>
           <div class="inline-actions">
             <button type="button" class="save-inline-btn">Salvar</button>
             <button type="button" class="cancel-inline-btn secondary">Cancelar</button>

@@ -8,6 +8,11 @@ const rateLimit = require('express-rate-limit');
 const { Pool } = require('pg');
 
 const app = express();
+// Só usamos parâmetros de busca simples (?q=&category=), então trocamos o
+// parser padrão (qs) pelo parser simples do Node: evita uma vulnerabilidade
+// de DoS conhecida no qs (sem correção disponível ainda) sem perder nada,
+// já que nunca precisamos da sintaxe de colchetes/aninhamento que ele resolve.
+app.set('query parser', 'simple');
 const PORT = process.env.PORT || 3000;
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123';
 const TOKEN_TTL_MS = 12 * 60 * 60 * 1000; // 12h de sessão
@@ -60,9 +65,19 @@ function rowToCar(row) {
   };
 }
 
+const MAX_NAME_LENGTH = 200;
+const MAX_SPAWN_CODE_LENGTH = 100;
+const MAX_CATEGORY_LENGTH = 60;
+const MAX_CATEGORIES_PER_CAR = 20;
+const MAX_PHOTO_URL_LENGTH = 2000;
+
+// Limites de tamanho evitam que um valor absurdamente grande fique preso no
+// cache em memória e seja reenviado em toda resposta pública dali em diante.
 function normalizeCategoriesInput(categories) {
-  if (!Array.isArray(categories)) return null;
-  return [...new Set(categories.map((c) => String(c).trim()).filter(Boolean))];
+  if (!Array.isArray(categories) || categories.length > MAX_CATEGORIES_PER_CAR) return null;
+  const trimmed = categories.map((c) => String(c).trim()).filter(Boolean);
+  if (trimmed.some((c) => c.length > MAX_CATEGORY_LENGTH)) return null;
+  return [...new Set(trimmed)];
 }
 
 // ----- Cache em memória -----
@@ -186,7 +201,12 @@ function safeCompare(a, b) {
 
 function isValidPhotoUrl(url) {
   if (!url) return true; // foto é opcional
-  return /^https:\/\/[^\s]+$/i.test(url);
+  if (url.length > MAX_PHOTO_URL_LENGTH) return false;
+  try {
+    return new URL(url).protocol === 'https:';
+  } catch {
+    return false;
+  }
 }
 
 function requireAuth(req, res, next) {
@@ -263,6 +283,9 @@ app.post('/api/categories', requireAuth, async (req, res, next) => {
     const { name } = req.body || {};
     const trimmed = typeof name === 'string' ? name.trim() : '';
     if (!trimmed) return res.status(400).json({ error: 'Nome da categoria é obrigatório' });
+    if (trimmed.length > MAX_CATEGORY_LENGTH) {
+      return res.status(400).json({ error: `Nome de categoria muito longo (máx. ${MAX_CATEGORY_LENGTH} caracteres)` });
+    }
     const slug = slugify(trimmed);
     if (!slug) return res.status(400).json({ error: 'Nome de categoria inválido' });
     await pool.query(
@@ -301,6 +324,9 @@ app.post('/api/cars', requireAuth, async (req, res, next) => {
     const cleanCategories = normalizeCategoriesInput(categories);
     if (!name || !spawnCode || !cleanCategories || cleanCategories.length === 0) {
       return res.status(400).json({ error: 'Nome, código e ao menos uma categoria são obrigatórios' });
+    }
+    if (String(name).trim().length > MAX_NAME_LENGTH || String(spawnCode).trim().length > MAX_SPAWN_CODE_LENGTH) {
+      return res.status(400).json({ error: `Nome (máx. ${MAX_NAME_LENGTH}) ou código (máx. ${MAX_SPAWN_CODE_LENGTH}) muito longo` });
     }
     if (photoUrl && !isValidPhotoUrl(photoUrl)) {
       return res.status(400).json({ error: 'URL de foto inválida. Use um link https://.' });
@@ -354,6 +380,9 @@ app.put('/api/cars/:id', requireAuth, async (req, res, next) => {
 
     if (!updated.name || !updated.spawnCode || updated.categories.length === 0) {
       return res.status(400).json({ error: 'Nome, código e ao menos uma categoria são obrigatórios' });
+    }
+    if (updated.name.length > MAX_NAME_LENGTH || updated.spawnCode.length > MAX_SPAWN_CODE_LENGTH) {
+      return res.status(400).json({ error: `Nome (máx. ${MAX_NAME_LENGTH}) ou código (máx. ${MAX_SPAWN_CODE_LENGTH}) muito longo` });
     }
 
     updated.updatedAt = new Date().toISOString();

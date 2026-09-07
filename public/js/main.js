@@ -7,10 +7,12 @@ const loadErrorEl = document.getElementById('load-error');
 
 let debounceTimer;
 
+// Segura tanto para texto quanto para dentro de atributos "...": também
+// escapa aspas, já que div.innerHTML por si só não as escapa.
 function escapeHtml(str) {
   const div = document.createElement('div');
   div.textContent = str ?? '';
-  return div.innerHTML;
+  return div.innerHTML.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 
 async function loadCategories() {

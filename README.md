@@ -91,13 +91,32 @@ do site não gera custo proporcional a quantas pessoas acessam.
 
 ## Segurança
 
-- O login do admin usa comparação de senha em tempo constante e limite de tentativas
-  (10 tentativas a cada 15 min por IP) para dificultar força bruta.
-- Sessões de admin são tokens aleatórios de 32 bytes, guardados só em memória (nunca em
-  disco), com expiração de 12h.
-- URLs de foto só são aceitas se forem `https://` (não dá para injetar `javascript:` ou
-  caminhos locais).
-- Cabeçalhos de segurança (CSP, X-Frame-Options, etc.) via `helmet`.
+- **Login do admin**: comparação de senha em tempo constante (evita ataques de timing) e
+  limite de 10 tentativas a cada 15 min por IP (dificulta força bruta).
+- **Sessões**: tokens aleatórios de 32 bytes (256 bits), guardados só em memória do
+  servidor (nunca em disco/banco), com expiração de 12h. Trafegam via header
+  `Authorization: Bearer`, não em cookie — isso já elimina CSRF por natureza, já que um
+  site malicioso não consegue anexar esse header a uma requisição forjada.
+- **Sem SQL injection**: todas as consultas ao banco usam parâmetros preparados
+  (`$1, $2, ...`), nunca concatenação de string com dado do usuário.
+- **Sem XSS**: todo texto vindo do banco (nome, código, categorias, foto) passa por uma
+  função de escape antes de virar HTML, tanto em contexto de texto quanto dentro de
+  atributos (`src="..."`, `value="..."`) — incluindo aspas, que por si só já bastam para
+  escapar de um atributo e injetar código.
+- **Limites de tamanho**: nome (200), código (100), categoria (60) e URL de foto (2000
+  caracteres), além de no máximo 20 categorias por veículo — evita que um valor absurdo
+  fique preso no cache em memória e seja reenviado pra todo mundo que visitar o site.
+- **URLs de foto**: validadas com o parser de URL nativo, aceitando só `https://` —
+  não dá para injetar `javascript:`, caminhos locais ou protocolos exóticos.
+- **Cabeçalhos de segurança** via `helmet`: CSP restritiva (só carrega script/estilo do
+  próprio domínio), X-Frame-Options (impede o site ser carregado dentro de um `<iframe>`
+  em outro domínio), X-Content-Type-Options, entre outros.
+- **Mitigação de uma vulnerabilidade conhecida do Express**: o parser de query string
+  padrão (`qs`) tem uma falha de negação de serviço sem correção disponível ainda; como o
+  site só usa parâmetros simples de busca, trocamos para o parser nativo do Node, que não
+  tem esse código vulnerável.
+- **Erros genéricos**: falhas internas nunca vazam detalhes (stack trace, erro do banco)
+  para quem está navegando — só aparecem no log do servidor.
 - A connection string do banco fica só no servidor (variável de ambiente) — nunca é
   exposta ao navegador do visitante.
 - **Antes de publicar na internet**: defina uma senha forte em `ADMIN_PASSWORD` (nunca
@@ -105,6 +124,10 @@ do site não gera custo proporcional a quantas pessoas acessam.
   automaticamente).
 - Se for rodar atrás de um proxy/load balancer, defina `TRUST_PROXY=true` para o limite
   de tentativas identificar corretamente o IP de cada visitante.
+- **Limitação conhecida**: a conexão com o Postgres usa `rejectUnauthorized: false` (não
+  verifica a cadeia de certificado do Supabase), uma prática comum para bancos gerenciados
+  mas que, em teoria, deixaria a conexão vulnerável a um ataque man-in-the-middle bem
+  posicionado na rede entre Render e Supabase — um cenário de risco baixo, mas real.
 
 ## Variáveis de ambiente
 
