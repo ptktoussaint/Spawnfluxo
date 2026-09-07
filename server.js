@@ -430,6 +430,31 @@ app.delete('/api/cars/:id', requireAuth, writeLimiter, async (req, res, next) =>
   }
 });
 
+// Gera o backup em texto: nome == código de spawn, agrupado por categoria
+// (mesmo formato das listas originais que o cliente usava antes do site).
+function buildBackupText() {
+  const cars = readCars();
+  const blocks = [];
+  for (const category of readCategoryNames()) {
+    const inCategory = cars
+      .filter((c) => c.categories.includes(category))
+      .sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'));
+    if (inCategory.length === 0) continue;
+
+    const nameWidth = Math.max(...inCategory.map((c) => c.name.length));
+    const separator = '-'.repeat(nameWidth + 20);
+    const lines = inCategory.map((c) => `${c.name.padEnd(nameWidth)} == ${c.spawnCode}`);
+    blocks.push([category, separator, ...lines].join('\n'));
+  }
+  return blocks.join('\n\n');
+}
+
+app.get('/api/export', requireAuth, (req, res) => {
+  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+  res.setHeader('Content-Disposition', 'attachment; filename="spawnfluxo-backup.txt"');
+  res.send(buildBackupText());
+});
+
 // Handler de erro genérico (rotas assíncronas usam next(err) para cair aqui).
 app.use((err, req, res, next) => {
   console.error(err);

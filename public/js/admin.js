@@ -4,6 +4,7 @@ const loginForm = document.getElementById('login-form');
 const loginError = document.getElementById('login-error');
 const passwordInput = document.getElementById('password');
 const logoutBtn = document.getElementById('logout-btn');
+const exportBtn = document.getElementById('export-btn');
 const newCarBtn = document.getElementById('new-car-btn');
 const adminQInput = document.getElementById('admin-q');
 const adminCategorySelect = document.getElementById('admin-category');
@@ -99,6 +100,26 @@ logoutBtn.addEventListener('click', async () => {
 newCarBtn.addEventListener('click', () => {
   editingId = 'new';
   renderTable();
+});
+
+exportBtn.addEventListener('click', async () => {
+  toolbarError.hidden = true;
+  try {
+    const res = await authFetch('/api/export');
+    if (!res.ok) throw new Error('Não foi possível gerar o backup.');
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'spawnfluxo-backup.txt';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+  } catch (err) {
+    toolbarError.textContent = err.message;
+    toolbarError.hidden = false;
+  }
 });
 
 function loadCarsSafely() {

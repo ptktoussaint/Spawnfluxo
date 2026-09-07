@@ -14,7 +14,9 @@ nome do veículo, código de spawn, uma ou mais categorias e foto (opcional).
   adicionar (ou trocar) a foto depois, editando o registro. A foto é sempre um link
   `https://` (hospede a imagem em algum lugar como imgur, Discord ou Google Drive com link
   público, e cole o link no formulário) — não há upload de arquivo, para o site poder rodar
-  100% de graça sem precisar de disco próprio.
+  100% de graça sem precisar de disco próprio. O botão **"Exportar backup (.txt)"** na barra
+  do topo baixa um arquivo de texto com todos os veículos (nome == código de spawn),
+  agrupados por categoria — sem fotos, só como backup/consulta rápida.
 
 Os dados ficam num banco **Postgres gratuito no Supabase**, não em arquivo local — assim o
 site pode ser hospedado inteiramente na camada gratuita do Render (que não oferece disco
