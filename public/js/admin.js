@@ -7,7 +7,7 @@ const logoutBtn = document.getElementById('logout-btn');
 const exportBtn = document.getElementById('export-btn');
 const newCarBtn = document.getElementById('new-car-btn');
 const adminQInput = document.getElementById('admin-q');
-const adminCategorySelect = document.getElementById('admin-category');
+const adminCategoryFiltersEl = document.getElementById('admin-category-filters');
 const adminCountEl = document.getElementById('admin-count');
 const carTbody = document.getElementById('car-tbody');
 const globalNewCategoryInput = document.getElementById('global-new-category');
@@ -17,6 +17,7 @@ const toolbarError = document.getElementById('toolbar-error');
 let token = sessionStorage.getItem('spawnfluxo_token') || '';
 let cars = [];
 let allCategories = [];
+let selectedCategories = new Set();
 let editingId = null; // null = ninguém sendo editado; 'new' = criando; ou o id do carro em edição
 let debounceTimer;
 
@@ -133,7 +134,6 @@ adminQInput.addEventListener('input', () => {
   clearTimeout(debounceTimer);
   debounceTimer = setTimeout(loadCarsSafely, 250);
 });
-adminCategorySelect.addEventListener('change', loadCarsSafely);
 
 async function loadCategories() {
   const res = await fetch('/api/categories');
@@ -141,11 +141,56 @@ async function loadCategories() {
   const data = await res.json();
   if (!Array.isArray(data)) throw new Error('Resposta inválida ao carregar categorias.');
   allCategories = data;
-  const current = adminCategorySelect.value;
-  adminCategorySelect.innerHTML =
-    '<option value="">Todas as categorias</option>' +
-    allCategories.map((c) => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
-  if (allCategories.includes(current)) adminCategorySelect.value = current;
+  // remove da seleção categorias que não existem mais (ex.: acabaram de ser excluídas)
+  for (const cat of [...selectedCategories]) {
+    if (!allCategories.includes(cat)) selectedCategories.delete(cat);
+  }
+  renderCategoryFilters();
+}
+
+function renderCategoryFilters() {
+  adminCategoryFiltersEl.innerHTML = allCategories
+    .map(
+      (cat) => `
+    <button type="button" class="category-chip${selectedCategories.has(cat) ? ' active' : ''}" data-cat="${escapeHtml(cat)}">
+      <span class="chip-label">${escapeHtml(cat)}</span>
+      <span class="category-chip-delete" data-cat="${escapeHtml(cat)}" title="Excluir categoria">&times;</span>
+    </button>
+  `
+    )
+    .join('');
+
+  adminCategoryFiltersEl.querySelectorAll('.category-chip').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const cat = btn.dataset.cat;
+      if (selectedCategories.has(cat)) selectedCategories.delete(cat);
+      else selectedCategories.add(cat);
+      btn.classList.toggle('active');
+      loadCarsSafely();
+    });
+  });
+
+  adminCategoryFiltersEl.querySelectorAll('.category-chip-delete').forEach((btn) => {
+    btn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const cat = btn.dataset.cat;
+      if (!confirm(`Excluir a categoria "${cat}"? Os veículos nela ficarão sem essa categoria (não serão excluídos).`)) return;
+      toolbarError.hidden = true;
+      try {
+        const res = await authFetch('/api/categories/' + encodeURIComponent(cat), { method: 'DELETE' });
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.error || 'Erro ao excluir categoria');
+        }
+        selectedCategories.delete(cat);
+        await loadCategories();
+        await loadCars();
+      } catch (err) {
+        toolbarError.textContent = err.message;
+        toolbarError.hidden = false;
+      }
+    });
+  });
 }
 
 // Atualiza só o checklist de categorias da linha em edição (se houver),
@@ -183,7 +228,7 @@ globalAddCategoryBtn.addEventListener('click', async () => {
 async function loadCars() {
   const params = new URLSearchParams();
   if (adminQInput.value.trim()) params.set('q', adminQInput.value.trim());
-  if (adminCategorySelect.value) params.set('category', adminCategorySelect.value);
+  selectedCategories.forEach((cat) => params.append('category', cat));
   const res = await fetch('/api/cars?' + params.toString());
   if (!res.ok) throw new Error('Não foi possível carregar os carros.');
   const data = await res.json();

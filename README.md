@@ -3,14 +3,20 @@
 Aplicação web para gerenciar o catálogo de códigos de spawn de veículos do servidor:
 nome do veículo, código de spawn, uma ou mais categorias e foto (opcional).
 
-- **Página pública** (`/` ou `/index.html`): qualquer pessoa pode buscar por nome ou
-  categoria e ver nome + código + categorias + foto. Não é possível editar nada por aqui.
-- **Painel administrativo** (`/admin.html`): protegido por senha. Tem busca e filtro por
-  categoria, igual à página pública. Clicar em "Editar" transforma a própria linha da
-  tabela num formulário editável (sem precisar rolar a página até o topo). Permite
-  adicionar, editar e excluir veículos, marcar **múltiplas categorias** por veículo (via
-  checkboxes) e **criar categorias novas** direto na barra do topo, mesmo sem ainda ter um
-  veículo para usá-la. A foto é opcional — dá para cadastrar só nome/código/categoria e
+- **Página pública** (`/` ou `/index.html`): qualquer pessoa pode buscar por nome, código
+  ou categoria e ver nome + código + categorias + foto. As categorias aparecem como botões
+  clicáveis — clique para filtrar por uma ou mais ao mesmo tempo (clique de novo para
+  tirar o filtro). Não é possível editar nada por aqui.
+- **Painel administrativo** (`/admin.html`): protegido por senha. Tem busca e os mesmos
+  botões de categoria da página pública para filtrar a tabela. Clicar em "Editar"
+  transforma a própria linha da tabela num formulário editável (sem precisar rolar a
+  página até o topo). Permite adicionar, editar e excluir veículos, marcar **múltiplas
+  categorias** por veículo (via checkboxes), **criar categorias novas** direto na barra do
+  topo (mesmo sem ainda ter um veículo para usá-la) e **excluir categorias** clicando no ×
+  do botão correspondente — os veículos que estavam nela só perdem essa categoria (podendo
+  ficar sem nenhuma), não são excluídos. Qualquer categoria criada ou excluída no admin
+  aparece/some dos botões da página pública automaticamente (os botões vêm sempre da lista
+  atual do servidor). A foto é opcional — dá para cadastrar só nome/código/categoria e
   adicionar (ou trocar) a foto depois, editando o registro. A foto é sempre um link
   `https://` (hospede a imagem em algum lugar como imgur, Discord ou Google Drive com link
   público, e cole o link no formulário) — não há upload de arquivo, para o site poder rodar

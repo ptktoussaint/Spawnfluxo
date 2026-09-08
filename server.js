@@ -285,8 +285,11 @@ app.get('/api/cars', (req, res) => {
         c.categories.some((cat) => cat.toLowerCase().includes(term))
     );
   }
-  if (category) {
-    cars = cars.filter((c) => c.categories.includes(category));
+  // ?category= pode repetir (?category=A&category=B): o parser simples do
+  // Node já entrega um array nesse caso. Casa qualquer uma das selecionadas.
+  const categoryList = Array.isArray(category) ? category : category ? [category] : [];
+  if (categoryList.length > 0) {
+    cars = cars.filter((c) => categoryList.some((cat) => c.categories.includes(cat)));
   }
   cars = [...cars].sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'));
   res.json(cars);
@@ -316,6 +319,41 @@ app.post('/api/categories', requireAuth, writeLimiter, async (req, res, next) =>
     res.status(201).json({ name: trimmed });
   } catch (err) {
     next(err);
+  }
+});
+
+// Exclui uma categoria. Carros que a tinham simplesmente perdem essa
+// categoria (podendo ficar sem nenhuma) — eles não são excluídos.
+app.delete('/api/categories/:name', requireAuth, writeLimiter, async (req, res, next) => {
+  const client = await pool.connect();
+  try {
+    const categoryName = req.params.name;
+    const now = new Date().toISOString();
+
+    await client.query('BEGIN');
+    const catResult = await client.query('DELETE FROM categories WHERE name = $1 RETURNING slug', [categoryName]);
+    if (catResult.rows.length === 0) {
+      await client.query('ROLLBACK');
+      return res.status(404).json({ error: 'Categoria não encontrada' });
+    }
+    const updateResult = await client.query(
+      `UPDATE cars SET categories = array_remove(categories, $1), updated_at = $2
+       WHERE $1 = ANY(categories)
+       RETURNING *`,
+      [categoryName, now]
+    );
+    await client.query('COMMIT');
+
+    const updatedById = new Map(updateResult.rows.map((r) => [r.id, rowToCar(r)]));
+    carsCache = carsCache.map((c) => updatedById.get(c.id) || c);
+    categoriesCache = categoriesCache.filter((name) => name !== categoryName);
+
+    res.json({ ok: true, affectedCars: updateResult.rows.length });
+  } catch (err) {
+    await client.query('ROLLBACK').catch(() => {});
+    next(err);
+  } finally {
+    client.release();
   }
 });
 

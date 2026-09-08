@@ -101,6 +101,58 @@ input:focus, select:focus {
 
 .count { color: var(--text-dim); margin-bottom: 0.75rem; font-size: 0.9rem; }
 
+.category-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.category-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--bg-alt);
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: background 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+
+.category-chip:hover {
+  border-color: var(--accent);
+  color: var(--text);
+  background: var(--bg-alt);
+}
+
+.category-chip.active {
+  background: var(--gradient);
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 0 0 1px rgba(168, 85, 247, 0.4), 0 4px 14px rgba(168, 85, 247, 0.35);
+}
+
+.category-chip-delete {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.2);
+  color: inherit;
+  font-size: 0.85rem;
+  line-height: 1;
+}
+
+.category-chip-delete:hover {
+  background: var(--danger);
+  color: #fff;
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));

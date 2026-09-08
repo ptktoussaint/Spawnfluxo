@@ -2,10 +2,11 @@ const gridEl = document.getElementById('grid');
 const emptyEl = document.getElementById('empty');
 const countEl = document.getElementById('count');
 const qEl = document.getElementById('q');
-const categoryEl = document.getElementById('category');
+const categoryFiltersEl = document.getElementById('category-filters');
 const loadErrorEl = document.getElementById('load-error');
 
 let debounceTimer;
+let selectedCategories = new Set();
 
 // Segura tanto para texto quanto para dentro de atributos "...": também
 // escapa aspas, já que div.innerHTML por si só não as escapa.
@@ -20,11 +21,29 @@ async function loadCategories() {
   if (!res.ok) return; // filtro de categoria é só um extra; falha aqui não impede a busca
   const categories = await res.json();
   if (!Array.isArray(categories)) return;
-  const current = categoryEl.value;
-  categoryEl.innerHTML =
-    '<option value="">Todas as categorias</option>' +
-    categories.map((c) => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
-  if (categories.includes(current)) categoryEl.value = current;
+  // remove da seleção categorias que não existem mais (ex.: excluídas no admin)
+  for (const cat of [...selectedCategories]) {
+    if (!categories.includes(cat)) selectedCategories.delete(cat);
+  }
+  renderCategoryFilters(categories);
+}
+
+function renderCategoryFilters(categories) {
+  categoryFiltersEl.innerHTML = categories
+    .map(
+      (cat) =>
+        `<button type="button" class="category-chip${selectedCategories.has(cat) ? ' active' : ''}" data-cat="${escapeHtml(cat)}">${escapeHtml(cat)}</button>`
+    )
+    .join('');
+  categoryFiltersEl.querySelectorAll('.category-chip').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const cat = btn.dataset.cat;
+      if (selectedCategories.has(cat)) selectedCategories.delete(cat);
+      else selectedCategories.add(cat);
+      btn.classList.toggle('active');
+      loadCars();
+    });
+  });
 }
 
 async function loadCars() {
@@ -32,7 +51,7 @@ async function loadCars() {
   try {
     const params = new URLSearchParams();
     if (qEl.value.trim()) params.set('q', qEl.value.trim());
-    if (categoryEl.value) params.set('category', categoryEl.value);
+    selectedCategories.forEach((cat) => params.append('category', cat));
     const res = await fetch('/api/cars?' + params.toString());
     if (!res.ok) throw new Error('Não foi possível carregar o catálogo agora. Tente novamente em instantes.');
     const cars = await res.json();
@@ -73,7 +92,6 @@ qEl.addEventListener('input', () => {
   clearTimeout(debounceTimer);
   debounceTimer = setTimeout(loadCars, 250);
 });
-categoryEl.addEventListener('change', loadCars);
 
 loadCategories();
 loadCars();
