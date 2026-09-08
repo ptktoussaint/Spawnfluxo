@@ -135,6 +135,7 @@ input:focus, select:focus {
   box-shadow: 0 0 0 1px rgba(168, 85, 247, 0.4), 0 4px 14px rgba(168, 85, 247, 0.35);
 }
 
+.category-chip-edit,
 .category-chip-delete {
   display: inline-flex;
   align-items: center;
@@ -144,8 +145,17 @@ input:focus, select:focus {
   border-radius: 50%;
   background: rgba(0, 0, 0, 0.2);
   color: inherit;
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   line-height: 1;
+}
+
+.category-chip-edit:hover {
+  background: var(--accent-hover);
+  color: #180a26;
+}
+
+.category-chip-delete {
+  font-size: 0.85rem;
 }
 
 .category-chip-delete:hover {

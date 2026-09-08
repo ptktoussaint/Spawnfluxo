@@ -83,6 +83,7 @@ porque o app nunca usa o SDK do Supabase, só a connection string do Postgres.
 | `/api/cars/:id` | PUT | Bearer token | Escrita (60/5min por IP) |
 | `/api/cars/:id` | DELETE | Bearer token | Escrita (60/5min por IP) |
 | `/api/categories` | POST | Bearer token | Escrita (60/5min por IP) |
+| `/api/categories/:name` | PUT | Bearer token | Escrita (60/5min por IP) |
 | `/api/categories/:name` | DELETE | Bearer token | Escrita (60/5min por IP) |
 | `/api/export` | GET | Bearer token | Geral (600/5min por IP) |
 

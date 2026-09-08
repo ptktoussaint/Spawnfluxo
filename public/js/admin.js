@@ -154,6 +154,7 @@ function renderCategoryFilters() {
       (cat) => `
     <button type="button" class="category-chip${selectedCategories.has(cat) ? ' active' : ''}" data-cat="${escapeHtml(cat)}">
       <span class="chip-label">${escapeHtml(cat)}</span>
+      <span class="category-chip-edit" data-cat="${escapeHtml(cat)}" title="Renomear categoria">&#9998;</span>
       <span class="category-chip-delete" data-cat="${escapeHtml(cat)}" title="Excluir categoria">&times;</span>
     </button>
   `
@@ -167,6 +168,38 @@ function renderCategoryFilters() {
       else selectedCategories.add(cat);
       btn.classList.toggle('active');
       loadCarsSafely();
+    });
+  });
+
+  adminCategoryFiltersEl.querySelectorAll('.category-chip-edit').forEach((btn) => {
+    btn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const cat = btn.dataset.cat;
+      const input = prompt('Novo nome para a categoria:', cat);
+      if (input === null) return;
+      const newName = input.trim();
+      if (!newName || newName === cat) return;
+      toolbarError.hidden = true;
+      try {
+        const res = await authFetch('/api/categories/' + encodeURIComponent(cat), {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: newName }),
+        });
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.error || 'Erro ao renomear categoria');
+        }
+        if (selectedCategories.has(cat)) {
+          selectedCategories.delete(cat);
+          selectedCategories.add(newName);
+        }
+        await loadCategories();
+        await loadCars();
+      } catch (err) {
+        toolbarError.textContent = err.message;
+        toolbarError.hidden = false;
+      }
     });
   });
 

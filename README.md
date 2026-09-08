@@ -12,11 +12,13 @@ nome do veículo, código de spawn, uma ou mais categorias e foto (opcional).
   transforma a própria linha da tabela num formulário editável (sem precisar rolar a
   página até o topo). Permite adicionar, editar e excluir veículos, marcar **múltiplas
   categorias** por veículo (via checkboxes), **criar categorias novas** direto na barra do
-  topo (mesmo sem ainda ter um veículo para usá-la) e **excluir categorias** clicando no ×
-  do botão correspondente — os veículos que estavam nela só perdem essa categoria (podendo
-  ficar sem nenhuma), não são excluídos. Qualquer categoria criada ou excluída no admin
-  aparece/some dos botões da página pública automaticamente (os botões vêm sempre da lista
-  atual do servidor). A foto é opcional — dá para cadastrar só nome/código/categoria e
+  topo (mesmo sem ainda ter um veículo para usá-la), **renomear categorias** clicando no ✎
+  do botão (o nome novo substitui o antigo em todos os veículos que a usavam) e **excluir
+  categorias** clicando no × — os veículos que estavam nela só perdem essa categoria
+  (podendo ficar sem nenhuma), não são excluídos. Qualquer categoria criada, renomeada ou
+  excluída no admin aparece/muda/some dos botões da página pública automaticamente (os
+  botões vêm sempre da lista atual do servidor). A foto é opcional — dá para cadastrar só
+  nome/código/categoria e
   adicionar (ou trocar) a foto depois, editando o registro. A foto é sempre um link
   `https://` (hospede a imagem em algum lugar como imgur, Discord ou Google Drive com link
   público, e cole o link no formulário) — não há upload de arquivo, para o site poder rodar

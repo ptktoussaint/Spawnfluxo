@@ -322,6 +322,64 @@ app.post('/api/categories', requireAuth, writeLimiter, async (req, res, next) =>
   }
 });
 
+// Renomeia uma categoria. Atualiza a linha em categories e troca o nome
+// dentro do array categories[] de todo carro que a usava, tudo na mesma
+// transação — o efeito aparece nos botões públicos assim que o cache atualiza.
+app.put('/api/categories/:name', requireAuth, writeLimiter, async (req, res, next) => {
+  const client = await pool.connect();
+  try {
+    const oldName = req.params.name;
+    const { name: rawNewName } = req.body || {};
+    const newName = typeof rawNewName === 'string' ? rawNewName.trim() : '';
+    if (!newName) return res.status(400).json({ error: 'Novo nome da categoria é obrigatório' });
+    if (newName.length > MAX_CATEGORY_LENGTH) {
+      return res.status(400).json({ error: `Nome de categoria muito longo (máx. ${MAX_CATEGORY_LENGTH} caracteres)` });
+    }
+    const newSlug = slugify(newName);
+    if (!newSlug) return res.status(400).json({ error: 'Nome de categoria inválido' });
+
+    await client.query('BEGIN');
+    const oldCatResult = await client.query('SELECT slug FROM categories WHERE name = $1', [oldName]);
+    if (oldCatResult.rows.length === 0) {
+      await client.query('ROLLBACK');
+      return res.status(404).json({ error: 'Categoria não encontrada' });
+    }
+    const oldSlug = oldCatResult.rows[0].slug;
+
+    if (newSlug !== oldSlug) {
+      const clash = await client.query('SELECT 1 FROM categories WHERE slug = $1', [newSlug]);
+      if (clash.rows.length > 0) {
+        await client.query('ROLLBACK');
+        return res.status(409).json({ error: 'Já existe uma categoria com esse nome' });
+      }
+    }
+
+    await client.query(
+      'UPDATE categories SET slug = $1, name = $2, updated_at = now() WHERE slug = $3',
+      [newSlug, newName, oldSlug]
+    );
+    const now = new Date().toISOString();
+    const carsResult = await client.query(
+      `UPDATE cars SET categories = array_replace(categories, $1, $2), updated_at = $3
+       WHERE $1 = ANY(categories)
+       RETURNING *`,
+      [oldName, newName, now]
+    );
+    await client.query('COMMIT');
+
+    const updatedById = new Map(carsResult.rows.map((r) => [r.id, rowToCar(r)]));
+    carsCache = carsCache.map((c) => updatedById.get(c.id) || c);
+    categoriesCache = sortCategoryNames(categoriesCache.map((n) => (n === oldName ? newName : n)));
+
+    res.json({ ok: true, name: newName, affectedCars: carsResult.rows.length });
+  } catch (err) {
+    await client.query('ROLLBACK').catch(() => {});
+    next(err);
+  } finally {
+    client.release();
+  }
+});
+
 // Exclui uma categoria. Carros que a tinham simplesmente perdem essa
 // categoria (podendo ficar sem nenhuma) — eles não são excluídos.
 app.delete('/api/categories/:name', requireAuth, writeLimiter, async (req, res, next) => {
