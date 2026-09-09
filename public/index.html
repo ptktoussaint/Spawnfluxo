@@ -10,11 +10,16 @@
   <header class="topbar">
     <div>
       <h1 class="brand-title">SPAWNS FLUXO <span class="credit">"BY PTK"</span></h1>
-      <p class="subtitle">Catálogo de códigos de spawn de veículos</p>
+      <p class="subtitle" id="subtitle">Catálogo de códigos de spawn de veículos</p>
     </div>
   </header>
 
   <main>
+    <div class="tabs" id="tabs">
+      <button type="button" class="tab-btn active" data-type="veiculo">Spawn de Veículos</button>
+      <button type="button" class="tab-btn" data-type="item">Spawn de Itens</button>
+    </div>
+
     <div class="search-bar">
       <input id="q" type="text" placeholder="Buscar por nome, código ou categoria...">
     </div>

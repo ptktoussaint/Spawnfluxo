@@ -1,30 +1,35 @@
-# Spawnfluxo — Catálogo de Spawn de Veículos
+# Spawnfluxo — Catálogo de Spawn
 
-Aplicação web para gerenciar o catálogo de códigos de spawn de veículos do servidor:
-nome do veículo, código de spawn, uma ou mais categorias e foto (opcional).
+Aplicação web para gerenciar catálogos de códigos de spawn do servidor, organizados em
+duas abas independentes: **Spawn de Veículos** e **Spawn de Itens**. Cada aba guarda nome,
+código de spawn, uma ou mais categorias (próprias daquela aba) e foto (opcional).
 
-- **Página pública** (`/` ou `/index.html`): qualquer pessoa pode buscar por nome, código
+- **Página pública** (`/` ou `/index.html`): qualquer pessoa pode alternar entre as abas
+  **Spawn de Veículos** e **Spawn de Itens** e, dentro de cada uma, buscar por nome, código
   ou categoria e ver nome + código + categorias + foto. As categorias aparecem como botões
   clicáveis — clique para filtrar por uma ou mais ao mesmo tempo (clique de novo para
-  tirar o filtro). Não é possível editar nada por aqui.
-- **Painel administrativo** (`/admin.html`): protegido por senha. Tem busca e os mesmos
-  botões de categoria da página pública para filtrar a tabela. Clicar em "Editar"
-  transforma a própria linha da tabela num formulário editável (sem precisar rolar a
-  página até o topo). Permite adicionar, editar e excluir veículos, marcar **múltiplas
-  categorias** por veículo (via checkboxes), **criar categorias novas** direto na barra do
-  topo (mesmo sem ainda ter um veículo para usá-la), **renomear categorias** clicando no ✎
-  do botão (o nome novo substitui o antigo em todos os veículos que a usavam) e **excluir
-  categorias** clicando no × — os veículos que estavam nela só perdem essa categoria
-  (podendo ficar sem nenhuma), não são excluídos. Qualquer categoria criada, renomeada ou
-  excluída no admin aparece/muda/some dos botões da página pública automaticamente (os
-  botões vêm sempre da lista atual do servidor). A foto é opcional — dá para cadastrar só
-  nome/código/categoria e
-  adicionar (ou trocar) a foto depois, editando o registro. A foto é sempre um link
+  tirar o filtro). Cada aba tem seu próprio conjunto de categorias (ex.: "ARMA" na aba de
+  itens não tem nada a ver com categorias de veículos). Não é possível editar nada por aqui.
+- **Painel administrativo** (`/admin.html`): protegido por senha. Tem as mesmas duas abas
+  da página pública — tudo que você faz (buscar, criar, editar, excluir veículo/item,
+  gerenciar categorias) vale só para a aba selecionada no momento. Dentro de cada aba: busca
+  e os mesmos botões de categoria da página pública para filtrar a tabela; clicar em
+  "Editar" transforma a própria linha da tabela num formulário editável (sem precisar rolar
+  a página até o topo); permite adicionar, editar e excluir registros, marcar **múltiplas
+  categorias** por registro (via checkboxes), **criar categorias novas** direto na barra do
+  topo (mesmo sem ainda ter um registro para usá-la), **renomear categorias** clicando no ✎
+  do botão (o nome novo substitui o antigo em todos os registros daquela aba que a usavam) e
+  **excluir categorias** clicando no × — os registros que estavam nela só perdem essa
+  categoria (podendo ficar sem nenhuma), não são excluídos. Qualquer categoria criada,
+  renomeada ou excluída no admin aparece/muda/some dos botões da página pública
+  automaticamente, sempre dentro da mesma aba (os botões vêm sempre da lista atual do
+  servidor para aquele tipo). A foto é opcional — dá para cadastrar só nome/código/categoria
+  e adicionar (ou trocar) a foto depois, editando o registro. A foto é sempre um link
   `https://` (hospede a imagem em algum lugar como imgur, Discord ou Google Drive com link
   público, e cole o link no formulário) — não há upload de arquivo, para o site poder rodar
   100% de graça sem precisar de disco próprio. O botão **"Exportar backup (.txt)"** na barra
-  do topo baixa um arquivo de texto com todos os veículos (nome == código de spawn),
-  agrupados por categoria — sem fotos, só como backup/consulta rápida.
+  do topo baixa um arquivo de texto com tudo que está na aba atual (nome == código de spawn),
+  agrupado por categoria — sem fotos, só como backup/consulta rápida.
 
 Os dados ficam num banco **Postgres gratuito no Supabase**, não em arquivo local — assim o
 site pode ser hospedado inteiramente na camada gratuita do Render (que não oferece disco
@@ -53,11 +58,28 @@ por leitura nem gera custo proporcional a acessos.
 
 Acesse `http://localhost:3000` (catálogo público) e `http://localhost:3000/admin.html` (admin).
 
-Na primeira execução, se a tabela `cars` estiver vazia, o servidor a popula automaticamente
-com os **207 veículos** já cadastrados (a partir de `data/seed-cars.json`), organizados em
-8 categorias: `PLANOS VIP'S`, `VEÍCULOS VIP'S`, `MOTOS VIP'S`, `VEÍCULOS ESPECIAIS`,
-`AERONAVES`, `CAMINHÕES`, `VEÍCULOS LUXO` e `RECOMPENSAS DO PASSE`. Nenhuma foto foi
-associada ainda — adicione pelo painel admin quando quiser.
+Na primeira execução, cada aba é populada automaticamente (uma independente da outra) se
+estiver vazia:
+- **Spawn de Veículos**: os **207 veículos** já cadastrados (a partir de
+  `data/seed-cars.json`), organizados em 8 categorias: `PLANOS VIP'S`, `VEÍCULOS VIP'S`,
+  `MOTOS VIP'S`, `VEÍCULOS ESPECIAIS`, `AERONAVES`, `CAMINHÕES`, `VEÍCULOS LUXO` e
+  `RECOMPENSAS DO PASSE`.
+- **Spawn de Itens**: os **155 itens** já cadastrados (a partir de `data/seed-items.json`),
+  organizados em 10 categorias: `ARMA`, `ARMAS BRANCAS`, `MUNIÇÕES & ATTACHS`, `MUAMBAS`,
+  `DROGAS`, `FARM`, `PESCA - MINERAÇÃO - FAZENDA`, `UTILIDADES`, `CASAMENTO` e `OUTROS`.
+
+Nenhuma foto foi associada ainda em nenhuma das duas abas — adicione pelo painel admin
+quando quiser.
+
+**Pontos para você revisar na lista de itens** (mesmo espírito das ressalvas de veículos
+abaixo — pequenos ajustes que fiz ao transcrever sua lista):
+- Categoria `PESCA - MINEIRAÇÃO - FAZENDA`: corrigi para `PESCA - MINERAÇÃO - FAZENDA`
+  (troquei "MINEIRAÇÃO" por "MINERAÇÃO") por parecer um typo — renomeie pelo ✎ do botão de
+  categoria no admin se eu tiver entendido errado.
+- Dois códigos vieram com um "1" solto no final (`WEAPON_COMBATPDW 1` → sig sauer, e
+  `secador 1` → secador); tirei esse "1" por parecer um resíduo de formatação da lista
+  original. Se o código de spawn realmente inclui esse "1", é só editar o registro no admin
+  e corrigir o código de spawn.
 
 **Pontos para você revisar** (peculiaridades que já existiam nas listas originais, mantidas
 fielmente na importação):
@@ -88,6 +110,22 @@ fielmente na importação):
 5. Substitua `[YOUR-PASSWORD]` pela senha do banco que você definiu no passo 2, e use essa
    string completa como `DATABASE_URL` no `.env` (local) ou nas variáveis de ambiente do
    Render (produção).
+
+### ⚠️ Atualizando um projeto que já estava no ar (antes da aba "Spawn de Itens" existir)
+
+Se o seu projeto Supabase já tinha as tabelas `cars`/`categories` de antes — ou seja, você
+já vinha usando o Spawnfluxo só com veículos — **rode a migração antes de atualizar o
+código em produção**:
+
+1. No SQL Editor do Supabase, cole o conteúdo de
+   [`db/migration-002-add-item-type.sql`](db/migration-002-add-item-type.sql) e clique em
+   **Run**. Não é destrutivo: todos os veículos e categorias existentes continuam
+   intactos, só ganham uma coluna `type = 'veiculo'` internamente.
+2. Só depois disso faça o deploy do código novo (`git push`/Render). Se o código novo subir
+   antes da migração, o servidor vai falhar ao iniciar (a coluna `type` ainda não existe).
+
+Se você está configurando o projeto do zero agora, **ignore isso** — o passo 3 acima
+(`db/schema.sql`) já cria as tabelas com suporte às duas abas desde o início.
 
 ### Como os dados persistem
 

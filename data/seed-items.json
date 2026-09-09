@@ -1,0 +1,1397 @@
+[
+  {
+    "id": "00f903c4-2738-40e8-a145-d5424794a65c",
+    "name": "AK47",
+    "spawnCode": "WEAPON_ASSAULTRIFLE_MK2",
+    "category": "ARMA",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "739aa7d6-f6e7-4c0c-8c46-b88542824547",
+    "name": "m4a1",
+    "spawnCode": "WEAPON_CARBINERIFLE",
+    "category": "ARMA",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "661898ed-be5d-4ffb-bc6a-1eb0312302be",
+    "name": "m4a1 mk2",
+    "spawnCode": "WEAPON_CARBINERIFLE_MK2",
+    "category": "ARMA",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "54b0b837-fc16-41e1-9a0c-8e0b4191e4ff",
+    "name": "sig sauer",
+    "spawnCode": "WEAPON_COMBATPDW",
+    "category": "ARMA",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "476c00c2-8ac1-4f4a-91cd-b8c76558e8bd",
+    "name": "tec-9",
+    "spawnCode": "WEAPON_MACHINEPISTOL",
+    "category": "ARMA",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "90dea6b3-8734-4fe9-9823-3ffcfe2ac92a",
+    "name": "uzi",
+    "spawnCode": "WEAPON_MICROSMG",
+    "category": "ARMA",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "6c21ef49-e592-4679-8d48-49e3fa905ad3",
+    "name": "mp5",
+    "spawnCode": "WEAPON_SMG",
+    "category": "ARMA",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "efc12a77-6795-4894-ab76-6433e8d84ea9",
+    "name": "mtar",
+    "spawnCode": "WEAPON_ASSAULTSMG",
+    "category": "ARMA",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "621879d3-4e5a-41a8-91a9-ab452302a395",
+    "name": "smg mk2",
+    "spawnCode": "WEAPON_SMG_MK2",
+    "category": "ARMA",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "b53cb8f4-b179-4afb-b417-a3b888ff7375",
+    "name": "g36 ou parafal",
+    "spawnCode": "WEAPON_SPECIALCARBINE",
+    "category": "ARMA",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "e6cef1d3-6094-461f-af63-fa77bef46ae7",
+    "name": "g36 mk2",
+    "spawnCode": "WEAPON_SPECIALCARBINE_MK2",
+    "category": "ARMA",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "3c61c666-a181-4b61-bd63-99ea60514b67",
+    "name": "taser",
+    "spawnCode": "WEAPON_STUNGUN",
+    "category": "ARMA",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "392674fe-5eb7-49d2-9a98-989c542fe695",
+    "name": "glock",
+    "spawnCode": "WEAPON_COMBATPISTOL",
+    "category": "ARMA",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "c297bfee-7be6-4ab1-a98e-9fb2b54fc05d",
+    "name": "fivemk2",
+    "spawnCode": "WEAPON_PISTOL_MK2",
+    "category": "ARMA",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "153057b6-70a1-4818-ac63-2e8010901c99",
+    "name": "pistola ceramica",
+    "spawnCode": "WEAPON_CERAMICPISTOL",
+    "category": "ARMA",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "e41dae4c-db87-4923-adc2-68756b52d9da",
+    "name": "pistola HK",
+    "spawnCode": "WEAPON_SNSPISTOL",
+    "category": "ARMA",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "444d5d21-6e48-4274-8205-bb32ebdceb46",
+    "name": "SCAR-H",
+    "spawnCode": "WEAPON_SCARH",
+    "category": "ARMA",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "3495b469-c13e-4e29-8735-0d863e358bd6",
+    "name": "MP9",
+    "spawnCode": "WEAPON_MP9",
+    "category": "ARMA",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "fea68e84-f06e-4bdf-8041-35585cdbdc60",
+    "name": "AUG",
+    "spawnCode": "WEAPON_MILITARYRIFLE",
+    "category": "ARMA",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "99271b44-7df1-4a9a-aafb-69f5c1c20433",
+    "name": "SCORPION",
+    "spawnCode": "WEAPON_SCORPIONEVO",
+    "category": "ARMA",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "314c8674-32a2-4ead-b1b1-2658c21249c7",
+    "name": "m9a3",
+    "spawnCode": "WEAPON_M9A3",
+    "category": "ARMA",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "0edc0810-e93c-49b1-b953-2c61095971a1",
+    "name": "NSR",
+    "spawnCode": "WEAPON_NSR",
+    "category": "ARMA",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "36ea5b53-58c9-4fa9-a135-9b9366fe2aa8",
+    "name": "pé de cabra",
+    "spawnCode": "WEAPON_CROWBAR",
+    "category": "ARMAS BRANCAS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "5a50adf1-7f59-4675-9b57-21f852494640",
+    "name": "machado de batalha",
+    "spawnCode": "WEAPON_BATTLEAXE",
+    "category": "ARMAS BRANCAS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "531ee29f-a380-46c0-99cf-22276736e0a0",
+    "name": "garrafa de vidro quebrada",
+    "spawnCode": "WEAPON_BOTTLE",
+    "category": "ARMAS BRANCAS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "cb1c97d4-44b0-46d6-9cf3-4ee8abeb8681",
+    "name": "adaga",
+    "spawnCode": "WEAPON_DAGGER",
+    "category": "ARMAS BRANCAS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "cf9bf60f-09aa-4fad-bfa5-cf8f4257f662",
+    "name": "machadinha",
+    "spawnCode": "WEAPON_HATCHET",
+    "category": "ARMAS BRANCAS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "a0fa7bb7-ba23-4aff-922d-32808ae9f9c7",
+    "name": "machete",
+    "spawnCode": "WEAPON_MACHETE",
+    "category": "ARMAS BRANCAS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "13f77a02-2749-4ffe-af8c-f0a12fbeb610",
+    "name": "machado de pedra",
+    "spawnCode": "WEAPON_STONE_HATCHET",
+    "category": "ARMAS BRANCAS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "63b24131-2f6e-4fd3-9225-bcc1a985422d",
+    "name": "taco de golf",
+    "spawnCode": "WEAPON_GOLFCLUB",
+    "category": "ARMAS BRANCAS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "f4000533-2af8-40f3-ac40-fa6248b8cd18",
+    "name": "martelo",
+    "spawnCode": "WEAPON_HAMMER",
+    "category": "ARMAS BRANCAS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "149bd72e-2013-44d9-a677-87047106bcc8",
+    "name": "chave inglesa",
+    "spawnCode": "WEAPON_WRENCH",
+    "category": "ARMAS BRANCAS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "dc880fc5-bbe0-473d-a463-d7149fc01a2a",
+    "name": "taco de sinuca",
+    "spawnCode": "WEAPON_POOLCUE",
+    "category": "ARMAS BRANCAS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "0477c6f4-a8b6-436c-b98e-cf2b50759af9",
+    "name": "faca",
+    "spawnCode": "WEAPON_KNIFE",
+    "category": "ARMAS BRANCAS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "40713873-0796-4cac-8828-7ebed265bec8",
+    "name": "lanterna",
+    "spawnCode": "WEAPON_FLASHLIGHT",
+    "category": "ARMAS BRANCAS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "2c951de1-f853-4b45-9f51-b92f53813568",
+    "name": "soco ingles",
+    "spawnCode": "WEAPON_KNUCKLE",
+    "category": "ARMAS BRANCAS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "3e95c97a-ca9f-43fa-be60-450befc63845",
+    "name": "bastão",
+    "spawnCode": "WEAPON_BAT",
+    "category": "ARMAS BRANCAS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "6f560ed8-1873-4f84-8554-6ab56e840065",
+    "name": "cacete",
+    "spawnCode": "WEAPON_NIGHTSTICK",
+    "category": "ARMAS BRANCAS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "668cbe54-4234-428b-816b-c3dba7b5c7ae",
+    "name": "munição de pistola",
+    "spawnCode": "ammo_pistol",
+    "category": "MUNIÇÕES & ATTACHS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "49c3b8e7-96f6-4345-829b-d828eb487af6",
+    "name": "munição de rifle",
+    "spawnCode": "ammo_rifle",
+    "category": "MUNIÇÕES & ATTACHS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "6fb48a0f-2157-4989-b14a-eaf4ade1ac01",
+    "name": "munição de smg",
+    "spawnCode": "ammo_smg",
+    "category": "MUNIÇÕES & ATTACHS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "025cf275-e769-4a24-81b5-8adca56faaa7",
+    "name": "carregador extentido",
+    "spawnCode": "wpn_c_extendido",
+    "category": "MUNIÇÕES & ATTACHS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "ee708369-d90e-46ba-b1d7-458e30842277",
+    "name": "lanterna",
+    "spawnCode": "wpn_lanterna",
+    "category": "MUNIÇÕES & ATTACHS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "13327428-466f-4995-8f27-2cad909855ac",
+    "name": "empunhadora",
+    "spawnCode": "wpn_empunhadura",
+    "category": "MUNIÇÕES & ATTACHS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "5118747e-2327-4545-aede-57b9d6b8d216",
+    "name": "mira",
+    "spawnCode": "wpn_mira",
+    "category": "MUNIÇÕES & ATTACHS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "33e7db87-89ca-4a49-90f4-87d4cd3366e1",
+    "name": "silenciador",
+    "spawnCode": "wpn_silenciador",
+    "category": "MUNIÇÕES & ATTACHS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "2ed07c6b-8925-4953-9cf0-5d47075b94c1",
+    "name": "algemas",
+    "spawnCode": "algemas",
+    "category": "MUAMBAS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "7b7b7eb8-3881-4fac-b509-05dd8d7f5ff3",
+    "name": "corda",
+    "spawnCode": "laco",
+    "category": "MUAMBAS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "333a0fcd-e9e2-4639-b963-28cc20794c62",
+    "name": "masterpick",
+    "spawnCode": "masterpick",
+    "category": "MUAMBAS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "6c1ff01b-9e43-4a98-9920-5dd43a0e653f",
+    "name": "lockpick",
+    "spawnCode": "lockpick",
+    "category": "MUAMBAS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "092a6501-1c41-41cc-9e42-296fa0accd4a",
+    "name": "mascara",
+    "spawnCode": "mascara",
+    "category": "MUAMBAS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "ac31ec3c-5e1e-455e-ad79-ae1eb0bfb4e8",
+    "name": "ticket de corrida",
+    "spawnCode": "ticket",
+    "category": "MUAMBAS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "c40ca1c8-14ce-4f46-9f77-93e6245d7ebe",
+    "name": "chave rosa",
+    "spawnCode": "keypink",
+    "category": "MUAMBAS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "3393b8d1-3ee9-403c-8de4-a5d10372921d",
+    "name": "chave azul",
+    "spawnCode": "keyblue",
+    "category": "MUAMBAS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "cfb780ec-6acc-4efa-b1f8-0e33e62c6a01",
+    "name": "chave yellow",
+    "spawnCode": "keyyellow",
+    "category": "MUAMBAS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "1e89ca30-454b-49a5-b709-5a345c1aa83f",
+    "name": "chave vermelha",
+    "spawnCode": "keyred",
+    "category": "MUAMBAS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "01a507db-41e9-47d3-9bc8-3fb9a8f194b0",
+    "name": "chave premium",
+    "spawnCode": "keycard",
+    "category": "MUAMBAS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "d82bf647-58ac-44a9-afe5-45c29d62e5bc",
+    "name": "placa",
+    "spawnCode": "placa",
+    "category": "MUAMBAS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "126daec1-3d9c-4681-a540-058d386aeb6d",
+    "name": "c4",
+    "spawnCode": "c4",
+    "category": "MUAMBAS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "76db0675-3f46-4323-9065-3ddd67f18f10",
+    "name": "capuz",
+    "spawnCode": "capuz",
+    "category": "MUAMBAS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "39933b28-18c8-4ec0-9375-13fd631f8db7",
+    "name": "farinha para venda",
+    "spawnCode": "farinha_embalada",
+    "category": "DROGAS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "f43eaa38-8cef-4f9d-ba7e-d65a28f54dd8",
+    "name": "farinha",
+    "spawnCode": "farinha",
+    "category": "DROGAS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "be928523-6a1b-4328-a518-4d4d553dbe96",
+    "name": "maconha",
+    "spawnCode": "maconha",
+    "category": "DROGAS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "00895514-5e5a-4a3e-8150-c423035adfee",
+    "name": "maconha pra uso",
+    "spawnCode": "maconha2",
+    "category": "DROGAS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "b0583dd0-10fa-46db-98ab-2cc85843278e",
+    "name": "papelzinho para uso",
+    "spawnCode": "papelzinho",
+    "category": "DROGAS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "d91fdd4e-5b11-42c0-ad8b-9553e7e2c636",
+    "name": "papelzinho para venda",
+    "spawnCode": "papelzinho_embalado",
+    "category": "DROGAS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "cf5e4230-4e13-496b-a26a-1a62c7ca293e",
+    "name": "adrenalina para uso",
+    "spawnCode": "adrenalina",
+    "category": "DROGAS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "c26afe5e-9dfb-4f74-a9d3-9e52c5b6ea87",
+    "name": "adrenalina para venda",
+    "spawnCode": "seringa_embalada",
+    "category": "DROGAS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "bf65116d-a429-46a1-b819-30f0691a0c55",
+    "name": "cristal para uso",
+    "spawnCode": "cristal",
+    "category": "DROGAS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "70728058-7238-4fb6-8def-533290747b86",
+    "name": "cristal para venda",
+    "spawnCode": "cristal_embalado",
+    "category": "DROGAS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "de897c9d-4c3f-40ed-bb1f-5ec467d30148",
+    "name": "dietilamina",
+    "spawnCode": "dietilamina",
+    "category": "DROGAS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "b8c22770-91fa-4fa6-8fbc-b8a9eabe6e06",
+    "name": "erva pra venda",
+    "spawnCode": "erva_embalada",
+    "category": "DROGAS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "dd6078a4-e8fc-4528-a31d-42691ff19403",
+    "name": "erva",
+    "spawnCode": "erva",
+    "category": "DROGAS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "332426a2-2a8f-4ec5-898b-3a9902909670",
+    "name": "cano de arma",
+    "spawnCode": "canodearma",
+    "category": "FARM",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "0bfd05d1-6428-4c3d-8a4e-6555a029ada5",
+    "name": "cartucho de pistola",
+    "spawnCode": "cartucho1",
+    "category": "FARM",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "20900d3e-6d40-498b-a017-1a15c91d8277",
+    "name": "cartucho de smg",
+    "spawnCode": "cartucho2",
+    "category": "FARM",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "51f9b62b-9ef2-49ea-b32f-13a91422ebda",
+    "name": "cartucho de fuzil",
+    "spawnCode": "cartucho3",
+    "category": "FARM",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "30ae8f5a-11fb-4624-8f63-c8f12681dcaa",
+    "name": "carga de cartucho de pistola",
+    "spawnCode": "cartuchocarga1",
+    "category": "FARM",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "96c0f07c-b164-457d-98c9-912374ee1afd",
+    "name": "carga de cartucho de sub",
+    "spawnCode": "cartuchocarga2",
+    "category": "FARM",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "a54c6e57-ba2e-4fd3-a1a5-63db80fe4e07",
+    "name": "carga de cartucho de fuzil",
+    "spawnCode": "cartuchocarga3",
+    "category": "FARM",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "9a1392c0-2d5f-44f2-9721-28842e22331d",
+    "name": "plastico",
+    "spawnCode": "plastico",
+    "category": "FARM",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "e3436a43-3eaf-459d-a653-7d0aa62953a6",
+    "name": "plastico para embalagem",
+    "spawnCode": "plastico2",
+    "category": "FARM",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "e385aab5-8f9a-406f-b52a-fe3b6602e87e",
+    "name": "polvora",
+    "spawnCode": "polvora",
+    "category": "FARM",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "3b9a52a2-0d70-4346-864e-dc6e300a069a",
+    "name": "projetil de pistola",
+    "spawnCode": "projetil1",
+    "category": "FARM",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "bc1dc935-9ef2-4a8c-ab56-2d9af549abe2",
+    "name": "projetil de smg",
+    "spawnCode": "projetil2",
+    "category": "FARM",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "b2c89817-03df-469a-a4e4-46eed698752c",
+    "name": "projetil de fuzil",
+    "spawnCode": "projetil3",
+    "category": "FARM",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "3a45b866-2c87-4a05-9987-feffa5ea59b6",
+    "name": "molas de armas",
+    "spawnCode": "mola2",
+    "category": "FARM",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "0e453119-bf30-405a-beb9-8fac7dce7fd3",
+    "name": "molas",
+    "spawnCode": "mola",
+    "category": "FARM",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "31d45cb2-0e7b-40fe-9463-2255b096730e",
+    "name": "fios",
+    "spawnCode": "fios",
+    "category": "FARM",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "c425e887-2830-4c36-a304-5e4a20df2f75",
+    "name": "tecido",
+    "spawnCode": "tecido",
+    "category": "FARM",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "d6bc9130-6e6c-4afc-9786-e8f5c40a1049",
+    "name": "fungo",
+    "spawnCode": "fungo",
+    "category": "FARM",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "25d7db1b-e3e5-42e4-be2d-0a6b73cd6ace",
+    "name": "gatilho",
+    "spawnCode": "gatilho",
+    "category": "FARM",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "f3faca33-1a65-4f74-a0a8-6edb19ec2d36",
+    "name": "papel",
+    "spawnCode": "papel",
+    "category": "FARM",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "176111b2-9cf4-46ba-9b39-815e9e7affb4",
+    "name": "tinta",
+    "spawnCode": "tintaf",
+    "category": "FARM",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "3f6c9907-9d4a-4900-b83c-4c2be7831d18",
+    "name": "aluminio",
+    "spawnCode": "aluminio",
+    "category": "FARM",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "83bacf81-c012-4bf6-bd2a-76d5ff2a8048",
+    "name": "folha de coca",
+    "spawnCode": "folhadecoca",
+    "category": "FARM",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "2f3314c5-8467-4788-8a6d-2ada2c2c1430",
+    "name": "inferiortec",
+    "spawnCode": "inferiortec",
+    "category": "FARM",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "8dc30709-d61b-4387-8f99-9eacc00014f2",
+    "name": "superiortec",
+    "spawnCode": "superiortec",
+    "category": "FARM",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "177de6e2-1ad3-48f3-a5fa-700da71b82e5",
+    "name": "inferiorfive",
+    "spawnCode": "inferiorfive",
+    "category": "FARM",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "f9e39c50-4ef6-40e6-8021-25af60d0c16a",
+    "name": "superiorfive",
+    "spawnCode": "superiorfive",
+    "category": "FARM",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "75ba960d-d905-4a52-bdcb-bab88ef2312b",
+    "name": "chip",
+    "spawnCode": "chip",
+    "category": "FARM",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "c99d19e6-7a02-4d5b-aa6c-efffd7be7b2f",
+    "name": "superiorg36",
+    "spawnCode": "superiorg36",
+    "category": "FARM",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "659e5a9c-e4fc-4d2c-a109-1124389ca021",
+    "name": "inferiorg36",
+    "spawnCode": "inferiorg36",
+    "category": "FARM",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "b7a2053a-2df9-436e-9764-e447b7227903",
+    "name": "inferiormk2",
+    "spawnCode": "inferiormk2",
+    "category": "FARM",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "68ee5c85-bf3e-47f5-9f82-1628ae7c40c7",
+    "name": "acidobateria",
+    "spawnCode": "acidobateria",
+    "category": "FARM",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "d8d94cea-120a-404f-aed2-3419d029d63d",
+    "name": "superiormp9",
+    "spawnCode": "superiormp9",
+    "category": "FARM",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "fa1a1dbb-f393-41b8-a7d3-d8dc37d8761b",
+    "name": "superiorscarh",
+    "spawnCode": "superiorscarh",
+    "category": "FARM",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "ef252f3e-9e4f-437c-b3d8-e37596d47760",
+    "name": "inferiormp9",
+    "spawnCode": "inferiormp9",
+    "category": "FARM",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "910d18d4-a79f-40c8-8599-4de3a087a4fe",
+    "name": "inferiorscarh",
+    "spawnCode": "inferiorscarh",
+    "category": "FARM",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "9011ded8-f988-42c5-842a-84adb36d95e3",
+    "name": "inferioraug",
+    "spawnCode": "inferioraug",
+    "category": "FARM",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "80a15628-9337-42d4-a873-eb9a9d4e8adf",
+    "name": "superioraug",
+    "spawnCode": "superioraug",
+    "category": "FARM",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "ca56ef8f-9529-475b-959a-3493387cce50",
+    "name": "inferiorceramic",
+    "spawnCode": "inferiorceramic",
+    "category": "FARM",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "79a7ffb1-0ce6-4bee-abdb-b7c87dbb8265",
+    "name": "superiorceramic",
+    "spawnCode": "superiorceramic",
+    "category": "FARM",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "31b98b2a-6132-4dcd-8f10-10b4e0617090",
+    "name": "superiorhk",
+    "spawnCode": "superiorhk",
+    "category": "FARM",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "fa428019-fdfe-4cdc-9dc0-d92d5a820232",
+    "name": "inferiorhk",
+    "spawnCode": "inferiorhk",
+    "category": "FARM",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "297df4c0-a6d3-4aa7-8700-8df9b56dbf1c",
+    "name": "isca",
+    "spawnCode": "isca",
+    "category": "PESCA - MINERAÇÃO - FAZENDA",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "e07556b3-6bd9-445a-a7a5-49e35aa66ace",
+    "name": "lambari",
+    "spawnCode": "lambari",
+    "category": "PESCA - MINERAÇÃO - FAZENDA",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "e6d79bfd-aec9-4461-bcde-f1cf3fe96ebd",
+    "name": "corvina",
+    "spawnCode": "corvina",
+    "category": "PESCA - MINERAÇÃO - FAZENDA",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "453bcdbc-fd74-4b9d-a2d5-640e0685d6ed",
+    "name": "pacu",
+    "spawnCode": "pacu",
+    "category": "PESCA - MINERAÇÃO - FAZENDA",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "c42a499d-f1a1-4c6a-98d6-70c7cd5b7ad5",
+    "name": "dourado",
+    "spawnCode": "dourado",
+    "category": "PESCA - MINERAÇÃO - FAZENDA",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "f561d8df-c4de-4865-9f3b-288f0d55d2cc",
+    "name": "pintado",
+    "spawnCode": "pintado",
+    "category": "PESCA - MINERAÇÃO - FAZENDA",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "34e5e4f2-ac31-4140-81ab-43879d90a71b",
+    "name": "ouro",
+    "spawnCode": "ouro",
+    "category": "PESCA - MINERAÇÃO - FAZENDA",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "3be7b3d2-b2cb-4bab-a5c8-e017f1de18f4",
+    "name": "bronze",
+    "spawnCode": "bronze",
+    "category": "PESCA - MINERAÇÃO - FAZENDA",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "ad50961e-a119-4ea3-a6f8-ce9aba60b0f0",
+    "name": "prata",
+    "spawnCode": "prata",
+    "category": "PESCA - MINERAÇÃO - FAZENDA",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "f2b10897-4d7d-4a10-bc94-87c3dd7ddc93",
+    "name": "quartzo",
+    "spawnCode": "quartzo",
+    "category": "PESCA - MINERAÇÃO - FAZENDA",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "83268108-2310-44cc-94c0-0087cccd3a87",
+    "name": "topazio",
+    "spawnCode": "topazio",
+    "category": "PESCA - MINERAÇÃO - FAZENDA",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "c94981b0-c003-4dc9-96e7-f4acb4ce86ef",
+    "name": "grãos impuro",
+    "spawnCode": "graosimpuros",
+    "category": "PESCA - MINERAÇÃO - FAZENDA",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "dafbb73e-509a-40a6-94e2-48e25c67bf6f",
+    "name": "dinheiro",
+    "spawnCode": "dinheiro",
+    "category": "UTILIDADES",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "31622c18-ba1c-4d5a-bfbf-05ae19b77e20",
+    "name": "dinheiro sujo",
+    "spawnCode": "dinheirosujo",
+    "category": "UTILIDADES",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "d8647047-8a4b-42d2-ade3-453e0611f5e5",
+    "name": "radio",
+    "spawnCode": "radio",
+    "category": "UTILIDADES",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "f2a55a56-3f08-4601-8dac-959f3301e818",
+    "name": "kitreparo",
+    "spawnCode": "repairkit",
+    "category": "UTILIDADES",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "02307e03-e706-4fc3-86f2-70d239f64e60",
+    "name": "roupa",
+    "spawnCode": "roupas",
+    "category": "UTILIDADES",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "8d94e4a4-c517-4282-9079-8e9b40849047",
+    "name": "mochila",
+    "spawnCode": "mochila",
+    "category": "UTILIDADES",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "d041342e-15dc-42ad-a021-3cff40f0050c",
+    "name": "cartão de debito",
+    "spawnCode": "cartaodedebito",
+    "category": "UTILIDADES",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "3074d2af-aecf-4ef6-841d-c5e95aec4db9",
+    "name": "celular",
+    "spawnCode": "celular",
+    "category": "UTILIDADES",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "a96ebb36-bb3e-46ab-b1eb-376ac784d079",
+    "name": "paraquedas",
+    "spawnCode": "GADGET_PARACHUTE",
+    "category": "UTILIDADES",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "20135d71-d020-40da-b195-53a209f9015c",
+    "name": "energético",
+    "spawnCode": "redbull",
+    "category": "UTILIDADES",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "6eb8254e-dda2-4157-9754-724dfd659e78",
+    "name": "anel",
+    "spawnCode": "anel",
+    "category": "CASAMENTO",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "efe684f3-fce6-4f06-a893-152d531acbcf",
+    "name": "aliança",
+    "spawnCode": "alianca",
+    "category": "CASAMENTO",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "81516f18-f060-44f8-98c3-5539fe747586",
+    "name": "binoculos",
+    "spawnCode": "binoculos",
+    "category": "OUTROS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "b0feeb33-b2b6-455a-b3df-8427a701cfaf",
+    "name": "cigarro",
+    "spawnCode": "cigarro",
+    "category": "OUTROS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "8906b21b-6b4d-4c94-8ae6-e70997f09286",
+    "name": "agua",
+    "spawnCode": "agua",
+    "category": "OUTROS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "d8f2ddf8-8af8-407e-a894-16de1bd3301f",
+    "name": "chocolate",
+    "spawnCode": "chocolate",
+    "category": "OUTROS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "e41d5bc2-7434-40d7-a5bb-0477c3f2f79d",
+    "name": "donutos",
+    "spawnCode": "donuts",
+    "category": "OUTROS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "4b433a9b-771f-4abb-b2ca-8af41523210d",
+    "name": "frappuccino",
+    "spawnCode": "frappuccino",
+    "category": "OUTROS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "f535e7e5-1f79-44c0-aead-2dc1f742ffeb",
+    "name": "laranja",
+    "spawnCode": "laranja",
+    "category": "OUTROS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "7723434d-b847-44d4-a70b-f2ee6fa2204d",
+    "name": "militec",
+    "spawnCode": "militec",
+    "category": "OUTROS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "99429129-2707-4d11-b262-1ae9fa7260eb",
+    "name": "toddynho",
+    "spawnCode": "toddynho",
+    "category": "OUTROS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "ced645a4-b927-444d-a33d-a1574b0e1686",
+    "name": "morango",
+    "spawnCode": "morango",
+    "category": "OUTROS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "6aa14970-053a-4cd1-b6e6-c71f95afbd55",
+    "name": "bandagem",
+    "spawnCode": "bandagem",
+    "category": "OUTROS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "5e278faf-21a4-4bf9-8080-4bf47753d8f4",
+    "name": "dipiroca",
+    "spawnCode": "dipiroca",
+    "category": "OUTROS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "50b9a558-fb7b-43f9-a6ed-69d72617de21",
+    "name": "xerelto",
+    "spawnCode": "xerelto",
+    "category": "OUTROS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "72c6f1b4-efde-4435-9e51-a8830c5b14be",
+    "name": "garrafa vazia",
+    "spawnCode": "garrafavazia",
+    "category": "OUTROS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "9a5cf343-156b-4dd2-9c1f-831adf543632",
+    "name": "secador",
+    "spawnCode": "secador",
+    "category": "OUTROS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  },
+  {
+    "id": "37398e6d-1faf-4921-aba2-ae775f568003",
+    "name": "extintor",
+    "spawnCode": "WEAPON_FIREEXTINGUISHER",
+    "category": "OUTROS",
+    "photoUrl": "",
+    "createdAt": "2026-09-09T03:43:57.491Z",
+    "updatedAt": "2026-09-09T03:43:57.491Z"
+  }
+]

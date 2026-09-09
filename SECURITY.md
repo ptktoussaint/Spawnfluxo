@@ -34,6 +34,12 @@ público compartilhado, não dados por usuário. Existe só **um** papel adminis
 (senha única em `ADMIN_PASSWORD`), sem contas individuais, sem roles, sem metadata de
 usuário que possa ser adulterado para virar admin.
 
+Ambas as tabelas têm uma coluna `type` (`'veiculo'` ou `'item'`, validada com `CHECK` no
+banco e com uma lista fixa no servidor) que separa as duas abas do site. Em `categories`,
+a chave primária é composta (`type`, `slug`): a mesma categoria "OUTROS", por exemplo, pode
+existir uma vez para veículos e outra vez para itens, como linhas totalmente independentes
+— nunca há mistura entre os dois conjuntos de categorias.
+
 ## Autenticação e sessão do admin
 
 - Login: senha única, comparada com `crypto.timingSafeEqual` (tempo constante).
@@ -75,17 +81,22 @@ porque o app nunca usa o SDK do Supabase, só a connection string do Postgres.
 
 | Rota | Método | Autenticação | Rate limit |
 |---|---|---|---|
-| `/api/cars` | GET | Nenhuma (pública) | Geral (600/5min por IP) |
-| `/api/categories` | GET | Nenhuma (pública) | Geral (600/5min por IP) |
+| `/api/cars?type=veiculo\|item` | GET | Nenhuma (pública) | Geral (600/5min por IP) |
+| `/api/categories?type=veiculo\|item` | GET | Nenhuma (pública) | Geral (600/5min por IP) |
 | `/api/login` | POST | — | 10 tentativas falhas/15min por IP |
 | `/api/logout` | POST | Bearer token | Geral |
-| `/api/cars` | POST | Bearer token | Escrita (60/5min por IP) |
+| `/api/cars` (body inclui `type`) | POST | Bearer token | Escrita (60/5min por IP) |
 | `/api/cars/:id` | PUT | Bearer token | Escrita (60/5min por IP) |
 | `/api/cars/:id` | DELETE | Bearer token | Escrita (60/5min por IP) |
-| `/api/categories` | POST | Bearer token | Escrita (60/5min por IP) |
-| `/api/categories/:name` | PUT | Bearer token | Escrita (60/5min por IP) |
-| `/api/categories/:name` | DELETE | Bearer token | Escrita (60/5min por IP) |
-| `/api/export` | GET | Bearer token | Geral (600/5min por IP) |
+| `/api/categories` (body inclui `type`) | POST | Bearer token | Escrita (60/5min por IP) |
+| `/api/categories/:type/:name` | PUT | Bearer token | Escrita (60/5min por IP) |
+| `/api/categories/:type/:name` | DELETE | Bearer token | Escrita (60/5min por IP) |
+| `/api/export?type=veiculo\|item` | GET | Bearer token | Geral (600/5min por IP) |
+
+`:type` e o `type` no body são validados contra uma lista fixa (`veiculo`, `item`) —
+qualquer outro valor é rejeitado com 400, nunca interpolado direto numa query. O `type` de
+um carro/item já existente é imutável via `PUT /api/cars/:id` (o campo é ignorado nessa
+rota) para que um registro nunca "pule" de aba por engano.
 
 Não existe IDOR no sentido clássico: como não há "dono" por registro, qualquer sessão de
 admin autenticada pode editar qualquer carro — esse é o comportamento pretendido (um

@@ -4,9 +4,31 @@ const countEl = document.getElementById('count');
 const qEl = document.getElementById('q');
 const categoryFiltersEl = document.getElementById('category-filters');
 const loadErrorEl = document.getElementById('load-error');
+const subtitleEl = document.getElementById('subtitle');
+const tabsEl = document.getElementById('tabs');
 
 let debounceTimer;
 let selectedCategories = new Set();
+let currentType = 'veiculo';
+
+function wordFor(plural) {
+  if (currentType === 'item') return plural ? 'itens' : 'item';
+  return plural ? 'veículos' : 'veículo';
+}
+
+tabsEl.querySelectorAll('.tab-btn').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    if (btn.dataset.type === currentType) return;
+    currentType = btn.dataset.type;
+    tabsEl.querySelectorAll('.tab-btn').forEach((b) => b.classList.toggle('active', b === btn));
+    subtitleEl.textContent =
+      currentType === 'item' ? 'Catálogo de códigos de spawn de itens' : 'Catálogo de códigos de spawn de veículos';
+    emptyEl.textContent = `Nenhum ${wordFor(false)} encontrado.`;
+    selectedCategories = new Set();
+    loadCategories();
+    loadCars();
+  });
+});
 
 // Segura tanto para texto quanto para dentro de atributos "...": também
 // escapa aspas, já que div.innerHTML por si só não as escapa.
@@ -17,7 +39,7 @@ function escapeHtml(str) {
 }
 
 async function loadCategories() {
-  const res = await fetch('/api/categories');
+  const res = await fetch('/api/categories?type=' + currentType);
   if (!res.ok) return; // filtro de categoria é só um extra; falha aqui não impede a busca
   const categories = await res.json();
   if (!Array.isArray(categories)) return;
@@ -50,6 +72,7 @@ async function loadCars() {
   loadErrorEl.hidden = true;
   try {
     const params = new URLSearchParams();
+    params.set('type', currentType);
     if (qEl.value.trim()) params.set('q', qEl.value.trim());
     selectedCategories.forEach((cat) => params.append('category', cat));
     const res = await fetch('/api/cars?' + params.toString());
@@ -64,7 +87,7 @@ async function loadCars() {
 }
 
 function renderCars(cars) {
-  countEl.textContent = cars.length + (cars.length === 1 ? ' carro encontrado' : ' carros encontrados');
+  countEl.textContent = cars.length + ' ' + wordFor(cars.length !== 1) + (cars.length === 1 ? ' encontrado' : ' encontrados');
   emptyEl.hidden = cars.length !== 0;
   gridEl.innerHTML = cars
     .map(
@@ -93,5 +116,6 @@ qEl.addEventListener('input', () => {
   debounceTimer = setTimeout(loadCars, 250);
 });
 
+emptyEl.textContent = `Nenhum ${wordFor(false)} encontrado.`;
 loadCategories();
 loadCars();

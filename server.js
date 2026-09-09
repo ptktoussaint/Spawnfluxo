@@ -17,6 +17,8 @@ const PORT = process.env.PORT || 3000;
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123';
 const TOKEN_TTL_MS = 12 * 60 * 60 * 1000; // 12h de sessão
 const SEED_FILE = path.join(__dirname, 'data', 'seed-cars.json');
+const SEED_ITEMS_FILE = path.join(__dirname, 'data', 'seed-items.json');
+const VALID_TYPES = ['veiculo', 'item'];
 
 if (ADMIN_PASSWORD === 'admin123' || ADMIN_PASSWORD.length < 8) {
   console.warn(
@@ -56,6 +58,7 @@ function slugify(name) {
 function rowToCar(row) {
   return {
     id: row.id,
+    type: row.type,
     name: row.name,
     spawnCode: row.spawn_code,
     categories: row.categories || [],
@@ -63,6 +66,12 @@ function rowToCar(row) {
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };
+}
+
+// "veiculo" (aba original) ou "item" (aba nova) — qualquer outro valor é
+// rejeitado; nunca aceitamos o valor cru do cliente sem passar por aqui.
+function normalizeType(type) {
+  return VALID_TYPES.includes(type) ? type : null;
 }
 
 const MAX_NAME_LENGTH = 200;
@@ -86,14 +95,14 @@ function normalizeCategoriesInput(categories) {
 // banco só é lido uma vez (na inicialização do servidor) e escrito a cada
 // alteração do admin — nunca lido de novo a cada requisição pública.
 let carsCache = [];
-let categoriesCache = [];
+let categoriesCache = { veiculo: [], item: [] };
 
 function sortCategoryNames(names) {
   return [...new Set(names)].sort((a, b) => a.localeCompare(b, 'pt-BR'));
 }
 
-function addCategoriesToCache(names) {
-  categoriesCache = sortCategoryNames([...categoriesCache, ...names]);
+function addCategoriesToCache(type, names) {
+  categoriesCache[type] = sortCategoryNames([...(categoriesCache[type] || []), ...names]);
 }
 
 async function loadCacheFromDb() {
@@ -102,44 +111,58 @@ async function loadCacheFromDb() {
     pool.query('SELECT * FROM categories'),
   ]);
   carsCache = carsResult.rows.map(rowToCar);
-  categoriesCache = sortCategoryNames(catResult.rows.map((r) => r.name).filter(Boolean));
-  console.log(`Cache carregado do banco: ${carsCache.length} veículos, ${categoriesCache.length} categorias.`);
+  const grouped = { veiculo: [], item: [] };
+  for (const row of catResult.rows) {
+    if (!grouped[row.type]) grouped[row.type] = [];
+    if (row.name) grouped[row.type].push(row.name);
+  }
+  categoriesCache = {
+    veiculo: sortCategoryNames(grouped.veiculo),
+    item: sortCategoryNames(grouped.item),
+  };
+  const totalVeiculos = carsCache.filter((c) => c.type === 'veiculo').length;
+  const totalItens = carsCache.filter((c) => c.type === 'item').length;
+  console.log(
+    `Cache carregado do banco: ${totalVeiculos} veículos (${categoriesCache.veiculo.length} categorias), ` +
+    `${totalItens} itens (${categoriesCache.item.length} categorias).`
+  );
 }
 
-function readCars() {
-  return carsCache;
+function readCars(type) {
+  return carsCache.filter((c) => c.type === type);
 }
 
-function readCategoryNames() {
-  return categoriesCache;
+function readCategoryNames(type) {
+  return categoriesCache[type] || [];
 }
 
-async function registerCategories(names) {
+async function registerCategories(type, names) {
   for (const name of names) {
     const slug = slugify(name);
     if (!slug) continue;
     await pool.query(
-      `INSERT INTO categories (slug, name, updated_at) VALUES ($1, $2, now())
-       ON CONFLICT (slug) DO UPDATE SET name = EXCLUDED.name, updated_at = now()`,
-      [slug, name]
+      `INSERT INTO categories (type, slug, name, updated_at) VALUES ($1, $2, $3, now())
+       ON CONFLICT (type, slug) DO UPDATE SET name = EXCLUDED.name, updated_at = now()`,
+      [type, slug, name]
     );
   }
-  addCategoriesToCache(names);
+  addCategoriesToCache(type, names);
 }
 
-async function seedIfEmpty() {
-  const { rows } = await pool.query('SELECT 1 FROM cars LIMIT 1');
+async function seedTypeIfEmpty(type, seedFile) {
+  const { rows } = await pool.query('SELECT 1 FROM cars WHERE type = $1 LIMIT 1', [type]);
   if (rows.length > 0) return;
-  if (!fs.existsSync(SEED_FILE)) return;
+  if (!fs.existsSync(seedFile)) return;
 
-  const seedCars = JSON.parse(fs.readFileSync(SEED_FILE, 'utf-8'));
+  const seedCars = JSON.parse(fs.readFileSync(seedFile, 'utf-8'));
   if (seedCars.length === 0) return;
 
   const values = [];
   const placeholders = seedCars.map((car, i) => {
-    const base = i * 7;
+    const base = i * 8;
     values.push(
       car.id,
+      type,
       car.name,
       car.spawnCode,
       car.category ? [car.category] : [],
@@ -147,18 +170,23 @@ async function seedIfEmpty() {
       car.createdAt,
       car.updatedAt
     );
-    return `($${base + 1}, $${base + 2}, $${base + 3}, $${base + 4}, $${base + 5}, $${base + 6}, $${base + 7})`;
+    return `($${base + 1}, $${base + 2}, $${base + 3}, $${base + 4}, $${base + 5}, $${base + 6}, $${base + 7}, $${base + 8})`;
   });
 
   await pool.query(
-    `INSERT INTO cars (id, name, spawn_code, categories, photo_url, created_at, updated_at)
+    `INSERT INTO cars (id, type, name, spawn_code, categories, photo_url, created_at, updated_at)
      VALUES ${placeholders.join(', ')}
      ON CONFLICT (id) DO NOTHING`,
     values
   );
 
-  await registerCategories([...new Set(seedCars.map((c) => c.category).filter(Boolean))]);
-  console.log(`Banco semeado com ${seedCars.length} veículos a partir de data/seed-cars.json.`);
+  await registerCategories(type, [...new Set(seedCars.map((c) => c.category).filter(Boolean))]);
+  console.log(`Banco semeado com ${seedCars.length} ${type === 'item' ? 'itens' : 'veículos'} a partir de ${path.basename(seedFile)}.`);
+}
+
+async function seedIfEmpty() {
+  await seedTypeIfEmpty('veiculo', SEED_FILE);
+  await seedTypeIfEmpty('item', SEED_ITEMS_FILE);
 }
 
 // Tokens de sessao do admin ficam apenas em memoria (nunca tocam disco) e
@@ -274,8 +302,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 // ----- Endpoints públicos (somente leitura) -----
 
 app.get('/api/cars', (req, res) => {
+  const type = normalizeType(req.query.type) || 'veiculo';
   const { q = '', category = '' } = req.query;
-  let cars = readCars();
+  let cars = readCars(type);
   const term = String(q).trim().toLowerCase();
   if (term) {
     cars = cars.filter(
@@ -296,13 +325,16 @@ app.get('/api/cars', (req, res) => {
 });
 
 app.get('/api/categories', (req, res) => {
-  res.json(readCategoryNames());
+  const type = normalizeType(req.query.type) || 'veiculo';
+  res.json(readCategoryNames(type));
 });
 
 // Criação explícita de categoria, mesmo sem nenhum carro usando-a ainda.
 app.post('/api/categories', requireAuth, writeLimiter, async (req, res, next) => {
   try {
-    const { name } = req.body || {};
+    const { name, type: rawType } = req.body || {};
+    const type = normalizeType(rawType);
+    if (!type) return res.status(400).json({ error: 'Tipo inválido (use "veiculo" ou "item")' });
     const trimmed = typeof name === 'string' ? name.trim() : '';
     if (!trimmed) return res.status(400).json({ error: 'Nome da categoria é obrigatório' });
     if (trimmed.length > MAX_CATEGORY_LENGTH) {
@@ -311,23 +343,25 @@ app.post('/api/categories', requireAuth, writeLimiter, async (req, res, next) =>
     const slug = slugify(trimmed);
     if (!slug) return res.status(400).json({ error: 'Nome de categoria inválido' });
     await pool.query(
-      `INSERT INTO categories (slug, name, updated_at) VALUES ($1, $2, now())
-       ON CONFLICT (slug) DO UPDATE SET name = EXCLUDED.name, updated_at = now()`,
-      [slug, trimmed]
+      `INSERT INTO categories (type, slug, name, updated_at) VALUES ($1, $2, $3, now())
+       ON CONFLICT (type, slug) DO UPDATE SET name = EXCLUDED.name, updated_at = now()`,
+      [type, slug, trimmed]
     );
-    addCategoriesToCache([trimmed]);
-    res.status(201).json({ name: trimmed });
+    addCategoriesToCache(type, [trimmed]);
+    res.status(201).json({ type, name: trimmed });
   } catch (err) {
     next(err);
   }
 });
 
 // Renomeia uma categoria. Atualiza a linha em categories e troca o nome
-// dentro do array categories[] de todo carro que a usava, tudo na mesma
+// dentro do array categories[] de todo carro/item que a usava, tudo na mesma
 // transação — o efeito aparece nos botões públicos assim que o cache atualiza.
-app.put('/api/categories/:name', requireAuth, writeLimiter, async (req, res, next) => {
+app.put('/api/categories/:type/:name', requireAuth, writeLimiter, async (req, res, next) => {
   const client = await pool.connect();
   try {
+    const type = normalizeType(req.params.type);
+    if (!type) return res.status(400).json({ error: 'Tipo inválido' });
     const oldName = req.params.name;
     const { name: rawNewName } = req.body || {};
     const newName = typeof rawNewName === 'string' ? rawNewName.trim() : '';
@@ -339,7 +373,7 @@ app.put('/api/categories/:name', requireAuth, writeLimiter, async (req, res, nex
     if (!newSlug) return res.status(400).json({ error: 'Nome de categoria inválido' });
 
     await client.query('BEGIN');
-    const oldCatResult = await client.query('SELECT slug FROM categories WHERE name = $1', [oldName]);
+    const oldCatResult = await client.query('SELECT slug FROM categories WHERE type = $1 AND name = $2', [type, oldName]);
     if (oldCatResult.rows.length === 0) {
       await client.query('ROLLBACK');
       return res.status(404).json({ error: 'Categoria não encontrada' });
@@ -347,7 +381,7 @@ app.put('/api/categories/:name', requireAuth, writeLimiter, async (req, res, nex
     const oldSlug = oldCatResult.rows[0].slug;
 
     if (newSlug !== oldSlug) {
-      const clash = await client.query('SELECT 1 FROM categories WHERE slug = $1', [newSlug]);
+      const clash = await client.query('SELECT 1 FROM categories WHERE type = $1 AND slug = $2', [type, newSlug]);
       if (clash.rows.length > 0) {
         await client.query('ROLLBACK');
         return res.status(409).json({ error: 'Já existe uma categoria com esse nome' });
@@ -355,21 +389,21 @@ app.put('/api/categories/:name', requireAuth, writeLimiter, async (req, res, nex
     }
 
     await client.query(
-      'UPDATE categories SET slug = $1, name = $2, updated_at = now() WHERE slug = $3',
-      [newSlug, newName, oldSlug]
+      'UPDATE categories SET slug = $1, name = $2, updated_at = now() WHERE type = $3 AND slug = $4',
+      [newSlug, newName, type, oldSlug]
     );
     const now = new Date().toISOString();
     const carsResult = await client.query(
       `UPDATE cars SET categories = array_replace(categories, $1, $2), updated_at = $3
-       WHERE $1 = ANY(categories)
+       WHERE type = $4 AND $1 = ANY(categories)
        RETURNING *`,
-      [oldName, newName, now]
+      [oldName, newName, now, type]
     );
     await client.query('COMMIT');
 
     const updatedById = new Map(carsResult.rows.map((r) => [r.id, rowToCar(r)]));
     carsCache = carsCache.map((c) => updatedById.get(c.id) || c);
-    categoriesCache = sortCategoryNames(categoriesCache.map((n) => (n === oldName ? newName : n)));
+    categoriesCache[type] = sortCategoryNames(categoriesCache[type].map((n) => (n === oldName ? newName : n)));
 
     res.json({ ok: true, name: newName, affectedCars: carsResult.rows.length });
   } catch (err) {
@@ -380,31 +414,36 @@ app.put('/api/categories/:name', requireAuth, writeLimiter, async (req, res, nex
   }
 });
 
-// Exclui uma categoria. Carros que a tinham simplesmente perdem essa
+// Exclui uma categoria. Carros/itens que a tinham simplesmente perdem essa
 // categoria (podendo ficar sem nenhuma) — eles não são excluídos.
-app.delete('/api/categories/:name', requireAuth, writeLimiter, async (req, res, next) => {
+app.delete('/api/categories/:type/:name', requireAuth, writeLimiter, async (req, res, next) => {
   const client = await pool.connect();
   try {
+    const type = normalizeType(req.params.type);
+    if (!type) return res.status(400).json({ error: 'Tipo inválido' });
     const categoryName = req.params.name;
     const now = new Date().toISOString();
 
     await client.query('BEGIN');
-    const catResult = await client.query('DELETE FROM categories WHERE name = $1 RETURNING slug', [categoryName]);
+    const catResult = await client.query(
+      'DELETE FROM categories WHERE type = $1 AND name = $2 RETURNING slug',
+      [type, categoryName]
+    );
     if (catResult.rows.length === 0) {
       await client.query('ROLLBACK');
       return res.status(404).json({ error: 'Categoria não encontrada' });
     }
     const updateResult = await client.query(
       `UPDATE cars SET categories = array_remove(categories, $1), updated_at = $2
-       WHERE $1 = ANY(categories)
+       WHERE type = $3 AND $1 = ANY(categories)
        RETURNING *`,
-      [categoryName, now]
+      [categoryName, now, type]
     );
     await client.query('COMMIT');
 
     const updatedById = new Map(updateResult.rows.map((r) => [r.id, rowToCar(r)]));
     carsCache = carsCache.map((c) => updatedById.get(c.id) || c);
-    categoriesCache = categoriesCache.filter((name) => name !== categoryName);
+    categoriesCache[type] = categoriesCache[type].filter((name) => name !== categoryName);
 
     res.json({ ok: true, affectedCars: updateResult.rows.length });
   } catch (err) {
@@ -435,7 +474,9 @@ app.post('/api/logout', requireAuth, (req, res) => {
 
 app.post('/api/cars', requireAuth, writeLimiter, async (req, res, next) => {
   try {
-    const { name, spawnCode, categories, photoUrl } = req.body || {};
+    const { type: rawType, name, spawnCode, categories, photoUrl } = req.body || {};
+    const type = normalizeType(rawType);
+    if (!type) return res.status(400).json({ error: 'Tipo inválido (use "veiculo" ou "item")' });
     const cleanCategories = normalizeCategoriesInput(categories);
     if (!name || !spawnCode || !cleanCategories || cleanCategories.length === 0) {
       return res.status(400).json({ error: 'Nome, código e ao menos uma categoria são obrigatórios' });
@@ -450,6 +491,7 @@ app.post('/api/cars', requireAuth, writeLimiter, async (req, res, next) => {
     const id = crypto.randomUUID();
     const car = {
       id,
+      type,
       name: String(name).trim(),
       spawnCode: String(spawnCode).trim(),
       categories: cleanCategories,
@@ -458,11 +500,11 @@ app.post('/api/cars', requireAuth, writeLimiter, async (req, res, next) => {
       updatedAt: now,
     };
     await pool.query(
-      `INSERT INTO cars (id, name, spawn_code, categories, photo_url, created_at, updated_at)
-       VALUES ($1, $2, $3, $4, $5, $6, $6)`,
-      [car.id, car.name, car.spawnCode, car.categories, car.photoUrl, now]
+      `INSERT INTO cars (id, type, name, spawn_code, categories, photo_url, created_at, updated_at)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $7)`,
+      [car.id, car.type, car.name, car.spawnCode, car.categories, car.photoUrl, now]
     );
-    await registerCategories(cleanCategories);
+    await registerCategories(type, cleanCategories);
     carsCache = [...carsCache, car];
     res.status(201).json(car);
   } catch (err) {
@@ -506,7 +548,7 @@ app.put('/api/cars/:id', requireAuth, writeLimiter, async (req, res, next) => {
        WHERE id = $6`,
       [updated.name, updated.spawnCode, updated.categories, updated.photoUrl, updated.updatedAt, req.params.id]
     );
-    if (cleanCategories) await registerCategories(cleanCategories);
+    if (cleanCategories) await registerCategories(current.type, cleanCategories);
     carsCache = carsCache.map((c) => (c.id === req.params.id ? updated : c));
     res.json(updated);
   } catch (err) {
@@ -528,10 +570,10 @@ app.delete('/api/cars/:id', requireAuth, writeLimiter, async (req, res, next) =>
 
 // Gera o backup em texto: nome == código de spawn, agrupado por categoria
 // (mesmo formato das listas originais que o cliente usava antes do site).
-function buildBackupText() {
-  const cars = readCars();
+function buildBackupText(type) {
+  const cars = readCars(type);
   const blocks = [];
-  for (const category of readCategoryNames()) {
+  for (const category of readCategoryNames(type)) {
     const inCategory = cars
       .filter((c) => c.categories.includes(category))
       .sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'));
@@ -546,9 +588,11 @@ function buildBackupText() {
 }
 
 app.get('/api/export', requireAuth, (req, res) => {
+  const type = normalizeType(req.query.type) || 'veiculo';
+  const filename = type === 'item' ? 'spawnfluxo-backup-itens.txt' : 'spawnfluxo-backup-veiculos.txt';
   res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-  res.setHeader('Content-Disposition', 'attachment; filename="spawnfluxo-backup.txt"');
-  res.send(buildBackupText());
+  res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+  res.send(buildBackupText(type));
 });
 
 // Handler de erro genérico (rotas assíncronas usam next(err) para cair aqui).

@@ -13,6 +13,7 @@ const carTbody = document.getElementById('car-tbody');
 const globalNewCategoryInput = document.getElementById('global-new-category');
 const globalAddCategoryBtn = document.getElementById('global-add-category-btn');
 const toolbarError = document.getElementById('toolbar-error');
+const adminTabsEl = document.getElementById('admin-tabs');
 
 let token = sessionStorage.getItem('spawnfluxo_token') || '';
 let cars = [];
@@ -20,6 +21,31 @@ let allCategories = [];
 let selectedCategories = new Set();
 let editingId = null; // null = ninguém sendo editado; 'new' = criando; ou o id do carro em edição
 let debounceTimer;
+let currentType = 'veiculo';
+
+function wordFor(plural) {
+  if (currentType === 'item') return plural ? 'itens' : 'item';
+  return plural ? 'carros' : 'carro';
+}
+
+adminTabsEl.querySelectorAll('.tab-btn').forEach((btn) => {
+  btn.addEventListener('click', async () => {
+    if (btn.dataset.type === currentType) return;
+    currentType = btn.dataset.type;
+    adminTabsEl.querySelectorAll('.tab-btn').forEach((b) => b.classList.toggle('active', b === btn));
+    newCarBtn.textContent = currentType === 'item' ? '+ Novo item' : '+ Novo carro';
+    editingId = null;
+    selectedCategories = new Set();
+    toolbarError.hidden = true;
+    try {
+      await loadCategories();
+      await loadCars();
+    } catch (err) {
+      toolbarError.textContent = err.message;
+      toolbarError.hidden = false;
+    }
+  });
+});
 
 // Segura tanto para texto quanto para dentro de atributos "...": também
 // escapa aspas, já que div.innerHTML por si só não as escapa.
@@ -106,13 +132,13 @@ newCarBtn.addEventListener('click', () => {
 exportBtn.addEventListener('click', async () => {
   toolbarError.hidden = true;
   try {
-    const res = await authFetch('/api/export');
+    const res = await authFetch('/api/export?type=' + currentType);
     if (!res.ok) throw new Error('Não foi possível gerar o backup.');
     const blob = await res.blob();
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = 'spawnfluxo-backup.txt';
+    link.download = currentType === 'item' ? 'spawnfluxo-backup-itens.txt' : 'spawnfluxo-backup-veiculos.txt';
     document.body.appendChild(link);
     link.click();
     link.remove();
@@ -136,7 +162,7 @@ adminQInput.addEventListener('input', () => {
 });
 
 async function loadCategories() {
-  const res = await fetch('/api/categories');
+  const res = await fetch('/api/categories?type=' + currentType);
   if (!res.ok) throw new Error('Não foi possível carregar as categorias.');
   const data = await res.json();
   if (!Array.isArray(data)) throw new Error('Resposta inválida ao carregar categorias.');
@@ -181,7 +207,7 @@ function renderCategoryFilters() {
       if (!newName || newName === cat) return;
       toolbarError.hidden = true;
       try {
-        const res = await authFetch('/api/categories/' + encodeURIComponent(cat), {
+        const res = await authFetch('/api/categories/' + currentType + '/' + encodeURIComponent(cat), {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ name: newName }),
@@ -207,10 +233,10 @@ function renderCategoryFilters() {
     btn.addEventListener('click', async (e) => {
       e.stopPropagation();
       const cat = btn.dataset.cat;
-      if (!confirm(`Excluir a categoria "${cat}"? Os veículos nela ficarão sem essa categoria (não serão excluídos).`)) return;
+      if (!confirm(`Excluir a categoria "${cat}"? Os ${wordFor(true)} nela ficarão sem essa categoria (não serão excluídos).`)) return;
       toolbarError.hidden = true;
       try {
-        const res = await authFetch('/api/categories/' + encodeURIComponent(cat), { method: 'DELETE' });
+        const res = await authFetch('/api/categories/' + currentType + '/' + encodeURIComponent(cat), { method: 'DELETE' });
         if (!res.ok) {
           const err = await res.json().catch(() => ({}));
           throw new Error(err.error || 'Erro ao excluir categoria');
@@ -243,7 +269,7 @@ globalAddCategoryBtn.addEventListener('click', async () => {
     const res = await authFetch('/api/categories', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name }),
+      body: JSON.stringify({ name, type: currentType }),
     });
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
@@ -260,6 +286,7 @@ globalAddCategoryBtn.addEventListener('click', async () => {
 
 async function loadCars() {
   const params = new URLSearchParams();
+  params.set('type', currentType);
   if (adminQInput.value.trim()) params.set('q', adminQInput.value.trim());
   selectedCategories.forEach((cat) => params.append('category', cat));
   const res = await fetch('/api/cars?' + params.toString());
@@ -294,7 +321,7 @@ function editRowHtml(car) {
       <td colspan="5">
         <div class="inline-form">
           <div class="inline-fields">
-            <label>Nome do carro
+            <label>Nome do ${wordFor(false)}
               <input type="text" class="f-name" value="${escapeHtml(c.name)}" maxlength="200">
             </label>
             <label>Código de spawn
@@ -339,7 +366,7 @@ function viewRowHtml(car) {
 }
 
 function renderTable() {
-  adminCountEl.textContent = cars.length + (cars.length === 1 ? ' carro encontrado' : ' carros encontrados');
+  adminCountEl.textContent = cars.length + ' ' + wordFor(cars.length !== 1) + (cars.length === 1 ? ' encontrado' : ' encontrados');
 
   let rowsHtml = '';
   if (editingId === 'new') rowsHtml += editRowHtml(null);
@@ -403,6 +430,7 @@ function attachRowHandlers() {
       try {
         const categories = Array.from(checklistEl.querySelectorAll('input:checked')).map((cb) => cb.value);
         const payload = {
+          type: currentType,
           name: row.querySelector('.f-name').value.trim(),
           spawnCode: row.querySelector('.f-spawnCode').value.trim(),
           categories,
