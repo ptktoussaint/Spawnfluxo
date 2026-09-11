@@ -12,3 +12,7 @@ services:
         sync: false
       - key: TRUST_PROXY
         value: "true"
+      # Endereço público do site, sem barra no final. Usado no cartão de
+      # compartilhamento (og:url). Preencha com a URL que o Render gerar.
+      - key: SITE_URL
+        sync: false

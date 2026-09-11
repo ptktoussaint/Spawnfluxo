@@ -23,3 +23,12 @@ create table if not exists categories (
   updated_at timestamptz not null default now(),
   primary key (type, slug)
 );
+
+-- Configuração do site (chave/valor). Hoje guarda os campos do "Cartão de
+-- compartilhamento": share_title, share_description e share_image. Pode ficar
+-- vazia — nesse caso o site usa os valores de reserva (nome/descrição/logo).
+create table if not exists site_config (
+  key text primary key,
+  value text not null default '',
+  updated_at timestamptz not null default now()
+);

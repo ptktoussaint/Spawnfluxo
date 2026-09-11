@@ -29,8 +29,10 @@ Navegador (público ou admin) ──HTTPS──> Express (Render) ──Postgres
 
 ## Modelo de dados e de usuários
 
-Duas tabelas (`cars`, `categories`), sem conceito de "dono" por registro — é um catálogo
-público compartilhado, não dados por usuário. Existe só **um** papel administrativo
+Três tabelas (`cars`, `categories` e `site_config`), sem conceito de "dono" por registro —
+é um catálogo público compartilhado, não dados por usuário. `site_config` é uma tabela
+chave/valor com a configuração do site (hoje, os campos do cartão de compartilhamento);
+não guarda segredo nenhum — tudo que está nela já sai público nas meta tags da home. Existe só **um** papel administrativo
 (senha única em `ADMIN_PASSWORD`), sem contas individuais, sem roles, sem metadata de
 usuário que possa ser adulterado para virar admin.
 
@@ -92,6 +94,8 @@ porque o app nunca usa o SDK do Supabase, só a connection string do Postgres.
 | `/api/categories/:type/:name` | PUT | Bearer token | Escrita (60/5min por IP) |
 | `/api/categories/:type/:name` | DELETE | Bearer token | Escrita (60/5min por IP) |
 | `/api/export?type=veiculo\|item` | GET | Bearer token | Geral (600/5min por IP) |
+| `/api/site-config` | GET | Bearer token | Geral (600/5min por IP) |
+| `/api/site-config` | PUT | Bearer token | Escrita (60/5min por IP) |
 
 `:type` e o `type` no body são validados contra uma lista fixa (`veiculo`, `item`) —
 qualquer outro valor é rejeitado com 400, nunca interpolado direto numa query. O `type` de
@@ -102,6 +106,30 @@ Não existe IDOR no sentido clássico: como não há "dono" por registro, qualqu
 admin autenticada pode editar qualquer carro — esse é o comportamento pretendido (um
 único painel administrativo compartilhado), não uma falha de autorização por usuário.
 
+## Cartão de compartilhamento (meta tags Open Graph)
+
+A home (`/` e `/index.html`) é servida por uma rota própria que injeta as meta tags Open
+Graph no HTML antes de entregá-lo — os robôs de prévia não executam JavaScript, então as
+tags precisam vir prontas do servidor. Pontos de segurança dessa rota:
+
+- **Escape em contexto de atributo**: todo valor vindo do banco passa por
+  `escapeHtmlAttribute` (`lib/share-card.js`), que escapa `& < > " '` — com o `&` primeiro,
+  para não gerar dupla codificação. Sem isso, um título com aspas fecharia o
+  `content="..."` e permitiria injetar atributos/tags na página. Coberto por teste
+  (`npm test`), incluindo o caso de um título contendo `<script>`.
+- **Imagem restrita a http/https**: `toAbsoluteUrl` descarta qualquer outro esquema
+  (`javascript:`, `data:`, `file:`) e também `//host` (protocol-relative). A mesma função
+  valida o campo na hora de salvar, então não dá para gravar algo que depois seria
+  descartado na renderização.
+- **`og:url` nunca carrega query string**: a URL é sempre a raiz do site, montada a partir
+  de `SITE_URL`. Isso importa porque o `og:url` vai parar nos servidores de terceiros que
+  geram a prévia — token, id de sessão ou parâmetro interno não podem vazar por aí.
+- **Domínio fixado por `SITE_URL`**: sem essa variável, o domínio viria do cabeçalho `Host`,
+  que é controlado por quem faz a requisição. O fallback existe (com o host filtrado por
+  uma lista de caracteres válidos), mas em produção `SITE_URL` deve estar definida.
+- **Sem redirecionamento** nesse caminho: o robô de prévia não carrega cookie e se perderia
+  num desvio, lendo o cartão da página errada.
+
 ## Cache em memória
 
 O servidor lê o Postgres **uma vez, ao iniciar**, e mantém tudo em memória depois disso.
@@ -109,6 +137,16 @@ Toda leitura pública vem da memória; o banco só é escrito (nunca relido em m
 ação do admin. Isso existe para não gerar custo/risco proporcional a quantidade de
 acessos, não é uma medida de segurança em si — mas tem um efeito colateral de segurança:
 reduz drasticamente a superfície de "um GET público custoso repetido vira DoS no banco".
+
+Como consequência disso, renderizar a home (inclusive as meta tags do cartão) **não faz
+nenhuma consulta ao banco** — os valores saem do mesmo cache. A leitura inicial de
+`site_config` tem limite de 3s e cai nos valores de reserva se falhar, então banco lento,
+fora do ar ou sem a migração aplicada não atrasa nem derruba a página.
+
+O pool do `pg` também tem um listener de `error` registrado: sem ele, uma conexão ociosa
+que cai (banco reiniciou, rede oscilou) viraria um evento `'error'` não tratado e o Node
+derrubaria o processo inteiro — tirando do ar um site que continuaria funcionando
+perfeitamente só com o cache em memória.
 
 ## Validação de entrada
 

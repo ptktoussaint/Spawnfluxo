@@ -14,6 +14,17 @@ const globalNewCategoryInput = document.getElementById('global-new-category');
 const globalAddCategoryBtn = document.getElementById('global-add-category-btn');
 const toolbarError = document.getElementById('toolbar-error');
 const adminTabsEl = document.getElementById('admin-tabs');
+const shareTitleInput = document.getElementById('share-title');
+const shareDescriptionInput = document.getElementById('share-description');
+const shareImageInput = document.getElementById('share-image');
+const shareSaveBtn = document.getElementById('share-save-btn');
+const shareStatusEl = document.getElementById('share-status');
+const shareErrorEl = document.getElementById('share-error');
+const shareImageStatusEl = document.getElementById('share-image-status');
+const sharePreviewImg = document.getElementById('share-preview-img');
+const sharePreviewSiteEl = document.getElementById('share-preview-site');
+const sharePreviewTitleEl = document.getElementById('share-preview-title');
+const sharePreviewDescEl = document.getElementById('share-preview-desc');
 
 let token = sessionStorage.getItem('spawnfluxo_token') || '';
 let cars = [];
@@ -21,7 +32,9 @@ let allCategories = [];
 let selectedCategories = new Set();
 let editingId = null; // null = ninguém sendo editado; 'new' = criando; ou o id do carro em edição
 let debounceTimer;
+let shareImageDebounceTimer;
 let currentType = 'veiculo';
+let shareDefaults = { title: '', description: '', image: '' };
 
 function wordFor(plural) {
   if (currentType === 'item') return plural ? 'itens' : 'item';
@@ -73,6 +86,11 @@ async function showAdmin() {
   // ainda em andamento re-renderizaria a tabela por cima de uma edição
   // recém-aberta, apagando o que já tivesse sido digitado.
   newCarBtn.disabled = true;
+  // Independente do resto: uma falha no cartão não pode travar o painel todo.
+  loadSiteConfig().catch((err) => {
+    shareErrorEl.textContent = err.message;
+    shareErrorEl.hidden = false;
+  });
   try {
     await loadCategories();
     await loadCars();
@@ -146,6 +164,123 @@ exportBtn.addEventListener('click', async () => {
   } catch (err) {
     toolbarError.textContent = err.message;
     toolbarError.hidden = false;
+  }
+});
+
+// ----- Cartão de compartilhamento (Open Graph) -----
+
+async function loadSiteConfig() {
+  const res = await authFetch('/api/site-config');
+  if (!res.ok) throw new Error('Não foi possível carregar o cartão de compartilhamento.');
+  const data = await res.json();
+  shareDefaults = data.defaults || shareDefaults;
+  shareTitleInput.value = data.shareTitle || '';
+  shareDescriptionInput.value = data.shareDescription || '';
+  shareImageInput.value = data.shareImage || '';
+  // Placeholder mostra exatamente o que entra no lugar se o campo ficar vazio.
+  shareTitleInput.placeholder = shareDefaults.title || '';
+  shareDescriptionInput.placeholder = shareDefaults.description || '';
+  renderSharePreview();
+  updateSharePreviewImage();
+}
+
+function renderSharePreview() {
+  // textContent (nunca innerHTML): o que é digitado aqui nunca vira HTML.
+  sharePreviewSiteEl.textContent = shareDefaults.title || '';
+  sharePreviewTitleEl.textContent = shareTitleInput.value.trim() || shareDefaults.title || '';
+  sharePreviewDescEl.textContent = shareDescriptionInput.value.trim() || shareDefaults.description || '';
+}
+
+// Valida de verdade: usa onload/onerror de um elemento de imagem, porque
+// conferir só o formato do endereço não prova que o link carrega como imagem.
+//
+// A sondagem é feita num elemento solto (new Image()), não no <img> da prévia:
+// trocar o src de um elemento que ainda está carregando aborta a carga e
+// dispara onerror — o que faria a resposta de uma URL abandonada sobrescrever
+// o status da URL atual. O contador abaixo descarta resultado atrasado de
+// qualquer sondagem que não seja a mais recente.
+let sharePreviewRequestId = 0;
+
+function updateSharePreviewImage() {
+  const url = shareImageInput.value.trim() || shareDefaults.image || '';
+  const requestId = ++sharePreviewRequestId;
+  const desatualizada = () => requestId !== sharePreviewRequestId;
+
+  if (!url) {
+    sharePreviewImg.hidden = true;
+    sharePreviewImg.removeAttribute('src');
+    shareImageStatusEl.textContent = 'Sem imagem — o cartão vai aparecer só com texto.';
+    return;
+  }
+
+  shareImageStatusEl.textContent = 'Carregando imagem…';
+
+  // Um host que não responde nunca dispara onload nem onerror — sem este
+  // limite, o campo ficaria "carregando" para sempre. E se o link demora tanto
+  // assim aqui, o robô de prévia provavelmente também vai desistir.
+  const timeout = setTimeout(() => {
+    if (desatualizada()) return;
+    sharePreviewImg.hidden = true;
+    shareImageStatusEl.textContent =
+      '✗ o link não respondeu a tempo. Use uma imagem hospedada em lugar público e rápido (imgur, por exemplo).';
+  }, 10000);
+
+  const probe = new Image();
+  probe.onload = () => {
+    clearTimeout(timeout);
+    if (desatualizada()) return;
+    sharePreviewImg.src = url;
+    sharePreviewImg.hidden = false;
+    const width = probe.naturalWidth;
+    const height = probe.naturalHeight;
+    const proporcaoOk = height > 0 && Math.abs(width / height - 1200 / 630) < 0.15;
+    shareImageStatusEl.textContent =
+      `✓ imagem carregou (${width} × ${height} px)` +
+      (proporcaoOk ? '' : ' — proporção diferente de 1200 × 630, pode aparecer cortada ou com barras no cartão.');
+  };
+  probe.onerror = () => {
+    clearTimeout(timeout);
+    if (desatualizada()) return;
+    sharePreviewImg.hidden = true;
+    shareImageStatusEl.textContent =
+      '✗ esse link não carregou como imagem. Confira se ele abre direto no navegador (deve terminar em .png, .jpg ou .webp).';
+  };
+  probe.src = url;
+}
+
+shareTitleInput.addEventListener('input', renderSharePreview);
+shareDescriptionInput.addEventListener('input', renderSharePreview);
+shareImageInput.addEventListener('input', () => {
+  clearTimeout(shareImageDebounceTimer);
+  shareImageDebounceTimer = setTimeout(updateSharePreviewImage, 400);
+});
+
+shareSaveBtn.addEventListener('click', async () => {
+  shareErrorEl.hidden = true;
+  shareStatusEl.hidden = true;
+  shareSaveBtn.disabled = true;
+  try {
+    const res = await authFetch('/api/site-config', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        shareTitle: shareTitleInput.value.trim(),
+        shareDescription: shareDescriptionInput.value.trim(),
+        shareImage: shareImageInput.value.trim(),
+      }),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || 'Erro ao salvar o cartão');
+    }
+    shareStatusEl.textContent =
+      'Cartão salvo. Onde o link já tiver sido colado antes, a prévia antiga pode ficar em cache por um tempo.';
+    shareStatusEl.hidden = false;
+  } catch (err) {
+    shareErrorEl.textContent = err.message;
+    shareErrorEl.hidden = false;
+  } finally {
+    shareSaveBtn.disabled = false;
   }
 });
 

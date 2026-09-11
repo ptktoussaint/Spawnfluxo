@@ -127,6 +127,16 @@ código em produção**:
 Se você está configurando o projeto do zero agora, **ignore isso** — o passo 3 acima
 (`db/schema.sql`) já cria as tabelas com suporte às duas abas desde o início.
 
+### Migração do cartão de compartilhamento (`site_config`)
+
+Para poder editar o cartão de compartilhamento pelo painel, rode uma vez no SQL Editor do
+Supabase o arquivo [`db/migration-003-site-config.sql`](db/migration-003-site-config.sql).
+Ele só cria uma tabela nova e vazia, não mexe em nada existente.
+
+Diferente da migração 002, **esta não é obrigatória para o deploy**: se a tabela não
+existir, o servidor sobe normalmente (registra um aviso no log) e o cartão usa os valores
+de reserva — você só não consegue salvar valores próprios pelo painel até rodá-la.
+
 ### Como os dados persistem
 
 O servidor lê as tabelas `cars` e `categories` do Supabase **uma única vez, quando inicia**,
@@ -136,6 +146,58 @@ quando: (a) o servidor reinicia (o que acontece de vez em quando no plano gráti
 não a cada visita), recarregando o cache do zero, ou (b) você cria/edita/exclui algo pelo
 painel admin, que grava no banco **e** atualiza o cache na hora. Isso significa que o uso
 do site não gera custo proporcional a quantas pessoas acessam.
+
+## Cartão de compartilhamento (prévia do link no Discord/WhatsApp/Telegram/Slack)
+
+Quando alguém cola o link do site num app de mensagem, aparece um "cartão de visitas"
+com imagem em miniatura, título e subtítulo. Isso é montado a partir das meta tags Open
+Graph, que o servidor injeta no HTML da home (`lib/share-card.js`).
+
+**Por que no servidor:** os robôs que geram essas prévias **não executam JavaScript**.
+Qualquer coisa que a página monte depois, no navegador, não existe para eles — então as
+tags precisam já sair prontas dentro do HTML da resposta.
+
+Para editar: painel admin → seção **Cartão de compartilhamento** (no topo, acima das
+abas). São três campos, todos opcionais:
+
+| Campo | Se ficar vazio, usa |
+|---|---|
+| Título do cartão | o nome do site (`SPAWNS FLUXO "BY PTK"`) |
+| Subtítulo do cartão | a descrição do site |
+| Imagem do cartão | o logo do site |
+
+Se não houver imagem nenhuma, o cartão sai só com texto (sem moldura de imagem
+quebrada) e o formato vira `summary` em vez de `summary_large_image`.
+
+- **Tamanho recomendado da imagem: 1200 × 630 px** (proporção 1,91:1). A prévia do painel
+  avisa na hora se o link não carrega como imagem e se a proporção está diferente disso.
+- **Use link externo, não arquivo enviado.** O Render no plano gratuito tem disco
+  temporário: qualquer arquivo salvo no servidor some a cada atualização/reinício. Por
+  isso o campo aceita um link `https://` (imgur, Discord, Google Drive público) — mesma
+  abordagem já usada nas fotos dos veículos.
+- Defina `SITE_URL` em produção. É o que garante `og:url` correto e transforma um caminho
+  interno (`/img/card.png`) na URL absoluta que os robôs exigem.
+
+**Forçar o Discord a atualizar um link que ele já guardou em cache:** o Discord guarda a
+prévia por algum tempo. Para ver a versão nova na hora, use um destes:
+1. Cole o link com um parâmetro qualquer no final (`https://seusite.com/?v=2`) — para o
+   Discord é outra URL, então ele busca de novo. O `og:url` continua apontando para a raiz.
+2. Passe o link no [Discord Embed Debugger](https://discord.com/developers/embeds) ou
+   valide em [opengraph.xyz](https://www.opengraph.xyz/) para conferir o que está sendo lido.
+3. Para os demais: WhatsApp costuma soltar em algumas horas; Telegram tem o bot
+   `@WebpageBot` (comando `/update` com o link); Slack revalida sozinho em ~30 min.
+
+## Testes
+
+```bash
+npm test
+```
+
+Roda o test runner nativo do Node (`node --test`) — sem dependência extra. Cobre o núcleo
+do cartão de compartilhamento (`lib/share-card.js`): prioridade do título/subtítulo
+próprios sobre os do site, as reservas quando os campos estão vazios, o escape de
+caracteres perigosos (um título com `<script>` não pode sair como tag executável) e a
+imagem virando endereço absoluto. Os testes não precisam de banco nem de servidor no ar.
 
 ## Segurança
 
@@ -188,6 +250,7 @@ projeto usa do Supabase, RLS, autenticação, segredos, etc.). Resumo rápido ab
 | `ADMIN_PASSWORD`  | `admin123`  | Senha do painel admin — **troque em produção**                   |
 | `DATABASE_URL`    | —           | Connection string do Postgres/Supabase (Project Settings > Database > Connection string > URI) |
 | `TRUST_PROXY`     | (vazio)     | `true` se estiver atrás de proxy/load balancer (ex. Render)      |
+| `SITE_URL`        | (vazio)     | Endereço público do site, sem barra final (ex. `https://spawnfluxo.onrender.com`). Usado no cartão de compartilhamento; se vazio, usa o domínio da requisição |
 
 ## Deploy no Render (deixar o site público, de graça)
 

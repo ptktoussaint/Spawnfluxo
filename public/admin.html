@@ -8,7 +8,10 @@
 </head>
 <body>
   <header class="topbar">
-    <h1 class="brand-title">SPAWNS FLUXO <span class="credit">"BY PTK"</span> — Admin</h1>
+    <div class="brand">
+      <img src="https://i.imgur.com/IoY8XvL.png" alt="" class="brand-logo">
+      <h1 class="brand-title">SPAWNS FLUXO <span class="credit">"BY PTK"</span> — Admin</h1>
+    </div>
     <a href="/index.html" class="back-link">← Voltar ao catálogo</a>
   </header>
 
@@ -25,6 +28,56 @@
     </section>
 
     <section id="admin-section" hidden>
+      <details class="config-panel" id="share-card-panel">
+        <summary>Cartão de compartilhamento</summary>
+        <div class="config-body">
+          <p class="hint">
+            É o que aparece quando alguém cola o link do site no Discord, WhatsApp, Telegram
+            ou Slack: imagem em miniatura, título e subtítulo. Deixe um campo vazio para usar
+            o valor padrão do site.
+          </p>
+
+          <div class="config-fields">
+            <label>Título do cartão
+              <input type="text" id="share-title" maxlength="200">
+            </label>
+            <label>Subtítulo do cartão
+              <input type="text" id="share-description" maxlength="300">
+            </label>
+            <label>Imagem do cartão — link <code>https://</code>
+              <input type="url" id="share-image" maxlength="2000" placeholder="https://i.imgur.com/...">
+            </label>
+          </div>
+
+          <p class="hint">
+            Tamanho recomendado da imagem: <strong>1200 × 630 px</strong> (proporção 1,91:1).
+            Hospede em algum lugar público (imgur, Discord, Google Drive com link público) e
+            cole o link aqui — este site roda em plano gratuito com disco temporário, então
+            arquivo enviado ao servidor seria apagado a cada atualização. Link externo é a
+            opção confiável.
+          </p>
+
+          <div class="share-preview">
+            <span class="field-label">Prévia</span>
+            <div class="share-preview-card">
+              <img id="share-preview-img" alt="" hidden>
+              <div class="share-preview-text">
+                <span class="share-preview-site" id="share-preview-site"></span>
+                <strong id="share-preview-title"></strong>
+                <span id="share-preview-desc"></span>
+              </div>
+            </div>
+            <p class="hint" id="share-image-status"></p>
+          </div>
+
+          <div class="inline-actions">
+            <button type="button" id="share-save-btn">Salvar cartão</button>
+          </div>
+          <p class="hint" id="share-status" hidden></p>
+          <p class="error" id="share-error" hidden></p>
+        </div>
+      </details>
+
       <div class="tabs" id="admin-tabs">
         <button type="button" class="tab-btn active" data-type="veiculo">Spawn de Veículos</button>
         <button type="button" class="tab-btn" data-type="item">Spawn de Itens</button>

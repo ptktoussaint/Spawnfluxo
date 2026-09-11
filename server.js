@@ -6,6 +6,13 @@ const crypto = require('crypto');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const { Pool } = require('pg');
+const {
+  buildShareMetaTags,
+  toAbsoluteUrl,
+  SITE_DEFAULTS,
+  SHARE_IMAGE_WIDTH,
+  SHARE_IMAGE_HEIGHT,
+} = require('./lib/share-card');
 
 const app = express();
 // Só usamos parâmetros de busca simples (?q=&category=), então trocamos o
@@ -19,6 +26,37 @@ const TOKEN_TTL_MS = 12 * 60 * 60 * 1000; // 12h de sessão
 const SEED_FILE = path.join(__dirname, 'data', 'seed-cars.json');
 const SEED_ITEMS_FILE = path.join(__dirname, 'data', 'seed-items.json');
 const VALID_TYPES = ['veiculo', 'item'];
+const INDEX_FILE = path.join(__dirname, 'public', 'index.html');
+const SHARE_META_PLACEHOLDER = '<!--SHARE_META-->';
+
+// Domínio público canônico (ex.: https://spawnfluxo.onrender.com). Serve para
+// montar og:url e transformar a imagem do cartão em URL absoluta. Se não for
+// definido, caímos no domínio do cabeçalho Host da requisição — funciona, mas
+// esse cabeçalho é controlado por quem chama, então em produção vale fixar.
+const SITE_URL = normalizeSiteUrl(process.env.SITE_URL);
+
+function normalizeSiteUrl(value) {
+  const raw = String(value ?? '').trim().replace(/\/+$/, '');
+  if (!raw) return '';
+  try {
+    const { protocol } = new URL(raw);
+    if (protocol !== 'https:' && protocol !== 'http:') throw new Error('protocolo inválido');
+    return raw;
+  } catch {
+    console.warn(`[AVISO] SITE_URL inválida (${value}); usando o domínio da requisição.`);
+    return '';
+  }
+}
+
+// Só caracteres válidos de host: o Host vem de quem chama, não entra cru.
+const SAFE_HOST_PATTERN = /^[A-Za-z0-9.-]+(:\d+)?$/;
+
+function getBaseUrl(req) {
+  if (SITE_URL) return SITE_URL;
+  const host = req.get('host') || '';
+  if (!SAFE_HOST_PATTERN.test(host)) return '';
+  return `${req.protocol}://${host}`;
+}
 
 if (ADMIN_PASSWORD === 'admin123' || ADMIN_PASSWORD.length < 8) {
   console.warn(
@@ -43,6 +81,16 @@ const pool = new Pool({
   // Supabase exige TLS; rejectUnauthorized:false evita falha de verificação
   // de cadeia de certificado comum em hosts gerenciados como este.
   ssl: { rejectUnauthorized: false },
+});
+
+// Sem este listener, uma conexão ociosa que cai (banco reiniciou, rede oscilou,
+// Supabase hibernou) vira um 'error' não tratado e o Node derruba o processo
+// inteiro — tirando o site do ar mesmo com todo o catálogo já em memória, que
+// continuaria sendo servido sem problema. Registrar o listener transforma isso
+// num aviso no log: o pool descarta a conexão morta e abre outra na próxima
+// escrita.
+pool.on('error', (err) => {
+  console.error('[AVISO] Conexão ociosa com o Postgres caiu; o cache em memória continua servindo.', err.message);
 });
 
 function slugify(name) {
@@ -96,6 +144,51 @@ function normalizeCategoriesInput(categories) {
 // alteração do admin — nunca lido de novo a cada requisição pública.
 let carsCache = [];
 let categoriesCache = { veiculo: [], item: [] };
+
+// Campos do "Cartão de compartilhamento". Ficam no mesmo cache em memória que
+// carros e categorias: renderizar a home NÃO consulta o banco nenhuma vez.
+const SHARE_FIELDS = {
+  shareTitle: { key: 'share_title', label: 'Título do cartão', maxLength: 200 },
+  shareDescription: { key: 'share_description', label: 'Subtítulo do cartão', maxLength: 300 },
+  shareImage: { key: 'share_image', label: 'Imagem do cartão', maxLength: MAX_PHOTO_URL_LENGTH },
+};
+
+let siteConfigCache = { shareTitle: '', shareDescription: '', shareImage: '' };
+
+// Limite curto: se o banco estiver lento/fora do ar na inicialização, seguimos
+// com os valores de reserva em vez de ficar pendurado esperando resposta.
+const SITE_CONFIG_QUERY_TIMEOUT_MS = 3000;
+
+async function queryWithTimeout(text, params, timeoutMs) {
+  let timer;
+  const timeout = new Promise((_, reject) => {
+    timer = setTimeout(() => reject(new Error(`consulta passou de ${timeoutMs}ms`)), timeoutMs);
+  });
+  try {
+    return await Promise.race([pool.query(text, params), timeout]);
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+async function loadSiteConfigFromDb() {
+  try {
+    const { rows } = await queryWithTimeout('SELECT key, value FROM site_config', [], SITE_CONFIG_QUERY_TIMEOUT_MS);
+    const byKey = new Map(rows.map((r) => [r.key, r.value]));
+    const loaded = {};
+    for (const [field, { key }] of Object.entries(SHARE_FIELDS)) {
+      loaded[field] = byKey.get(key) || '';
+    }
+    siteConfigCache = loaded;
+  } catch (err) {
+    // Inclui o caso "tabela ainda não existe" (migração 003 não rodada): o
+    // site sobe normalmente, só usando as reservas no cartão.
+    console.warn(
+      '[AVISO] Não foi possível ler site_config; o cartão de compartilhamento vai usar os valores de reserva.',
+      err.message
+    );
+  }
+}
 
 function sortCategoryNames(names) {
   return [...new Set(names)].sort((a, b) => a.localeCompare(b, 'pt-BR'));
@@ -297,6 +390,38 @@ const writeLimiter = rateLimit({
 
 app.use('/api', apiLimiter);
 app.use(express.json({ limit: '200kb' }));
+
+// ----- Home com o cartão de compartilhamento embutido -----
+// Precisa vir ANTES do express.static, que serviria o index.html cru.
+//
+// Os robôs de prévia (Discord, WhatsApp, Telegram, Slack) não executam
+// JavaScript: nada que o navegador aplique depois existe para eles. Por isso as
+// meta tags são montadas aqui no servidor e já saem prontas no HTML.
+// Também não há redirecionamento nenhum neste caminho, de propósito — o robô
+// não carrega cookie e acabaria lendo o cartão da página errada.
+let indexHtmlTemplate = '';
+
+function loadIndexTemplate() {
+  try {
+    indexHtmlTemplate = fs.readFileSync(INDEX_FILE, 'utf-8');
+  } catch (err) {
+    console.error('[AVISO] Não foi possível ler public/index.html:', err.message);
+    indexHtmlTemplate = '';
+  }
+}
+
+app.get(['/', '/index.html'], (req, res, next) => {
+  if (!indexHtmlTemplate) return next(); // deixa o express.static tentar servir
+  const metaTags = buildShareMetaTags(siteConfigCache, { baseUrl: getBaseUrl(req) });
+  const html = indexHtmlTemplate.includes(SHARE_META_PLACEHOLDER)
+    ? indexHtmlTemplate.replace(SHARE_META_PLACEHOLDER, metaTags)
+    : indexHtmlTemplate.replace('</head>', `  ${metaTags}\n</head>`);
+  // O cartão muda assim que o admin salva; sem isso o robô poderia reusar uma
+  // versão antiga do HTML guardada em cache.
+  res.set('Cache-Control', 'no-cache');
+  res.type('html').send(html);
+});
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 // ----- Endpoints públicos (somente leitura) -----
@@ -454,6 +579,68 @@ app.delete('/api/categories/:type/:name', requireAuth, writeLimiter, async (req,
   }
 });
 
+// ----- Configuração do site (cartão de compartilhamento) -----
+// Os valores já saem públicos nas meta tags da home, mas só o admin precisa
+// lê-los por aqui — então a rota fica atrás do login como as demais de gestão.
+
+// Aceita o mesmo que o renderizador aceita: vazio (usa o logo do site), link
+// http(s) externo, ou caminho interno que vira URL absoluta na hora de montar
+// a tag. Usar a mesma função evita salvar algo que depois seria descartado.
+function isValidShareImage(value) {
+  const raw = String(value ?? '').trim();
+  if (!raw) return true;
+  return toAbsoluteUrl(raw, 'https://exemplo.invalid') !== '';
+}
+
+app.get('/api/site-config', requireAuth, (req, res) => {
+  // Os valores de reserva vão junto para o painel mostrar, em cada campo
+  // vazio, exatamente o que o cartão vai usar no lugar.
+  res.json({
+    ...siteConfigCache,
+    defaults: {
+      title: SITE_DEFAULTS.name,
+      description: SITE_DEFAULTS.description,
+      image: SITE_DEFAULTS.logo,
+    },
+    recommendedImageSize: { width: SHARE_IMAGE_WIDTH, height: SHARE_IMAGE_HEIGHT },
+  });
+});
+
+app.put('/api/site-config', requireAuth, writeLimiter, async (req, res, next) => {
+  try {
+    const body = req.body || {};
+    const updated = { ...siteConfigCache };
+
+    for (const [field, { label, maxLength }] of Object.entries(SHARE_FIELDS)) {
+      if (body[field] === undefined) continue; // campo não enviado = mantém o atual
+      const value = String(body[field] ?? '').trim();
+      if (value.length > maxLength) {
+        return res.status(400).json({ error: `${label}: muito longo (máx. ${maxLength} caracteres)` });
+      }
+      updated[field] = value;
+    }
+
+    if (!isValidShareImage(updated.shareImage)) {
+      return res.status(400).json({
+        error: 'Imagem do cartão inválida. Use um link https:// (recomendado) ou um caminho interno começando com /.',
+      });
+    }
+
+    for (const [field, { key }] of Object.entries(SHARE_FIELDS)) {
+      await pool.query(
+        `INSERT INTO site_config (key, value, updated_at) VALUES ($1, $2, now())
+         ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, updated_at = now()`,
+        [key, updated[field]]
+      );
+    }
+
+    siteConfigCache = updated;
+    res.json({ ...siteConfigCache });
+  } catch (err) {
+    next(err);
+  }
+});
+
 // ----- Autenticação do admin -----
 
 app.post('/api/login', loginLimiter, (req, res) => {
@@ -604,6 +791,8 @@ app.use((err, req, res, next) => {
 async function main() {
   await seedIfEmpty();
   await loadCacheFromDb();
+  await loadSiteConfigFromDb();
+  loadIndexTemplate();
   app.listen(PORT, () => {
     console.log(`Spawnfluxo rodando em http://localhost:${PORT}`);
   });
