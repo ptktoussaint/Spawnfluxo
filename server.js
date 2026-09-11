@@ -637,6 +637,17 @@ app.put('/api/site-config', requireAuth, writeLimiter, async (req, res, next) =>
     siteConfigCache = updated;
     res.json({ ...siteConfigCache });
   } catch (err) {
+    // 42P01 = undefined_table. Acontece quando a migração 003 ainda não foi
+    // rodada: ler funciona (o cartão usa as reservas, tudo vem do cache), mas
+    // salvar precisa da tabela. Sem esta mensagem, o admin só veria o 500
+    // genérico, que não diz o que fazer.
+    if (err && err.code === '42P01') {
+      return res.status(503).json({
+        error:
+          'A tabela site_config ainda não existe no banco. Rode uma vez o arquivo ' +
+          'db/migration-003-site-config.sql no SQL Editor do Supabase e tente salvar de novo.',
+      });
+    }
     next(err);
   }
 });
